@@ -1,0 +1,32 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+version = "0.0.1"
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+mainClassName = 'scraper.test.Hello'
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    baseName = 'jscraper'
+    version = '0.0.1'
+    manifest {
+        attributes(
+                'Implementation-Title': 'JScraper',
+                'Main-Class': mainClassName,
+                'Implementation-Version': version,
+        )
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
+
+
+dependencies {
+    compile "joda-time:joda-time:2.2"
+    testCompile "junit:junit:4.12"
+}
