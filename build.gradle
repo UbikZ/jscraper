@@ -1,15 +1,19 @@
+buildscript {
+    ext {
+        springBootVersion = '1.4.3.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'application'
-
-version = "0.0.1"
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-mainClassName = 'scraper.test.Hello'
-
-repositories {
-    mavenCentral()
-}
+apply plugin: 'org.springframework.boot'
 
 jar {
     baseName = 'jscraper'
@@ -17,16 +21,27 @@ jar {
     manifest {
         attributes(
                 'Implementation-Title': 'JScraper',
-                'Main-Class': mainClassName,
+                'Main-Class': 'com.ubikz.com.ubikz.scraper.Application',
                 'Implementation-Version': version,
         )
     }
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
+repositories {
+    mavenCentral()
+}
 
 dependencies {
-    compile "joda-time:joda-time:2.2"
-    testCompile "junit:junit:4.12"
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+}
+
+configurations {
+    compile.exclude module: "spring-boot-starter-tomcat"
 }
