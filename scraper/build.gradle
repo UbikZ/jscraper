@@ -15,13 +15,15 @@ apply plugin: 'idea'
 apply plugin: 'application'
 apply plugin: 'org.springframework.boot'
 
+mainClassName = "com.ubikz.scraper.Application"
+
 jar {
     baseName = 'jscraper'
     version = '0.0.1'
     manifest {
         attributes(
                 'Implementation-Title': 'JScraper',
-                'Main-Class': 'com.ubikz.com.ubikz.scraper.Application',
+                'Main-Class': mainClassName,
                 'Implementation-Version': version,
         )
     }
