@@ -2,3 +2,5 @@ scraper:
   build: scraper
   ports:
       - "3000:3000"
+  volumes:
+      - /srv/docker/jscraper:/var/log
