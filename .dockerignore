@@ -1,0 +1,5 @@
+.env.dist
+.git
+.gitignore
+scraper/build.gradle
+scraper/src/test
