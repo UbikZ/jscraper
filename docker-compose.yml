@@ -1,6 +1,14 @@
 scraper:
   build: scraper
+  links:
+    - redis
   ports:
       - "3000:3000"
   volumes:
-      - /srv/docker/jscraper:/var/log
+      - /srv/docker/jscraper-log:/var/log
+redis:
+  build: redis
+  ports:
+      - "6379:6379"
+  volumes:
+      - /srv/docker/jscraper-redis:/data

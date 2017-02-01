@@ -41,6 +41,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    compile("redis.clients:jedis:2.9.0")
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
