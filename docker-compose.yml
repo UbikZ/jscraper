@@ -1,14 +1,24 @@
-scraper:
-  build: scraper
+jscraper:
+  build: jscraper
   links:
     - redis
+    - pgsql
   ports:
       - "3000:3000"
   volumes:
-      - /srv/docker/jscraper-log:/var/log
+      - /srv/docker/jscraper/scraper/log:/var/log
+  env_file: .env
+pgsql:
+  image: postgres:9.6.1-alpine
+  ports:
+    - "5432:5432"
+  volumes:
+    - /srv/docker/jscraper/pgsql/data:/var/lib/postgresql/data
+  env_file: .env
 redis:
   build: redis
   ports:
       - "6379:6379"
   volumes:
-      - /srv/docker/jscraper-redis:/data
+      - /srv/docker/jscraper/redis/data:/data
+  env_file: .env

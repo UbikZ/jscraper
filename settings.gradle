@@ -1,0 +1,3 @@
+rootProject.projectDir = new File('jscraper')
+
+include 'scraper', 'database'

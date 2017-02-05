@@ -1,13 +1,13 @@
 #!/bin/bash
 
-if [ "${REDIS_PASS}" == "__reset__" ]; then
-    unset REDIS_PASS
+if [ "${REDIS_PASSWORD}" == "__reset__" ]; then
+    unset REDIS_PASSWORD
 fi
 
 if [ ! -f /.redis_configured ]; then
-    if [ "${REDIS_PASS}" != "**None**" ]; then
-        PASS=${REDIS_PASS:-$(pwgen -s 32 1)}
-        _word=$( [ ${REDIS_PASS} ] && echo "preset" || echo "random" )
+    if [ "${REDIS_PASSWORD}" != "**None**" ]; then
+        PASS=${REDIS_PASSWORD:-$(pwgen -s 32 1)}
+        _word=$( [ ${REDIS_PASSWORD} ] && echo "preset" || echo "random" )
         echo "=> Securing redis with a ${_word} password"
         echo "requirepass $PASS" >> /etc/redis/redis.conf
         echo "=> Done!"
@@ -20,7 +20,7 @@ if [ ! -f /.redis_configured ]; then
         echo "========================================================================"
     fi
 
-    unset REDIS_PASS
+    unset REDIS_PASSWORD
 
     touch /.redis_configured
 fi

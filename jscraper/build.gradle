@@ -1,0 +1,79 @@
+buildscript {
+    ext {
+        springBootVersion = '1.4.3.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+subprojects {
+    apply plugin: 'application'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+project(':database') {
+    mainClassName = "com.ubikz.database.test.PostgreSQL"
+
+    jar {
+        baseName = 'dbConnect'
+        version = '0.0.1'
+        manifest {
+            attributes(
+                    'Implementation-Title': 'dbConnect',
+                    'Main-Class': mainClassName,
+                    'Implementation-Version': version,
+            )
+        }
+        from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    }
+
+    dependencies {
+        compile("org.postgresql:postgresql:9.4.1212.jre6")
+    }
+}
+
+project(':scraper') {
+    apply plugin: 'org.springframework.boot'
+
+    mainClassName = "com.ubikz.scraper.Application"
+
+    jar {
+        baseName = 'jscraper'
+        version = '0.0.1'
+        manifest {
+            attributes(
+                    'Implementation-Title': 'JScraper',
+                    'Main-Class': mainClassName,
+                    'Implementation-Version': version,
+            )
+        }
+        from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    }
+
+    dependencies {
+        compile("org.springframework.boot:spring-boot-starter-web:1.4.3.RELEASE")
+        compile("org.springframework.boot:spring-boot-starter-undertow:1.4.3.RELEASE")
+        compile("org.springframework.boot:spring-boot-gradle-plugin:1.4.3.RELEASE")
+        compile("org.postgresql:postgresql:9.4.1212.jre6")
+        compile("redis.clients:jedis:2.9.0")
+        testCompile("org.springframework.boot:spring-boot-starter-test")
+    }
+
+    configurations {
+        compile.exclude module: "spring-boot-starter-tomcat"
+    }
+}
