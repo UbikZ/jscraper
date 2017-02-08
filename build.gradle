@@ -1,17 +1,6 @@
-buildscript {
-    ext {
-        springBootVersion = '1.4.3.RELEASE'
-    }
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    }
-}
-
 apply plugin: 'java'
 apply plugin: 'idea'
+
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -21,6 +10,12 @@ repositories {
 }
 
 dependencies {
-    compile project(':scraper')
-    compile project(':database')
+    compile("org.springframework.boot:spring-boot-starter-web:1.4.3.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-undertow:1.4.3.RELEASE")
+    compile("org.springframework.boot:spring-boot-gradle-plugin:1.4.3.RELEASE")
+    compile("org.postgresql:postgresql:9.4.1212.jre6")
+    compile("org.flywaydb:flyway-core:4.0.3")
+    compile("redis.clients:jedis:2.9.0")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
 }
+

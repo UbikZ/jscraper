@@ -1,11 +1,12 @@
-package com.ubikz.scraper.service.message;
+package com.ubikz.scraper.api.service.message;
 
-abstract public class AbstractMessage {
-    private boolean isSuccess = false;
+public class BaseMessage {
+    private Object data;
     private int code = 0;
     private int status = 0;
+    private boolean isSuccess = false;
 
-    public AbstractMessage() {
+    public BaseMessage() {
     }
 
     public boolean isSuccess() {
@@ -30,5 +31,13 @@ abstract public class AbstractMessage {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
     }
 }

@@ -43,6 +43,7 @@ project(':database') {
 
     dependencies {
         compile("org.postgresql:postgresql:9.4.1212.jre6")
+        compile("org.flywaydb:flyway-core:4.0.3")
     }
 }
 

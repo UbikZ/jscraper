@@ -1,0 +1,5 @@
+db.conn.host=pgsql
+db.conn.port=5432
+db.conn.dbName=scraper
+db.conn.username=scraper
+db.conn.password=scraper
