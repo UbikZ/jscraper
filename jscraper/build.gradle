@@ -67,14 +67,14 @@ project(':scraper') {
 
     dependencies {
         compile("org.springframework.boot:spring-boot-starter-web:1.4.3.RELEASE")
+        compile("org.springframework:spring-jdbc:4.3.6.RELEASE")
         compile("org.springframework.boot:spring-boot-starter-undertow:1.4.3.RELEASE")
         compile("org.springframework.boot:spring-boot-gradle-plugin:1.4.3.RELEASE")
         compile("org.postgresql:postgresql:9.4.1212.jre6")
         compile("redis.clients:jedis:2.9.0")
-        testCompile("org.springframework.boot:spring-boot-starter-test")
     }
 
     configurations {
-        compile.exclude module: "spring-boot-starter-tomcat"
+        compile.exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
     }
 }

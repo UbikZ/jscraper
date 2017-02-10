@@ -3,15 +3,15 @@ package com.ubikz.scraper.api.dto;
 import java.util.regex.Pattern;
 
 class FeedTypeDto extends AbstractDto {
-    private Pattern feedTypeRegex;
+    private Pattern urlRegex;
     private Pattern contentRegex;
 
-    public Pattern getFeedTypeRegex() {
-        return feedTypeRegex;
+    public Pattern getUrlRegex() {
+        return urlRegex;
     }
 
-    public void setFeedTypeRegex(Pattern feedTypeRegex) {
-        this.feedTypeRegex = feedTypeRegex;
+    public void setUrlRegex(Pattern urlRegex) {
+        this.urlRegex = urlRegex;
     }
 
     public Pattern getContentRegex() {

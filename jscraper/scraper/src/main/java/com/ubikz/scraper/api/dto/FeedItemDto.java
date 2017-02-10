@@ -1,15 +1,17 @@
 package com.ubikz.scraper.api.dto;
 
+import java.util.List;
+
 class FeedItemDto extends AbstractDto {
     private FeedDto feed;
     private FeedTypeDto feedType;
     private String url;
     private String checksum;
-    private boolean isEnabled;
     private boolean isViewed;
     private boolean isApproved;
-    private boolean isReposted;
+    private boolean isRepposted;
     private boolean isSent;
+    private List<TagDto> tags;
 
     public FeedDto getFeed() {
         return feed;
@@ -43,16 +45,6 @@ class FeedItemDto extends AbstractDto {
         this.checksum = checksum;
     }
 
-    @Override
-    public boolean isEnabled() {
-        return isEnabled;
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
-    }
-
     public boolean isViewed() {
         return isViewed;
     }
@@ -69,12 +61,12 @@ class FeedItemDto extends AbstractDto {
         isApproved = approved;
     }
 
-    public boolean isReposted() {
-        return isReposted;
+    public boolean isRepposted() {
+        return isRepposted;
     }
 
-    public void setReposted(boolean reposted) {
-        isReposted = reposted;
+    public void setRepposted(boolean repposted) {
+        isRepposted = repposted;
     }
 
     public boolean isSent() {
@@ -83,5 +75,13 @@ class FeedItemDto extends AbstractDto {
 
     public void setSent(boolean sent) {
         isSent = sent;
+    }
+
+    public List<TagDto> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<TagDto> tags) {
+        this.tags = tags;
     }
 }

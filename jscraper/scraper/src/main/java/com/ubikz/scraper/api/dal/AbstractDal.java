@@ -1,19 +1,17 @@
 package com.ubikz.scraper.api.dal;
 
-import com.ubikz.scraper.lib.db.DBConnector;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 abstract class AbstractDal {
-    private DBConnector dbConnector = null;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-    public AbstractDal() {
-        this.dbConnector = new DBConnector();
+    public JdbcTemplate getJdbcTemplate() {
+        return jdbcTemplate;
     }
 
-    public DBConnector getDbConnector() {
-        return dbConnector;
-    }
-
-    public void setDbConnector(DBConnector dbConnector) {
-        this.dbConnector = dbConnector;
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 }
