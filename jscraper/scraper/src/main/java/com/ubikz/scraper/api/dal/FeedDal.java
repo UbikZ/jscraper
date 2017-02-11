@@ -1,10 +1,24 @@
 package com.ubikz.scraper.api.dal;
 
-import com.ubikz.scraper.api.dal.request.FeedDalRequest;
+import com.ubikz.scraper.lib.db.DBWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
+@Repository
+public class FeedDal {
+    private DBWrapper dbWrapper;
 
-class FeedDal extends AbstractDal {
-    final private String table = "feed";
+    @Autowired
+    public FeedDal(DBWrapper dbWrapper) {
+        this.dbWrapper = dbWrapper;
+    }
 
+    public int createFeed() {
+        String sql = "INSERT INTO feed (ref_key, label, url) VALUES (?, ?, ?) RETURNING id";
+        return dbWrapper.jdbcTemplate.queryForObject(
+                sql,
+                new Object[]{"pouet", "test", "http://test.com"},
+                Integer.class
+        );
+    }
 }

@@ -23,6 +23,4 @@ COPY scripts/entrypoint.sh /entrypoint.sh
 ADD . /jscraper
 WORKDIR /jscraper
 
-RUN /install/gradle/bin/gradle build -x test
-
 ENTRYPOINT ["/entrypoint.sh"]

@@ -2,6 +2,20 @@
 
 set -e
 
+echo "[DEBUG] > Init configuration."
+sed -i \
+    -e "s/{{PG_HOST}}/${POSTGRES_HOST}/g" \
+    -e "s/{{PG_DB}}/${POSTGRES_DB}/g" \
+    -e "s/{{PG_PORT}}/${POSTGRES_PORT}/g" \
+    -e "s/{{PG_USER}}/${POSTGRES_USER}/g" \
+    -e "s/{{PG_PWD}}/${POSTGRES_PASSWORD}/g" \
+    /jscraper/scraper/src/main/resources/application.properties
+echo "[DEBUG] > Configuration ok."
+
+echo "[DEBUG] > Build packages"
+/install/gradle/bin/gradle build -x test 1>/dev/null || exit 1
+echo "[DEBUG] > Build OK."
+
 maxTriesPostgres=10
 echo "[DEBUG] > Check POSTGRES availability"
 while ! nc -w 1 "${POSTGRES_HOST}" "${POSTGRES_PORT}" 1>/dev/null 2>&1
