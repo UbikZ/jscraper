@@ -1,6 +1,7 @@
 package com.ubikz.scraper.api.controller;
 
 import com.ubikz.scraper.api.dal.FeedDal;
+import com.ubikz.scraper.api.dal.filter.FeedDalFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,6 +18,12 @@ public class TestController extends Throwable {
 
     @RequestMapping(value = "/test", method = RequestMethod.GET, produces = "application/json")
     public int test() {
-        return this.feedDal.createFeed();
+        FeedDalFilter filter = new FeedDalFilter();
+        filter.setUrl("test");
+        filter.setEnabled(true);
+        filter.setId(12345);
+        System.out.println(" >>>>>> " + this.feedDal.getFeed(filter));
+
+        return 1;
     }
 }
