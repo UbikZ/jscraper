@@ -2,18 +2,18 @@ package com.ubikz.scraper.lib.db;
 
 import org.postgresql.ds.PGSimpleDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 
 @Component
 public class DBWrapper {
-    public JdbcTemplate jdbcTemplate;
+    public NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
     public DBWrapper(DBProperties dbProperties) {
-        this.jdbcTemplate = new JdbcTemplate(this.buildDataSource(dbProperties));
+        this.jdbcTemplate = new NamedParameterJdbcTemplate(this.buildDataSource(dbProperties));
     }
 
     private DataSource buildDataSource(DBProperties dbProperties) {

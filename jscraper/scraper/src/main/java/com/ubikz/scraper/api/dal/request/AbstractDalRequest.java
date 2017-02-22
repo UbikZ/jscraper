@@ -2,9 +2,8 @@ package com.ubikz.scraper.api.dal.request;
 
 class AbstractDalRequest {
     private Integer id;
-    private String referenceKey;
     private String label;
-    private boolean isEnabled;
+    private Boolean isEnabled;
 
     public Integer getId() {
         return id;
@@ -12,14 +11,6 @@ class AbstractDalRequest {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getReferenceKey() {
-        return referenceKey;
-    }
-
-    public void setReferenceKey(String referenceKey) {
-        this.referenceKey = referenceKey;
     }
 
     public String getLabel() {
@@ -30,11 +21,11 @@ class AbstractDalRequest {
         this.label = label;
     }
 
-    public boolean isEnabled() {
+    public Boolean isEnabled() {
         return isEnabled;
     }
 
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         isEnabled = enabled;
     }
 }

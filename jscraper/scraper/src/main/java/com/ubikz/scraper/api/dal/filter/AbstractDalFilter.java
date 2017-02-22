@@ -4,7 +4,6 @@ import java.util.Date;
 
 abstract class AbstractDalFilter {
     private Integer id;
-    private String referenceKey;
     private String label;
     private Date startDate;
     private Date endDate;
@@ -16,14 +15,6 @@ abstract class AbstractDalFilter {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getReferenceKey() {
-        return referenceKey;
-    }
-
-    public void setReferenceKey(String referenceKey) {
-        this.referenceKey = referenceKey;
     }
 
     public String getLabel() {

@@ -1,11 +1,14 @@
 package com.ubikz.scraper.api.dal;
 
 import com.ubikz.scraper.api.dal.filter.FeedDalFilter;
+import com.ubikz.scraper.api.dal.request.FeedDalRequest;
 import com.ubikz.scraper.lib.db.DBWrapper;
-import com.ubikz.scraper.lib.db.qb.DBQueryBuilder;
-import com.ubikz.scraper.lib.db.qb.DBSelect;
+import com.ubikz.scraper.lib.db.qb.AbstractQuery;
+import com.ubikz.scraper.lib.db.qb.QueryBuilder;
+import com.ubikz.scraper.lib.db.qb.Select;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,18 +18,34 @@ public class FeedDal extends AbstractDal {
         super(dbWrapper);
     }
 
-    public int createFeed() {
-        String sql = "INSERT INTO feed (ref_key, label, url) VALUES (?, ?, ?) RETURNING id";
-        return this.dbWrapper.jdbcTemplate.queryForObject(
-                sql,
-                new Object[]{"pouet", "test", "http://test.com"},
-                Integer.class
-        );
+    public int createFeed(FeedDalRequest feedDalRequest) {
+        QueryBuilder qb = new QueryBuilder();
+        Map<String, Object> insertValues = new HashMap<>();
+
+        if (feedDalRequest.getId() != null) {
+            insertValues.put("id", feedDalRequest.getId());
+        }
+
+        if (feedDalRequest.getUrl() != null) {
+            insertValues.put("url", feedDalRequest.getUrl());
+        }
+
+        if (feedDalRequest.getLabel() != null) {
+            insertValues.put("label", feedDalRequest.getLabel());
+        }
+
+        if (feedDalRequest.isEnabled() != null) {
+            insertValues.put("enabled", feedDalRequest.isEnabled());
+        }
+
+        AbstractQuery insert = qb.insert("feed").values(insertValues);
+
+        return this.request(insert);
     }
 
     public List<Map<String, Object>> getFeed(FeedDalFilter filter) {
-        DBQueryBuilder qb = new DBQueryBuilder();
-        DBSelect select = qb.select().from("feed");
+        QueryBuilder qb = new QueryBuilder();
+        Select select = qb.select().from("feed");
 
         if (filter.getId() != null) {
             select.where("id", filter.getId());
@@ -40,16 +59,10 @@ public class FeedDal extends AbstractDal {
             select.where("label", filter.getLabel());
         }
 
-        if (filter.getReferenceKey() != null) {
-            select.where("ref_key", filter.getReferenceKey());
-        }
-
         if (filter.isEnabled() != null) {
             select.where("enabled", filter.isEnabled());
         }
 
-        System.out.println(" >>>>>>> " + select.toSQL());
-
-        return this.dbWrapper.jdbcTemplate.queryForList(select.toSQL());
+        return this.query(select);
     }
 }
