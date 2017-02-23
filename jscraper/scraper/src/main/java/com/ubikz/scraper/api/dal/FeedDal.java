@@ -14,10 +14,17 @@ import java.util.Map;
 
 @Repository
 public class FeedDal extends AbstractDal {
+    /**
+     * @param dbWrapper
+     */
     public FeedDal(DBWrapper dbWrapper) {
         super(dbWrapper);
     }
 
+    /**
+     * @param feedDalRequest
+     * @return
+     */
     public int createFeed(FeedDalRequest feedDalRequest) {
         QueryBuilder qb = new QueryBuilder();
         Map<String, Object> insertValues = new HashMap<>();
@@ -43,6 +50,10 @@ public class FeedDal extends AbstractDal {
         return this.request(insert);
     }
 
+    /**
+     * @param filter
+     * @return
+     */
     public List<Map<String, Object>> getFeed(FeedDalFilter filter) {
         QueryBuilder qb = new QueryBuilder();
         Select select = qb.select().from("feed");

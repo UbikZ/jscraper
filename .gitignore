@@ -5,6 +5,8 @@ build
 .env
 .gradle
 application.properties
+docker/*
+!docker/.gitkeep
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

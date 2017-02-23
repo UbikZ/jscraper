@@ -17,6 +17,11 @@ public class FeedContext extends AbstractContext {
         this.feedService = feedService;
     }
 
+    /**
+     * @param request
+     * @return
+     * @throws Exception
+     */
     public BaseMessage createFeed(FeedDto request) throws Exception {
         return this.handle(() -> {
             FeedServiceRequest feedServiceRequest = new FeedServiceRequest();
@@ -28,6 +33,11 @@ public class FeedContext extends AbstractContext {
         }, 201, 1);
     }
 
+    /**
+     * @param id
+     * @return
+     * @throws Exception
+     */
     public BaseMessage getFeedById(int id) throws Exception {
         return this.handle(() -> {
             FeedServiceFilter feedServiceFilter = new FeedServiceFilter();

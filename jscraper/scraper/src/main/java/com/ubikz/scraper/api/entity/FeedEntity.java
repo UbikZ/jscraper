@@ -21,6 +21,10 @@ public class FeedEntity extends AbstractEntity {
         this.feedDal = feedDal;
     }
 
+    /**
+     * @param feedEntityFilter
+     * @return
+     */
     public List<FeedDto> getFeed(FeedEntityFilter feedEntityFilter) {
         FeedDalFilter feedDalFilter = new FeedDalFilter();
         feedDalFilter.setId(feedEntityFilter.getId());
@@ -30,6 +34,10 @@ public class FeedEntity extends AbstractEntity {
         return FeedEntityHelper.getDtoListFromDal(this.feedDal.getFeed(feedDalFilter));
     }
 
+    /**
+     * @param feedEntityRequest
+     * @return
+     */
     public int createFeed(FeedEntityRequest feedEntityRequest) {
         FeedDalRequest feedDalRequest = new FeedDalRequest();
         feedDalRequest.setUrl(feedEntityRequest.getUrl());

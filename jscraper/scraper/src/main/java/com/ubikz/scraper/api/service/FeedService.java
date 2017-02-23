@@ -20,6 +20,11 @@ public class FeedService extends AbstractService {
         this.feedEntity = feedEntity;
     }
 
+    /**
+     * @param feedServiceFilter
+     * @return
+     * @throws Exception
+     */
     public List<FeedDto> getFeed(FeedServiceFilter feedServiceFilter) throws Exception {
         FeedEntityFilter feedEntityFilter = new FeedEntityFilter();
         feedEntityFilter.setId(feedServiceFilter.getId());
@@ -30,6 +35,11 @@ public class FeedService extends AbstractService {
         return this.feedEntity.getFeed(feedEntityFilter);
     }
 
+    /**
+     * @param feedServiceRequest
+     * @return
+     * @throws Exception
+     */
     public int createFeed(FeedServiceRequest feedServiceRequest) throws Exception {
         FeedEntityRequest feedEntityRequest = new FeedEntityRequest();
         feedEntityRequest.setId(feedServiceRequest.getId());
