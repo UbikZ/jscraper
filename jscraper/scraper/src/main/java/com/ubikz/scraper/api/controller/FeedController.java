@@ -1,7 +1,7 @@
 package com.ubikz.scraper.api.controller;
 
-import com.ubikz.scraper.api.context.FeedContext;
-import com.ubikz.scraper.api.dto.FeedDto;
+import com.ubikz.scraper.core.app.context.FeedContext;
+import com.ubikz.scraper.core.app.dto.FeedDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
