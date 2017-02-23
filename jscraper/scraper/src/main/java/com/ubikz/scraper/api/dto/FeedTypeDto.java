@@ -2,7 +2,7 @@ package com.ubikz.scraper.api.dto;
 
 import java.util.regex.Pattern;
 
-class FeedTypeDto extends AbstractDto {
+public class FeedTypeDto extends AbstractDto {
     private Pattern urlRegex;
     private Pattern contentRegex;
 

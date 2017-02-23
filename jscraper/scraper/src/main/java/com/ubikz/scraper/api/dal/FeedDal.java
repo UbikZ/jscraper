@@ -38,7 +38,7 @@ public class FeedDal extends AbstractDal {
             insertValues.put("enabled", feedDalRequest.isEnabled());
         }
 
-        AbstractQuery insert = qb.insert("feed").values(insertValues);
+        AbstractQuery insert = qb.insert("feed").values(insertValues).returning("id");
 
         return this.request(insert);
     }

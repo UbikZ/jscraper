@@ -1,11 +1,7 @@
-package com.ubikz.scraper.api.dto;
+package com.ubikz.scraper.api.service.filter;
 
-public class FeedDto extends AbstractDto {
+public class FeedServiceFilter extends AbstractServiceFilter {
     private String url;
-
-    public FeedDto() {
-        super();
-    }
 
     public String getUrl() {
         return url;

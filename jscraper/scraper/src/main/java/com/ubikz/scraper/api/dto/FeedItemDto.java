@@ -2,7 +2,7 @@ package com.ubikz.scraper.api.dto;
 
 import java.util.List;
 
-class FeedItemDto extends AbstractDto {
+public class FeedItemDto extends AbstractDto {
     private FeedDto feed;
     private FeedTypeDto feedType;
     private String url;

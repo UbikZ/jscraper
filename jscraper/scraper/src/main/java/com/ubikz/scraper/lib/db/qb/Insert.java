@@ -6,9 +6,11 @@ import java.util.stream.Collectors;
 
 public class Insert extends Edit {
     protected String KEY_VALUES = "values";
+    protected String KEY_RETURNING = "returning";
 
     private String SQL_INSERT = "INSERT INTO";
     private String SQL_VALUES = "VALUES";
+    private String SQL_RETURNING = "RETURNING";
 
     public Insert(String table) {
         super(table);
@@ -32,6 +34,11 @@ public class Insert extends Edit {
 
         this.parts.put(KEY_VALUES, namedParametersList);
 
+        return this;
+    }
+
+    public Insert returning(String column) {
+        this.parts.put(KEY_RETURNING, column);
         return this;
     }
 
@@ -68,6 +75,12 @@ public class Insert extends Edit {
                         .map(row -> "(" + row.stream().collect(Collectors.joining(",")) + ")")
                         .collect(Collectors.joining(","))
         );
+
+        String returningColumn = (String) this.parts.get(KEY_RETURNING);
+        if (returningColumn != null) {
+            this.sql.add(SQL_RETURNING);
+            this.sql.add(returningColumn);
+        }
     }
 
     @Override
@@ -76,5 +89,6 @@ public class Insert extends Edit {
         this.parts.put(KEY_COLUMNS, new HashSet<>());
         this.parts.put(KEY_VALUES, new ArrayList<>());
         this.parts.put(KEY_WHERE, new ArrayList<>());
+        this.parts.put(KEY_RETURNING, null);
     }
 }

@@ -1,6 +1,6 @@
 package com.ubikz.scraper.api.dto;
 
-class TagDto extends AbstractDto {
+public class TagDto extends AbstractDto {
     private String url;
 
     public TagDto() {

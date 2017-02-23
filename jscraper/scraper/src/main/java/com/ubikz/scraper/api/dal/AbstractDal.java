@@ -21,7 +21,7 @@ abstract class AbstractDal {
         System.out.println("# Request SQL > " + request.getSQL());
         System.out.println("# Request Params > " + request.getParameters());
 
-        return this.dbWrapper.jdbcTemplate.update(request.getSQL(), request.getParameters());
+        return this.dbWrapper.jdbcTemplate.queryForObject(request.getSQL(), request.getParameters(), Integer.class);
     }
 
     public List<Map<String, Object>> query(AbstractQuery query) {
