@@ -2,7 +2,7 @@ package com.ubikz.scraper.core.app.dto;
 
 import java.util.Date;
 
-abstract class AbstractDto {
+abstract public class AbstractDto {
     private Integer id;
     private String label;
     private boolean isEnabled;

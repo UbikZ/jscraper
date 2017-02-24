@@ -2,7 +2,7 @@ package com.ubikz.scraper.core.app.dal.filter;
 
 import java.util.Date;
 
-abstract class AbstractDalFilter {
+abstract public class AbstractDalFilter {
     private Integer id;
     private String label;
     private Date startDate;

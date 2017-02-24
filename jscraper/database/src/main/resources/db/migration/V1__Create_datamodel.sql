@@ -48,9 +48,10 @@ CREATE TABLE public.feed_item
 
 CREATE TABLE public.tag
 (
-  id    SERIAL PRIMARY KEY      NOT NULL,
-  label VARCHAR(255)            NOT NULL,
-  date  TIMESTAMP DEFAULT NOW() NOT NULL
+  id      SERIAL PRIMARY KEY      NOT NULL,
+  label   VARCHAR(255)            NOT NULL,
+  date    TIMESTAMP DEFAULT NOW() NOT NULL,
+  enabled BOOLEAN DEFAULT TRUE    NOT NULL
 );
 
 CREATE TABLE public.feed_item_tag

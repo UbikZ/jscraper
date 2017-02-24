@@ -1,6 +1,6 @@
 package com.ubikz.scraper.core.app.dal.request;
 
-class AbstractDalRequest {
+public class AbstractDalRequest {
     private Integer id;
     private String label;
     private Boolean isEnabled;

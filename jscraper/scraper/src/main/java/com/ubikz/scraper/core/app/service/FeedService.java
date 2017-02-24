@@ -23,17 +23,35 @@ public class FeedService extends AbstractService {
     /**
      * @param feedServiceFilter
      * @return
-     * @throws Exception
      */
-    public List<FeedDto> getFeed(FeedServiceFilter feedServiceFilter) throws Exception {
+    private FeedEntityFilter parseFilter(FeedServiceFilter feedServiceFilter) {
         FeedEntityFilter feedEntityFilter = new FeedEntityFilter();
         feedEntityFilter.setId(feedServiceFilter.getId());
         feedEntityFilter.setUrl(feedServiceFilter.getUrl());
         feedEntityFilter.setLabel(feedServiceFilter.getLabel());
         feedEntityFilter.setEnabled(feedServiceFilter.isEnabled());
 
-        return this.feedEntity.getFeed(feedEntityFilter);
+        return feedEntityFilter;
     }
+
+    /**
+     * @param feedServiceFilter
+     * @return
+     * @throws Exception
+     */
+    public List<FeedDto> getFeed(FeedServiceFilter feedServiceFilter) throws Exception {
+        return this.feedEntity.getFeed(this.parseFilter(feedServiceFilter));
+    }
+
+    /**
+     * @param feedServiceFilter
+     * @return
+     * @throws Exception
+     */
+    public FeedDto getOneFeed(FeedServiceFilter feedServiceFilter) throws Exception {
+        return this.feedEntity.getOneFeed(this.parseFilter(feedServiceFilter));
+    }
+
 
     /**
      * @param request

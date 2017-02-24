@@ -2,7 +2,7 @@ package com.ubikz.scraper.core.app.entity.filter;
 
 import java.util.Date;
 
-abstract class AbstractEntityFilter {
+abstract public class AbstractEntityFilter {
     private Integer id;
     private String label;
     private Date startDate;

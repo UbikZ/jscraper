@@ -1,7 +1,9 @@
 package com.ubikz.scraper.core.lib.db.qb;
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Update extends Edit {

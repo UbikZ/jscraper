@@ -1,6 +1,6 @@
 package com.ubikz.scraper.core.app.entity.request;
 
-class AbstractEntityRequest {
+public class AbstractEntityRequest {
     private Integer id;
     private String label;
     private Boolean isEnabled;

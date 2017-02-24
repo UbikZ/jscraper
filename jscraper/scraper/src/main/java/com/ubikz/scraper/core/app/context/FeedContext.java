@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FeedContext extends AbstractContext {
-    final private int CODE_CREATE = 1;
-    final private int CODE_UPDATE = 2;
-    final private int CODE_GET_ONE = 3;
+    final private int FEED_CREATED = 1;
+    final private int FEED_UPDATED = 2;
+    final private int FEED_GET_ONE = 3;
 
     private FeedService feedService;
 
@@ -36,7 +36,7 @@ public class FeedContext extends AbstractContext {
             feedServiceRequest.setEnabled(request.isEnabled());
 
             return this.feedService.createFeed(feedServiceRequest);
-        }, HttpStatus.CREATED, CODE_CREATE);
+        }, HttpStatus.CREATED, FEED_CREATED);
     }
 
     /**
@@ -57,7 +57,7 @@ public class FeedContext extends AbstractContext {
             feedServiceRequest.setEnabled(request.isEnabled());
 
             return this.feedService.updateFeed(feedServiceRequest);
-        }, HttpStatus.OK, CODE_UPDATE);
+        }, HttpStatus.OK, FEED_UPDATED);
     }
 
     /**
@@ -70,7 +70,7 @@ public class FeedContext extends AbstractContext {
             FeedServiceFilter feedServiceFilter = new FeedServiceFilter();
             feedServiceFilter.setId(id);
 
-            return this.feedService.getFeed(feedServiceFilter);
-        }, HttpStatus.OK, CODE_GET_ONE);
+            return this.feedService.getOneFeed(feedServiceFilter);
+        }, HttpStatus.OK, FEED_GET_ONE);
     }
 }
