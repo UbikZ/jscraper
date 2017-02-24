@@ -36,17 +36,34 @@ public class FeedService extends AbstractService {
     }
 
     /**
-     * @param feedServiceRequest
+     * @param request
      * @return
      * @throws Exception
      */
-    public int createFeed(FeedServiceRequest feedServiceRequest) throws Exception {
-        FeedEntityRequest feedEntityRequest = new FeedEntityRequest();
-        feedEntityRequest.setId(feedServiceRequest.getId());
-        feedEntityRequest.setUrl(feedServiceRequest.getUrl());
-        feedEntityRequest.setLabel(feedServiceRequest.getLabel());
-        feedEntityRequest.setEnabled(feedServiceRequest.isEnabled());
+    public int createFeed(FeedServiceRequest request) throws Exception {
+        return this.feedEntity.createFeed(this.parseServiceToEntityRequest(request));
+    }
 
-        return this.feedEntity.createFeed(feedEntityRequest);
+    /**
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    public int updateFeed(FeedServiceRequest request) throws Exception {
+        return this.feedEntity.updateFeed(this.parseServiceToEntityRequest(request));
+    }
+
+    /**
+     * @param request
+     * @return
+     */
+    private FeedEntityRequest parseServiceToEntityRequest(FeedServiceRequest request) {
+        FeedEntityRequest feedEntityRequest = new FeedEntityRequest();
+        feedEntityRequest.setId(request.getId());
+        feedEntityRequest.setUrl(request.getUrl());
+        feedEntityRequest.setLabel(request.getLabel());
+        feedEntityRequest.setEnabled(request.isEnabled());
+
+        return feedEntityRequest;
     }
 }

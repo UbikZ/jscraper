@@ -21,33 +21,45 @@ public class FeedDal extends AbstractDal {
         super(dbWrapper);
     }
 
+    private Map<String, Object> parseRequest(FeedDalRequest request) {
+        Map<String, Object> values = new HashMap<>();
+
+        if (request.getUrl() != null) {
+            values.put("url", request.getUrl());
+        }
+
+        if (request.getLabel() != null) {
+            values.put("label", request.getLabel());
+        }
+
+        if (request.isEnabled() != null) {
+            values.put("enabled", request.isEnabled());
+        }
+
+        return values;
+    }
+
     /**
-     * @param feedDalRequest
+     * @param request
      * @return
      */
-    public int createFeed(FeedDalRequest feedDalRequest) {
+    public int createFeed(FeedDalRequest request) {
         QueryBuilder qb = new QueryBuilder();
-        Map<String, Object> insertValues = new HashMap<>();
 
-        if (feedDalRequest.getId() != null) {
-            insertValues.put("id", feedDalRequest.getId());
-        }
+        AbstractQuery insert = qb.insert("feed").values(this.parseRequest(request)).returning("id");
 
-        if (feedDalRequest.getUrl() != null) {
-            insertValues.put("url", feedDalRequest.getUrl());
-        }
+        return this.insert(insert);
+    }
 
-        if (feedDalRequest.getLabel() != null) {
-            insertValues.put("label", feedDalRequest.getLabel());
-        }
+    /**
+     * @param request
+     * @return
+     */
+    public int updateFeed(FeedDalRequest request) {
+        QueryBuilder qb = new QueryBuilder();
+        AbstractQuery update = qb.update("feed").set(this.parseRequest(request)).where("id", request.getId());
 
-        if (feedDalRequest.isEnabled() != null) {
-            insertValues.put("enabled", feedDalRequest.isEnabled());
-        }
-
-        AbstractQuery insert = qb.insert("feed").values(insertValues).returning("id");
-
-        return this.request(insert);
+        return this.update(update);
     }
 
     /**
@@ -74,6 +86,6 @@ public class FeedDal extends AbstractDal {
             select.where("enabled", filter.isEnabled());
         }
 
-        return this.query(select);
+        return this.find(select);
     }
 }

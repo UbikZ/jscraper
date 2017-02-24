@@ -88,7 +88,6 @@ public class Insert extends Edit {
         super.initParts();
         this.parts.put(KEY_COLUMNS, new HashSet<>());
         this.parts.put(KEY_VALUES, new ArrayList<>());
-        this.parts.put(KEY_WHERE, new ArrayList<>());
         this.parts.put(KEY_RETURNING, null);
     }
 }

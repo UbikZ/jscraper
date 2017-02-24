@@ -25,24 +25,37 @@ abstract class AbstractDal {
      * @param request
      * @return
      */
-    public int request(AbstractQuery request) {
+    public int insert(AbstractQuery request) {
         request.build();
 
-        logger.debug("# Request SQL > " + request.getSQL());
-        logger.debug("# Request Params > " + request.getParameters());
+        logger.debug("# Insert SQL > " + request.getSQL());
+        logger.debug("# Insert Params > " + request.getParameters());
 
         return this.dbWrapper.jdbcTemplate.queryForObject(request.getSQL(), request.getParameters(), Integer.class);
+    }
+
+    /**
+     * @param request
+     * @return
+     */
+    public int update(AbstractQuery request) {
+        request.build();
+
+        logger.debug("# Update SQL > " + request.getSQL());
+        logger.debug("# Update Params > " + request.getParameters());
+
+        return this.dbWrapper.jdbcTemplate.update(request.getSQL(), request.getParameters());
     }
 
     /**
      * @param query
      * @return
      */
-    public List<Map<String, Object>> query(AbstractQuery query) {
+    public List<Map<String, Object>> find(AbstractQuery query) {
         query.build();
 
-        logger.debug("# Query SQL > " + query.getSQL());
-        logger.debug("# Query Params > " + query.getParameters());
+        logger.debug("# Select SQL > " + query.getSQL());
+        logger.debug("# Select Params > " + query.getParameters());
 
         return this.dbWrapper.jdbcTemplate.queryForList(query.getSQL(), query.getParameters());
     }

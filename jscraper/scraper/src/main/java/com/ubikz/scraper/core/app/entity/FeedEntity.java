@@ -35,15 +35,28 @@ public class FeedEntity extends AbstractEntity {
     }
 
     /**
-     * @param feedEntityRequest
+     * @param request
      * @return
      */
-    public int createFeed(FeedEntityRequest feedEntityRequest) {
-        FeedDalRequest feedDalRequest = new FeedDalRequest();
-        feedDalRequest.setUrl(feedEntityRequest.getUrl());
-        feedDalRequest.setLabel(feedEntityRequest.getLabel());
-        feedDalRequest.setEnabled(feedEntityRequest.isEnabled());
+    public int createFeed(FeedEntityRequest request) {
+        return this.feedDal.createFeed(this.parseEntityToDalRequest(request));
+    }
 
-        return this.feedDal.createFeed(feedDalRequest);
+    /**
+     * @param request
+     * @return
+     */
+    public int updateFeed(FeedEntityRequest request) {
+        return this.feedDal.updateFeed(this.parseEntityToDalRequest(request));
+    }
+
+    private FeedDalRequest parseEntityToDalRequest(FeedEntityRequest request) {
+        FeedDalRequest feedDalRequest = new FeedDalRequest();
+        feedDalRequest.setId(request.getId());
+        feedDalRequest.setUrl(request.getUrl());
+        feedDalRequest.setLabel(request.getLabel());
+        feedDalRequest.setEnabled(request.isEnabled());
+
+        return feedDalRequest;
     }
 }

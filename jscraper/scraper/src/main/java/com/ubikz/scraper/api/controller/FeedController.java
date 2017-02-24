@@ -32,6 +32,17 @@ public class FeedController extends AbstractController {
      * @return
      * @throws Exception
      */
+    @RequestMapping(value = "/feed/{id}", method = RequestMethod.PUT, produces = "application/json")
+    public String update(@PathVariable("id") int id, @RequestBody FeedDto request) throws Exception {
+        request.setId(id);
+        return this.sendResponse(this.feedContext.updateFeed(request));
+    }
+
+    /**
+     * @param id
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/feed/{id}", method = RequestMethod.GET, produces = "application/json")
     public String create(@PathVariable("id") int id) throws Exception {
         return this.sendResponse(this.feedContext.getFeedById(id));

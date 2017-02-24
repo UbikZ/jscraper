@@ -33,10 +33,11 @@ abstract public class AbstractQuery implements IQuery {
     }
 
     public AbstractQuery where(String column, String op, Object value) {
-        this.parameters.put(column, value);
+        String whereColumn = "w_" + column;
+        this.parameters.put(whereColumn, value);
 
         List<String> existingWhere = (List<String>) this.parts.get(KEY_WHERE);
-        existingWhere.add(column + op + ":" + column);
+        existingWhere.add(column + op + ":" + whereColumn);
         this.parts.put(KEY_WHERE, existingWhere);
         return this;
     }
