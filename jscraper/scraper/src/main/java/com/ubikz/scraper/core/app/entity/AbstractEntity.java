@@ -4,8 +4,11 @@ import com.ubikz.scraper.core.app.dal.filter.AbstractDalFilter;
 import com.ubikz.scraper.core.app.dal.request.AbstractDalRequest;
 import com.ubikz.scraper.core.app.entity.filter.AbstractEntityFilter;
 import com.ubikz.scraper.core.app.entity.request.AbstractEntityRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 abstract class AbstractEntity {
+    protected final Logger logger = LoggerFactory.getLogger(AbstractEntity.class);
 
     /**
      * @param request
@@ -24,7 +27,7 @@ abstract class AbstractEntity {
      * @param dRequest
      * @return
      */
-    protected AbstractDalRequest parseBaseEntityToDalRequest(AbstractEntityRequest eRequest, AbstractDalRequest dRequest) {
+    final protected AbstractDalRequest parseBaseEntityToDalRequest(AbstractEntityRequest eRequest, AbstractDalRequest dRequest) {
         dRequest.setId(eRequest.getId());
         dRequest.setLabel(eRequest.getLabel());
         dRequest.setEnabled(eRequest.isEnabled());
@@ -37,7 +40,7 @@ abstract class AbstractEntity {
      * @param dFilter
      * @return
      */
-    protected AbstractDalFilter parseBaseEntityToDalFilter(AbstractEntityFilter eFilter, AbstractDalFilter dFilter) {
+    final protected AbstractDalFilter parseBaseEntityToDalFilter(AbstractEntityFilter eFilter, AbstractDalFilter dFilter) {
         dFilter.setId(eFilter.getId());
         dFilter.setLabel(eFilter.getLabel());
         dFilter.setEnabled(eFilter.isEnabled());

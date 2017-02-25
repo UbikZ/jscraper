@@ -5,7 +5,7 @@ import java.util.Date;
 abstract public class AbstractDto {
     private Integer id;
     private String label;
-    private boolean isEnabled;
+    private Boolean isEnabled;
     private Date date;
 
     public AbstractDto() {
@@ -19,11 +19,11 @@ abstract public class AbstractDto {
         this.id = id;
     }
 
-    public boolean isEnabled() {
+    public Boolean isEnabled() {
         return isEnabled;
     }
 
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         isEnabled = enabled;
     }
 

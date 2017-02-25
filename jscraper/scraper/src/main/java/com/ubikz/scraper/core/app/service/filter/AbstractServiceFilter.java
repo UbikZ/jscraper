@@ -2,7 +2,7 @@ package com.ubikz.scraper.core.app.service.filter;
 
 import java.util.Date;
 
-abstract class AbstractServiceFilter {
+abstract public class AbstractServiceFilter {
     private Integer id;
     private String label;
     private Date startDate;

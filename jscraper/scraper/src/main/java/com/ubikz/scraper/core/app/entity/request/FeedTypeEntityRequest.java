@@ -1,6 +1,6 @@
-package com.ubikz.scraper.core.app.dto;
+package com.ubikz.scraper.core.app.entity.request;
 
-public class FeedTypeDto extends AbstractDto {
+public class FeedTypeEntityRequest extends AbstractEntityRequest {
     private String urlRegex;
     private String contentRegex;
 

@@ -26,32 +26,23 @@ public class FeedEntity extends AbstractEntity {
     }
 
     /**
-     * @param feedEntityFilter
+     * @param filter
      * @return
      */
-    private FeedDalFilter parseFilter(FeedEntityFilter feedEntityFilter) {
-        FeedDalFilter feedDalFilter = new FeedDalFilter();
-        feedDalFilter.setId(feedEntityFilter.getId());
-        feedDalFilter.setUrl(feedEntityFilter.getUrl());
-        feedDalFilter.setEnabled(feedEntityFilter.isEnabled());
-
-        return feedDalFilter;
+    public List<FeedDto> getAllFeeds(FeedEntityFilter filter) {
+        return FeedEntityHelper.getDtoListFromDal(
+                this.feedDal.getAll(this.parseEntityToDalFilter(filter))
+        );
     }
 
     /**
-     * @param feedEntityFilter
+     * @param filter
      * @return
      */
-    public List<FeedDto> getFeed(FeedEntityFilter feedEntityFilter) {
-        return FeedEntityHelper.getDtoListFromDal(this.feedDal.get(this.parseFilter(feedEntityFilter)));
-    }
-
-    /**
-     * @param feedEntityFilter
-     * @return
-     */
-    public FeedDto getOneFeed(FeedEntityFilter feedEntityFilter) {
-        return FeedEntityHelper.getDtoFromDal(this.feedDal.getOne(this.parseFilter(feedEntityFilter)));
+    public FeedDto getOneFeed(FeedEntityFilter filter) {
+        return FeedEntityHelper.getDtoFromDal(
+                this.feedDal.getOne(this.parseEntityToDalFilter(filter))
+        );
     }
 
     /**

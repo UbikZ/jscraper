@@ -1,7 +1,6 @@
 package com.ubikz.scraper.core.app.dal;
 
 import com.ubikz.scraper.core.app.dal.filter.AbstractDalFilter;
-import com.ubikz.scraper.core.app.dal.filter.FeedDalFilter;
 import com.ubikz.scraper.core.app.dal.request.AbstractDalRequest;
 import com.ubikz.scraper.core.lib.db.DBWrapper;
 import com.ubikz.scraper.core.lib.db.qb.AbstractQuery;
@@ -18,7 +17,8 @@ import java.util.Map;
  *
  */
 abstract public class AbstractDal {
-    private static final Logger logger = LoggerFactory.getLogger(AbstractDal.class);
+    protected final Logger logger = LoggerFactory.getLogger(AbstractDal.class);
+
     protected DBWrapper dbWrapper;
     protected String tableName;
     protected String tableIdentifier = "id";
@@ -61,7 +61,7 @@ abstract public class AbstractDal {
      * @param filter
      * @return
      */
-    public List<Map<String, Object>> get(FeedDalFilter filter) {
+    public List<Map<String, Object>> getAll(AbstractDalFilter filter) {
         QueryBuilder qb = new QueryBuilder();
         AbstractQuery select = qb.select().from(this.tableName);
 
@@ -74,7 +74,7 @@ abstract public class AbstractDal {
      * @param filter
      * @return
      */
-    public Map<String, Object> getOne(FeedDalFilter filter) {
+    public Map<String, Object> getOne(AbstractDalFilter filter) {
         QueryBuilder qb = new QueryBuilder();
         AbstractQuery select = qb.select().from(this.tableName);
 
@@ -139,8 +139,8 @@ abstract public class AbstractDal {
     protected int insert(AbstractQuery request) {
         request.build();
 
-        logger.debug("# Insert SQL > " + request.getSQL());
-        logger.debug("# Insert Params > " + request.getParameters());
+        this.logger.debug("# Insert SQL > " + request.getSQL());
+        this.logger.debug("# Insert Params > " + request.getParameters());
 
         return this.dbWrapper.jdbcTemplate.queryForObject(request.getSQL(), request.getParameters(), Integer.class);
     }
@@ -152,8 +152,8 @@ abstract public class AbstractDal {
     protected int update(AbstractQuery request) {
         request.build();
 
-        logger.debug("# Update SQL > " + request.getSQL());
-        logger.debug("# Update Params > " + request.getParameters());
+        this.logger.debug("# Update SQL > " + request.getSQL());
+        this.logger.debug("# Update Params > " + request.getParameters());
 
         return this.dbWrapper.jdbcTemplate.update(request.getSQL(), request.getParameters());
     }
@@ -165,8 +165,8 @@ abstract public class AbstractDal {
     protected List<Map<String, Object>> find(AbstractQuery query) {
         query.build();
 
-        logger.debug("# Select All SQL > " + query.getSQL());
-        logger.debug("# Select All Params > " + query.getParameters());
+        this.logger.debug("# Select All SQL > " + query.getSQL());
+        this.logger.debug("# Select All Params > " + query.getParameters());
 
         return this.dbWrapper.jdbcTemplate.queryForList(query.getSQL(), query.getParameters());
     }
@@ -178,8 +178,8 @@ abstract public class AbstractDal {
     protected Map<String, Object> findOne(AbstractQuery query) {
         query.build();
 
-        logger.debug("# Select SQL > " + query.getSQL());
-        logger.debug("# Select Params > " + query.getParameters());
+        this.logger.debug("# Select SQL > " + query.getSQL());
+        this.logger.debug("# Select Params > " + query.getParameters());
 
         return this.dbWrapper.jdbcTemplate.queryForMap(query.getSQL(), query.getParameters());
     }

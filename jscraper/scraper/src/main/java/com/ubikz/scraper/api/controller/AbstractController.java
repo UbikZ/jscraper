@@ -3,10 +3,12 @@ package com.ubikz.scraper.api.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ubikz.scraper.core.app.service.message.BaseMessage;
-import org.springframework.web.bind.annotation.RestController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@RestController
 public class AbstractController {
+    protected final Logger logger = LoggerFactory.getLogger(AbstractController.class);
+
     /**
      * @param message
      * @return

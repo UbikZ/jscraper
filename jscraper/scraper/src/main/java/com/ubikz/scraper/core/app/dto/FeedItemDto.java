@@ -7,11 +7,11 @@ public class FeedItemDto extends AbstractDto {
     private FeedTypeDto feedType;
     private String url;
     private String checksum;
-    private boolean isViewed;
-    private boolean isApproved;
-    private boolean isRepposted;
-    private boolean isSent;
     private List<TagDto> tags;
+    private Boolean viewed;
+    private Boolean approved;
+    private Boolean reposted;
+    private Boolean sent;
 
     public FeedDto getFeed() {
         return feed;
@@ -45,43 +45,43 @@ public class FeedItemDto extends AbstractDto {
         this.checksum = checksum;
     }
 
-    public boolean isViewed() {
-        return isViewed;
-    }
-
-    public void setViewed(boolean viewed) {
-        isViewed = viewed;
-    }
-
-    public boolean isApproved() {
-        return isApproved;
-    }
-
-    public void setApproved(boolean approved) {
-        isApproved = approved;
-    }
-
-    public boolean isRepposted() {
-        return isRepposted;
-    }
-
-    public void setRepposted(boolean repposted) {
-        isRepposted = repposted;
-    }
-
-    public boolean isSent() {
-        return isSent;
-    }
-
-    public void setSent(boolean sent) {
-        isSent = sent;
-    }
-
     public List<TagDto> getTags() {
         return tags;
     }
 
     public void setTags(List<TagDto> tags) {
         this.tags = tags;
+    }
+
+    public Boolean getViewed() {
+        return viewed;
+    }
+
+    public void setViewed(Boolean viewed) {
+        this.viewed = viewed;
+    }
+
+    public Boolean getApproved() {
+        return approved;
+    }
+
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
+    }
+
+    public Boolean getReposted() {
+        return reposted;
+    }
+
+    public void setReposted(Boolean reposted) {
+        this.reposted = reposted;
+    }
+
+    public Boolean getSent() {
+        return sent;
+    }
+
+    public void setSent(Boolean sent) {
+        this.sent = sent;
     }
 }

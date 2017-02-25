@@ -1,6 +1,6 @@
 package com.ubikz.scraper.core.app.service.request;
 
-class AbstractServiceRequest {
+abstract public class AbstractServiceRequest {
     private Integer id;
     private String label;
     private Boolean isEnabled;

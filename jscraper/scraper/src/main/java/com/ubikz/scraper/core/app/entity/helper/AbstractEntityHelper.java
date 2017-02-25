@@ -28,7 +28,7 @@ public class AbstractEntityHelper {
         }
 
         if (data.containsKey("enabled")) {
-            dto.setEnabled((boolean) data.get("enabled"));
+            dto.setEnabled((Boolean) data.get("enabled"));
         }
 
         return dto;

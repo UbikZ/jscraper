@@ -2,9 +2,13 @@ package com.ubikz.scraper.core.app.service;
 
 import com.ubikz.scraper.core.app.dto.FeedDto;
 import com.ubikz.scraper.core.app.entity.FeedEntity;
+import com.ubikz.scraper.core.app.entity.filter.AbstractEntityFilter;
 import com.ubikz.scraper.core.app.entity.filter.FeedEntityFilter;
+import com.ubikz.scraper.core.app.entity.request.AbstractEntityRequest;
 import com.ubikz.scraper.core.app.entity.request.FeedEntityRequest;
+import com.ubikz.scraper.core.app.service.filter.AbstractServiceFilter;
 import com.ubikz.scraper.core.app.service.filter.FeedServiceFilter;
+import com.ubikz.scraper.core.app.service.request.AbstractServiceRequest;
 import com.ubikz.scraper.core.app.service.request.FeedServiceRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,35 +25,25 @@ public class FeedService extends AbstractService {
     }
 
     /**
-     * @param feedServiceFilter
-     * @return
-     */
-    private FeedEntityFilter parseFilter(FeedServiceFilter feedServiceFilter) {
-        FeedEntityFilter feedEntityFilter = new FeedEntityFilter();
-        feedEntityFilter.setId(feedServiceFilter.getId());
-        feedEntityFilter.setUrl(feedServiceFilter.getUrl());
-        feedEntityFilter.setLabel(feedServiceFilter.getLabel());
-        feedEntityFilter.setEnabled(feedServiceFilter.isEnabled());
-
-        return feedEntityFilter;
-    }
-
-    /**
-     * @param feedServiceFilter
+     * @param filter
      * @return
      * @throws Exception
      */
-    public List<FeedDto> getFeed(FeedServiceFilter feedServiceFilter) throws Exception {
-        return this.feedEntity.getFeed(this.parseFilter(feedServiceFilter));
+    public List<FeedDto> getAllFeeds(FeedServiceFilter filter) throws Exception {
+        return this.feedEntity.getAllFeeds(
+                (FeedEntityFilter) this.parseServiceToEntityFilter(filter)
+        );
     }
 
     /**
-     * @param feedServiceFilter
+     * @param filter
      * @return
      * @throws Exception
      */
-    public FeedDto getOneFeed(FeedServiceFilter feedServiceFilter) throws Exception {
-        return this.feedEntity.getOneFeed(this.parseFilter(feedServiceFilter));
+    public FeedDto getOneFeed(FeedServiceFilter filter) throws Exception {
+        return this.feedEntity.getOneFeed(
+                (FeedEntityFilter) this.parseServiceToEntityFilter(filter)
+        );
     }
 
 
@@ -59,7 +53,7 @@ public class FeedService extends AbstractService {
      * @throws Exception
      */
     public int createFeed(FeedServiceRequest request) throws Exception {
-        return this.feedEntity.createFeed(this.parseServiceToEntityRequest(request));
+        return this.feedEntity.createFeed((FeedEntityRequest) this.parseServiceToEntityRequest(request));
     }
 
     /**
@@ -68,20 +62,29 @@ public class FeedService extends AbstractService {
      * @throws Exception
      */
     public int updateFeed(FeedServiceRequest request) throws Exception {
-        return this.feedEntity.updateFeed(this.parseServiceToEntityRequest(request));
+        return this.feedEntity.updateFeed((FeedEntityRequest) this.parseServiceToEntityRequest(request));
     }
 
-    /**
-     * @param request
-     * @return
-     */
-    private FeedEntityRequest parseServiceToEntityRequest(FeedServiceRequest request) {
+
+    @Override
+    protected AbstractEntityRequest parseServiceToEntityRequest(AbstractServiceRequest request) {
         FeedEntityRequest feedEntityRequest = new FeedEntityRequest();
-        feedEntityRequest.setId(request.getId());
-        feedEntityRequest.setUrl(request.getUrl());
-        feedEntityRequest.setLabel(request.getLabel());
-        feedEntityRequest.setEnabled(request.isEnabled());
+        FeedServiceRequest feedServiceRequest = (FeedServiceRequest) request;
+
+        this.parseBaseServiceToEntityRequest(feedServiceRequest, feedEntityRequest);
+        feedEntityRequest.setUrl(feedServiceRequest.getUrl());
 
         return feedEntityRequest;
+    }
+
+    @Override
+    protected AbstractEntityFilter parseServiceToEntityFilter(AbstractServiceFilter filter) {
+        FeedEntityFilter feedEntityFilter = new FeedEntityFilter();
+        FeedServiceFilter feedServiceFilter = (FeedServiceFilter) filter;
+
+        this.parseBaseServiceToEntityFilter(feedServiceFilter, feedEntityFilter);
+        feedEntityFilter.setUrl(feedServiceFilter.getUrl());
+
+        return feedEntityFilter;
     }
 }
