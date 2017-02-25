@@ -46,6 +46,16 @@ public class FeedService extends AbstractService {
         );
     }
 
+    /**
+     * @param filter
+     * @return
+     * @throws Exception
+     */
+    public int delete(FeedServiceFilter filter) throws Exception {
+        return this.feedEntity.deleteFeed(
+                (FeedEntityFilter) this.parseServiceToEntityFilter(filter)
+        );
+    }
 
     /**
      * @param request

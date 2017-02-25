@@ -46,6 +46,14 @@ public class FeedEntity extends AbstractEntity {
     }
 
     /**
+     * @param filter
+     * @return
+     */
+    public int deleteFeed(FeedEntityFilter filter) {
+        return this.feedDal.delete(this.parseEntityToDalFilter(filter));
+    }
+
+    /**
      * @param request
      * @return
      */

@@ -7,9 +7,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 abstract public class AbstractQuery implements IQuery {
+    protected final String KEY_FROM = "from";
     protected final String KEY_WHERE = "where";
     protected final String KEY_COLUMNS = "columns";
 
+    protected final String SQL_FROM = "FROM";
     protected final String SQL_WHERE = "WHERE";
     protected final String SQL_AND = "AND";
     protected final String SQL_OR = "OR";

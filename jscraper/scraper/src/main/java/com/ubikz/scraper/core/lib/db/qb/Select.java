@@ -10,7 +10,6 @@ public class Select extends AbstractQuery {
     protected final String SQL_AS = "AS";
     // Key use within maps
     private final String KEY_DISTINCT = "distinct";
-    private final String KEY_FROM = "from";
     private final String KEY_ORDER = "order";
     private final String KEY_JOIN = "inner_join";
     // SQL elements

@@ -61,6 +61,20 @@ abstract public class AbstractDal {
      * @param filter
      * @return
      */
+    public int delete(AbstractDalFilter filter) {
+        QueryBuilder qb = new QueryBuilder();
+        AbstractQuery delete = qb
+                .delete()
+                .from(this.tableName)
+                .where(this.tableIdentifier, filter.getId());
+
+        return this.delete(delete);
+    }
+
+    /**
+     * @param filter
+     * @return
+     */
     public List<Map<String, Object>> getAll(AbstractDalFilter filter) {
         QueryBuilder qb = new QueryBuilder();
         AbstractQuery select = qb.select().from(this.tableName);
@@ -154,6 +168,19 @@ abstract public class AbstractDal {
 
         this.logger.debug("# Update SQL > " + request.getSQL());
         this.logger.debug("# Update Params > " + request.getParameters());
+
+        return this.dbWrapper.jdbcTemplate.update(request.getSQL(), request.getParameters());
+    }
+
+    /**
+     * @param request
+     * @return
+     */
+    protected int delete(AbstractQuery request) {
+        request.build();
+
+        this.logger.debug("# Delete SQL > " + request.getSQL());
+        this.logger.debug("# Delete Params > " + request.getParameters());
 
         return this.dbWrapper.jdbcTemplate.update(request.getSQL(), request.getParameters());
     }

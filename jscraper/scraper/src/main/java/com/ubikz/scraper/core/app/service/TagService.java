@@ -48,6 +48,16 @@ public class TagService extends AbstractService {
         );
     }
 
+    /**
+     * @param filter
+     * @return
+     * @throws Exception
+     */
+    public int delete(TagServiceFilter filter) throws Exception {
+        return this.tagEntity.deleteTag(
+                (TagEntityFilter) this.parseServiceToEntityFilter(filter)
+        );
+    }
 
     /**
      * @param request

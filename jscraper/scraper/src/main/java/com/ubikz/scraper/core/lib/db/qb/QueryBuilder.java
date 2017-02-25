@@ -15,4 +15,8 @@ public class QueryBuilder {
     public Update update(String table) {
         return new Update(table);
     }
+
+    public Delete delete() {
+        return new Delete();
+    }
 }

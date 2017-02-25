@@ -10,7 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 
 abstract class AbstractContext {
     protected final Logger logger = LoggerFactory.getLogger(AbstractContext.class);
@@ -37,6 +40,7 @@ abstract class AbstractContext {
     final protected BaseMessage handle(Callable callable, HttpStatus defaultStatus, int defaultCode) throws Exception {
         BaseMessage result = new BaseMessage();
         ErrorMessage errorMessage = new ErrorMessage();
+        Exception exception = null;
 
         Object data = null;
         boolean isSuccess = false;
@@ -47,12 +51,14 @@ abstract class AbstractContext {
             data = callable.call();
             isSuccess = true;
         } catch (EmptyResultDataAccessException e) {
+            exception = e;
             code = CODE_DATA_NOT_FOUND;
             status = HttpStatus.NOT_FOUND.value();
             errorMessage.setTitle("Not found.");
             errorMessage.setDetail("Bad query. No result returned.");
             data = errorMessage;
         } catch (Exception e) {
+            exception = e;
             code = CODE_ERROR;
             status = HttpStatus.INTERNAL_SERVER_ERROR.value();
             String detail = e.getMessage() + "\n";
@@ -67,6 +73,14 @@ abstract class AbstractContext {
             result.setCode(code);
             result.setStatus(status);
             result.setSuccess(isSuccess);
+            if (exception != null) {
+                List<String> errorLog = new ArrayList<>();
+                errorLog.add(exception.getMessage());
+                for (StackTraceElement stackTraceElement : exception.getStackTrace()) {
+                    errorLog.add("      " + stackTraceElement);
+                }
+                this.logger.error("Exception : " + errorLog.stream().collect(Collectors.joining("\n")));
+            }
         }
 
         return result;

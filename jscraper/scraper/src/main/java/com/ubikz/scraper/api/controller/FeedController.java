@@ -56,4 +56,14 @@ public class FeedController extends AbstractController {
     public String getById(@PathVariable("id") final int id) throws Exception {
         return this.sendResponse(this.feedContext.getFeedById(id));
     }
+
+    /**
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/feed/{id}", method = RequestMethod.DELETE, produces = "application/json")
+    public String deleteById(@PathVariable("id") final int id) throws Exception {
+        return this.sendResponse(this.feedContext.deleteFeedById(id));
+    }
 }

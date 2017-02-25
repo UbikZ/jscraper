@@ -52,4 +52,14 @@ public class TagController extends AbstractController {
     public String getById(@PathVariable("id") final int id) throws Exception {
         return this.sendResponse(this.tagContext.getTagById(id));
     }
+
+    /**
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/tag/{id}", method = RequestMethod.DELETE, produces = "application/json")
+    public String deleteById(@PathVariable("id") final int id) throws Exception {
+        return this.sendResponse(this.tagContext.deleteTagById(id));
+    }
 }

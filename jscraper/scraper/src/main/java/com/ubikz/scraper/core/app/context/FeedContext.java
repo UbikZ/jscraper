@@ -15,10 +15,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FeedContext extends AbstractContext {
-    final private int FEED_CREATED = 1;
-    final private int FEED_UPDATED = 2;
-    final private int FEED_GET_ONE = 3;
-    final private int FEED_GET_ALL = 4;
+    final private int FEED_CREATED = 10;
+    final private int FEED_UPDATED = 11;
+    final private int FEED_GET_ONE = 12;
+    final private int FEED_GET_ALL = 12;
+    final private int FEED_DELETE = 13;
 
     private FeedService feedService;
 
@@ -75,6 +76,22 @@ public class FeedContext extends AbstractContext {
 
             return this.feedService.getOneFeed((FeedServiceFilter) this.parseFilter(filter, serviceFilter));
         }, HttpStatus.OK, FEED_GET_ONE);
+    }
+
+    /**
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public BaseMessage deleteFeedById(int id) throws Exception {
+        FeedDto filter = new FeedDto();
+        filter.setId(id);
+
+        return this.handle(() -> {
+            FeedServiceFilter serviceFilter = new FeedServiceFilter();
+
+            return this.feedService.delete((FeedServiceFilter) this.parseFilter(filter, serviceFilter));
+        }, HttpStatus.OK, FEED_DELETE);
     }
 
     /**

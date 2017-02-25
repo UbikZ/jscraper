@@ -1,6 +1,7 @@
 package com.ubikz.scraper.core.app.context;
 
 import com.ubikz.scraper.core.app.dto.AbstractDto;
+import com.ubikz.scraper.core.app.dto.FeedTypeDto;
 import com.ubikz.scraper.core.app.dto.TagDto;
 import com.ubikz.scraper.core.app.exception.MissingParameterException;
 import com.ubikz.scraper.core.app.service.TagService;
@@ -15,10 +16,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TagContext extends AbstractContext {
-    final private int FEED_TYPE_CREATED = 5;
-    final private int FEED_TYPE_UPDATED = 6;
-    final private int FEED_TYPE_GET_ONE = 7;
-    final private int FEED_TYPE_GET_ALL = 8;
+    final private int TAG_TYPE_CREATED = 30;
+    final private int TAG_TYPE_UPDATED = 31;
+    final private int TAG_TYPE_GET_ONE = 32;
+    final private int TAG_TYPE_GET_ALL = 33;
+    final private int TAG_TYPE_DELETE = 34;
 
     private TagService tagService;
 
@@ -39,7 +41,7 @@ public class TagContext extends AbstractContext {
             return this.tagService.createTag(
                     (TagServiceRequest) this.parseRequest(request, serviceRequest)
             );
-        }, HttpStatus.CREATED, FEED_TYPE_CREATED);
+        }, HttpStatus.CREATED, TAG_TYPE_CREATED);
     }
 
     /**
@@ -58,7 +60,7 @@ public class TagContext extends AbstractContext {
             return this.tagService.createTag(
                     (TagServiceRequest) this.parseRequest(request, serviceRequest)
             );
-        }, HttpStatus.OK, FEED_TYPE_UPDATED);
+        }, HttpStatus.OK, TAG_TYPE_UPDATED);
     }
 
     /**
@@ -74,7 +76,23 @@ public class TagContext extends AbstractContext {
             TagServiceFilter serviceFilter = new TagServiceFilter();
 
             return this.tagService.getAllTags((TagServiceFilter) this.parseFilter(filter, serviceFilter));
-        }, HttpStatus.OK, FEED_TYPE_GET_ALL);
+        }, HttpStatus.OK, TAG_TYPE_GET_ALL);
+    }
+
+    /**
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public BaseMessage deleteTagById(int id) throws Exception {
+        FeedTypeDto filter = new FeedTypeDto();
+        filter.setId(id);
+
+        return this.handle(() -> {
+            TagServiceFilter serviceFilter = new TagServiceFilter();
+
+            return this.tagService.delete((TagServiceFilter) this.parseFilter(filter, serviceFilter));
+        }, HttpStatus.OK, TAG_TYPE_DELETE);
     }
 
     /**
@@ -91,7 +109,7 @@ public class TagContext extends AbstractContext {
             serviceFilter = (TagServiceFilter) this.parseFilter(filter, serviceFilter);
 
             return this.tagService.getOneTag(serviceFilter);
-        }, HttpStatus.OK, FEED_TYPE_GET_ONE);
+        }, HttpStatus.OK, TAG_TYPE_GET_ONE);
     }
 
     @Override

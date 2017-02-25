@@ -62,6 +62,14 @@ public class TagEntity extends AbstractEntity {
     }
 
     /**
+     * @param filter
+     * @return
+     */
+    public int deleteTag(TagEntityFilter filter) {
+        return this.tagDal.delete(this.parseEntityToDalFilter(filter));
+    }
+
+    /**
      * @param request
      * @return
      */
