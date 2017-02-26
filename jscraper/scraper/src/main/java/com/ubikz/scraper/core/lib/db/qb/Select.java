@@ -1,6 +1,7 @@
 package com.ubikz.scraper.core.lib.db.qb;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -11,6 +12,7 @@ public class Select extends AbstractQuery {
     // Key use within maps
     private final String KEY_DISTINCT = "distinct";
     private final String KEY_ORDER = "order";
+    private final String KEY_GROUP = "group";
     private final String KEY_JOIN = "inner_join";
     // SQL elements
     private final String SQL_WILDCARD = "*";
@@ -18,6 +20,7 @@ public class Select extends AbstractQuery {
     private final String SQL_FROM = "FROM";
     private final String SQL_DISTINCT = "DISTINCT";
     private final String SQL_ORDER_BY = "ORDER BY";
+    private final String SQL_GROUP_BY = "GROUP BY";
     private final String SQL_ON = "ON";
     private final String SQL_ASC = "ASC";
     private final String SQL_DESC = "DESC";
@@ -29,25 +32,80 @@ public class Select extends AbstractQuery {
         this.parseColumns(columns);
     }
 
+    /**
+     * @param table
+     * @return
+     */
     public Select from(String table) {
-        this.parts.put(KEY_FROM, table);
+        this.from(table, null);
         return this;
     }
 
+    /**
+     * @param table
+     * @param alias
+     * @return
+     */
+    public Select from(String table, String alias) {
+        this.parts.put(KEY_FROM, this.buildAlias(table, alias));
+        return this;
+    }
+
+    /**
+     * @param table
+     * @param on
+     * @return
+     */
     public Select join(String table, String on) {
+        this.join(table, null, on);
+        return this;
+    }
+
+    /**
+     * @param table
+     * @param alias
+     * @param on
+     * @return
+     */
+    public Select join(String table, String alias, String on) {
         @SuppressWarnings("unchecked")
         List<String> existingJoins = (List<String>) this.parts.get(KEY_JOIN);
-        existingJoins.add("JOIN " + table + " " + SQL_ON + " " + on);
+        existingJoins.add("JOIN " + this.buildAlias(table, alias) + " " + SQL_ON + " " + on);
         this.parts.put(KEY_JOIN, existingJoins);
         return this;
     }
 
-    private void parseColumns(String... columns) {
-        List<String> existingColumns = (List<String>) this.parts.get(KEY_COLUMNS);
-        for (String column : columns) {
-            existingColumns.add(column);
+    /**
+     * @param table
+     * @param alias
+     * @return
+     */
+    private String buildAlias(String table, String alias) {
+        List<String> aliasedTable = new ArrayList<>();
+        aliasedTable.add(table);
+
+        if (alias != null) {
+            aliasedTable.add(SQL_AS);
+            aliasedTable.add(alias);
         }
-        this.parts.put(KEY_COLUMNS, existingColumns);
+
+        return aliasedTable.stream().collect(Collectors.joining(" "));
+    }
+
+    /**
+     * @param columns
+     */
+    private void parseColumns(String... columns) {
+        this.parts.put(KEY_COLUMNS, Arrays.asList(columns));
+    }
+
+    /**
+     * @param columns
+     * @return
+     */
+    public Select groupBy(String... columns) {
+        this.parts.put(KEY_GROUP, Arrays.asList(columns));
+        return this;
     }
 
     @Override
@@ -96,6 +154,12 @@ public class Select extends AbstractQuery {
             this.sql.add(SQL_WHERE);
             this.sql.add(wheres.stream().collect(Collectors.joining(" " + SQL_AND + " ")));
         }
+
+        List<String> groupBy = (List<String>) this.parts.get(KEY_GROUP);
+        if (groupBy.size() > 0) {
+            this.sql.add(SQL_GROUP_BY);
+            this.sql.add("(" + groupBy.stream().collect(Collectors.joining(",")) + ")");
+        }
     }
 
     @Override
@@ -106,6 +170,7 @@ public class Select extends AbstractQuery {
         this.parts.put(KEY_JOIN, new ArrayList<>());
         this.parts.put(KEY_WHERE, new ArrayList<>());
         this.parts.put(KEY_ORDER, new ArrayList<>());
+        this.parts.put(KEY_GROUP, new ArrayList<>());
     }
 
     @Override

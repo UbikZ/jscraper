@@ -1,32 +1,32 @@
-package com.ubikz.scraper.core.app.dto;
+package com.ubikz.scraper.api.controller.request;
 
 import java.util.List;
 
-public class FeedItemDto extends AbstractDto {
-    private FeedDto feed;
-    private FeedTypeDto feedType;
+public class FeedItemRequestBody extends AbstractRequestBody {
+    private Integer feedId;
+    private Integer feedTypeId;
     private String url;
     private String checksum;
-    private List<TagDto> tags;
+    private List<Integer> tagIds;
     private Boolean isViewed;
     private Boolean isApproved;
     private Boolean isReposted;
     private Boolean isSent;
 
-    public FeedDto getFeed() {
-        return feed;
+    public Integer getFeedId() {
+        return feedId;
     }
 
-    public void setFeed(FeedDto feed) {
-        this.feed = feed;
+    public void setFeedId(Integer feedId) {
+        this.feedId = feedId;
     }
 
-    public FeedTypeDto getFeedType() {
-        return feedType;
+    public Integer getFeedTypeId() {
+        return feedTypeId;
     }
 
-    public void setFeedType(FeedTypeDto feedType) {
-        this.feedType = feedType;
+    public void setFeedTypeId(Integer feedTypeId) {
+        this.feedTypeId = feedTypeId;
     }
 
     public String getUrl() {
@@ -45,12 +45,12 @@ public class FeedItemDto extends AbstractDto {
         this.checksum = checksum;
     }
 
-    public List<TagDto> getTags() {
-        return tags;
+    public List<Integer> getTagIds() {
+        return tagIds;
     }
 
-    public void setTags(List<TagDto> tags) {
-        this.tags = tags;
+    public void setTagIds(List<Integer> tagIds) {
+        this.tagIds = tagIds;
     }
 
     public Boolean getViewed() {

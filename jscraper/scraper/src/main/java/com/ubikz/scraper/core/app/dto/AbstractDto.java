@@ -19,7 +19,7 @@ abstract public class AbstractDto {
         this.id = id;
     }
 
-    public Boolean isEnabled() {
+    public Boolean getEnabled() {
         return isEnabled;
     }
 

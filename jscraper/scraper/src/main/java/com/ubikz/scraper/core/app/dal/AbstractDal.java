@@ -5,6 +5,7 @@ import com.ubikz.scraper.core.app.dal.request.AbstractDalRequest;
 import com.ubikz.scraper.core.lib.db.DBWrapper;
 import com.ubikz.scraper.core.lib.db.qb.AbstractQuery;
 import com.ubikz.scraper.core.lib.db.qb.QueryBuilder;
+import com.ubikz.scraper.core.lib.db.qb.Select;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,13 +76,21 @@ abstract public class AbstractDal {
      * @param filter
      * @return
      */
-    public List<Map<String, Object>> getAll(AbstractDalFilter filter) {
+    protected Select getBaseSelect(AbstractDalFilter filter) {
         QueryBuilder qb = new QueryBuilder();
         AbstractQuery select = qb.select().from(this.tableName);
 
         this.parseFilter(filter, select);
 
-        return this.find(select);
+        return (Select) select;
+    }
+
+    /**
+     * @param filter
+     * @return
+     */
+    public List<Map<String, Object>> getAll(AbstractDalFilter filter) {
+        return this.find(this.getBaseSelect(filter));
     }
 
     /**
@@ -89,12 +98,7 @@ abstract public class AbstractDal {
      * @return
      */
     public Map<String, Object> getOne(AbstractDalFilter filter) {
-        QueryBuilder qb = new QueryBuilder();
-        AbstractQuery select = qb.select().from(this.tableName);
-
-        this.parseFilter(filter, select);
-
-        return this.findOne(select);
+        return this.findOne(this.getBaseSelect(filter));
     }
 
     /**
@@ -121,8 +125,8 @@ abstract public class AbstractDal {
             values.put("label", request.getLabel());
         }
 
-        if (request.isEnabled() != null) {
-            values.put("enabled", request.isEnabled());
+        if (request.getEnabled() != null) {
+            values.put("enabled", request.getEnabled());
         }
 
         return values;
@@ -141,8 +145,8 @@ abstract public class AbstractDal {
             select.where("label", filter.getLabel());
         }
 
-        if (filter.isEnabled() != null) {
-            select.where("enabled", filter.isEnabled());
+        if (filter.getEnabled() != null) {
+            select.where("enabled", filter.getEnabled());
         }
     }
 

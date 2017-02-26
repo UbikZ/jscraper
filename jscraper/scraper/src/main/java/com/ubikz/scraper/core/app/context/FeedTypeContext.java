@@ -1,11 +1,12 @@
 package com.ubikz.scraper.core.app.context;
 
-import com.ubikz.scraper.core.app.dto.AbstractDto;
-import com.ubikz.scraper.core.app.dto.FeedTypeDto;
+import com.ubikz.scraper.api.controller.filter.AbstractFilterBody;
+import com.ubikz.scraper.api.controller.filter.FeedTypeFilterBody;
+import com.ubikz.scraper.api.controller.request.AbstractRequestBody;
+import com.ubikz.scraper.api.controller.request.FeedTypeRequestBody;
 import com.ubikz.scraper.core.app.exception.MissingParameterException;
 import com.ubikz.scraper.core.app.service.FeedTypeService;
 import com.ubikz.scraper.core.app.service.filter.AbstractServiceFilter;
-import com.ubikz.scraper.core.app.service.filter.FeedServiceFilter;
 import com.ubikz.scraper.core.app.service.filter.FeedTypeServiceFilter;
 import com.ubikz.scraper.core.app.service.message.BaseMessage;
 import com.ubikz.scraper.core.app.service.request.AbstractServiceRequest;
@@ -34,14 +35,10 @@ public class FeedTypeContext extends AbstractContext {
      * @return
      * @throws Exception
      */
-    public BaseMessage createFeedType(FeedTypeDto request) throws Exception {
-        return this.handle(() -> {
-            FeedTypeServiceRequest serviceRequest = new FeedTypeServiceRequest();
-
-            return this.feedTypeService.createFeedType(
-                    (FeedTypeServiceRequest) this.parseRequest(request, serviceRequest)
-            );
-        }, HttpStatus.CREATED, FEED_TYPE_CREATED);
+    public BaseMessage createFeedType(FeedTypeRequestBody request) throws Exception {
+        return this.handle(() -> this.feedTypeService.createFeedType(
+                (FeedTypeServiceRequest) this.parseRequest(request, new FeedTypeServiceRequest())
+        ), HttpStatus.CREATED, FEED_TYPE_CREATED);
     }
 
     /**
@@ -49,16 +46,14 @@ public class FeedTypeContext extends AbstractContext {
      * @return
      * @throws Exception
      */
-    public BaseMessage updateFeedType(FeedTypeDto request) throws Exception {
+    public BaseMessage updateFeedType(Integer id, FeedTypeRequestBody request) throws Exception {
         return this.handle(() -> {
-            FeedTypeServiceRequest serviceRequest = new FeedTypeServiceRequest();
-
-            if (request.getId() == null) {
+            if (id == null) {
                 throw new MissingParameterException();
             }
 
             return this.feedTypeService.createFeedType(
-                    (FeedTypeServiceRequest) this.parseRequest(request, serviceRequest)
+                    (FeedTypeServiceRequest) this.parseRequest(request, new FeedTypeServiceRequest())
             );
         }, HttpStatus.OK, FEED_TYPE_UPDATED);
     }
@@ -69,15 +64,12 @@ public class FeedTypeContext extends AbstractContext {
      * @throws Exception
      */
     public BaseMessage getFeedTypeById(int id) throws Exception {
-        FeedTypeDto filter = new FeedTypeDto();
+        FeedTypeFilterBody filter = new FeedTypeFilterBody();
         filter.setId(id);
 
-        return this.handle(() -> {
-            FeedTypeServiceFilter serviceFilter = new FeedTypeServiceFilter();
-            serviceFilter = (FeedTypeServiceFilter) this.parseFilter(filter, serviceFilter);
-
-            return this.feedTypeService.getOneFeedType(serviceFilter);
-        }, HttpStatus.OK, FEED_TYPE_GET_ONE);
+        return this.handle(() -> this.feedTypeService.getOneFeedType(
+                (FeedTypeServiceFilter) this.parseFilter(filter, new FeedTypeServiceFilter())
+        ), HttpStatus.OK, FEED_TYPE_GET_ONE);
     }
 
     /**
@@ -86,47 +78,37 @@ public class FeedTypeContext extends AbstractContext {
      * @throws Exception
      */
     public BaseMessage deleteFeedTypeById(int id) throws Exception {
-        FeedTypeDto filter = new FeedTypeDto();
+        FeedTypeFilterBody filter = new FeedTypeFilterBody();
         filter.setId(id);
 
-        return this.handle(() -> {
-            FeedServiceFilter serviceFilter = new FeedServiceFilter();
-
-            return this.feedTypeService.delete((FeedTypeServiceFilter) this.parseFilter(filter, serviceFilter));
-        }, HttpStatus.OK, FEED_TYPE_DELETE);
+        return this.handle(() -> this.feedTypeService.delete(
+                (FeedTypeServiceFilter) this.parseFilter(filter, new FeedTypeServiceFilter())
+        ), HttpStatus.OK, FEED_TYPE_DELETE);
     }
 
     /**
-     * @param enabled
+     * @param filter
      * @return
      * @throws Exception
      */
-    public BaseMessage getAllFeedTypes(Boolean enabled) throws Exception {
-        FeedTypeDto filter = new FeedTypeDto();
-        filter.setEnabled(enabled);
-
-        return this.handle(() -> {
-            FeedServiceFilter serviceFilter = new FeedServiceFilter();
-
-            return this.feedTypeService.getAllFeedTypes((FeedTypeServiceFilter) this.parseFilter(filter, serviceFilter));
-        }, HttpStatus.OK, FEED_TYPE_GET_ALL);
+    public BaseMessage getAllFeedTypes(FeedTypeFilterBody filter) throws Exception {
+        return this.handle(() -> this.feedTypeService.getAllFeedTypes(
+                (FeedTypeServiceFilter) this.parseFilter(filter, new FeedTypeServiceFilter())
+        ), HttpStatus.OK, FEED_TYPE_GET_ALL);
     }
 
     @Override
-    protected AbstractServiceRequest parseRequest(AbstractDto data, AbstractServiceRequest request) {
-        FeedTypeDto feedTypeDto = (FeedTypeDto) data;
-        FeedTypeServiceRequest serviceRequest = (FeedTypeServiceRequest) this.parseBaseRequest(feedTypeDto, request);
-        serviceRequest.setUrlRegex(feedTypeDto.getUrlRegex());
-        serviceRequest.setUrlRegex(feedTypeDto.getUrlRegex());
+    protected AbstractServiceRequest parseRequest(AbstractRequestBody data, AbstractServiceRequest request) {
+        FeedTypeRequestBody requestBody = (FeedTypeRequestBody) data;
+        FeedTypeServiceRequest serviceRequest = (FeedTypeServiceRequest) this.parseBaseRequest(requestBody, request);
+        serviceRequest.setUrlRegex(requestBody.getUrlRegex());
+        serviceRequest.setContentRegex(requestBody.getContentRegex());
 
         return serviceRequest;
     }
 
     @Override
-    protected AbstractServiceFilter parseFilter(AbstractDto data, AbstractServiceFilter filter) {
-        FeedTypeDto feedTypeDto = (FeedTypeDto) data;
-        FeedTypeServiceFilter serviceFilter = (FeedTypeServiceFilter) this.parseBaseFilter(feedTypeDto, filter);
-
-        return serviceFilter;
+    protected AbstractServiceFilter parseFilter(AbstractFilterBody data, AbstractServiceFilter filter) {
+        return this.parseBaseFilter(data, filter);
     }
 }

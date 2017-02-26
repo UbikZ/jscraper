@@ -30,7 +30,7 @@ abstract class AbstractEntity {
     final protected AbstractDalRequest parseBaseEntityToDalRequest(AbstractEntityRequest eRequest, AbstractDalRequest dRequest) {
         dRequest.setId(eRequest.getId());
         dRequest.setLabel(eRequest.getLabel());
-        dRequest.setEnabled(eRequest.isEnabled());
+        dRequest.setEnabled(eRequest.getEnabled());
 
         return dRequest;
     }
@@ -43,7 +43,7 @@ abstract class AbstractEntity {
     final protected AbstractDalFilter parseBaseEntityToDalFilter(AbstractEntityFilter eFilter, AbstractDalFilter dFilter) {
         dFilter.setId(eFilter.getId());
         dFilter.setLabel(eFilter.getLabel());
-        dFilter.setEnabled(eFilter.isEnabled());
+        dFilter.setEnabled(eFilter.getEnabled());
 
         return dFilter;
     }

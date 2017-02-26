@@ -1,7 +1,8 @@
 package com.ubikz.scraper.api.controller;
 
+import com.ubikz.scraper.api.controller.filter.TagFilterBody;
+import com.ubikz.scraper.api.controller.request.TagRequestBody;
 import com.ubikz.scraper.core.app.context.TagContext;
-import com.ubikz.scraper.core.app.dto.TagDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,13 +24,13 @@ public class TagController extends AbstractController {
      * @throws Exception
      */
     @RequestMapping(value = "/tag", method = RequestMethod.POST, produces = "application/json")
-    public String create(@RequestBody final TagDto request) throws Exception {
+    public String create(@RequestBody final TagRequestBody request) throws Exception {
         return this.sendResponse(this.tagContext.createTag(request));
     }
 
     @RequestMapping(value = "/tag", method = RequestMethod.GET, produces = "application/json")
-    public String get(@RequestParam(required = false) final Boolean enabled) throws Exception {
-        return this.sendResponse(this.tagContext.getAllTags(enabled));
+    public String get(final TagFilterBody filter) throws Exception {
+        return this.sendResponse(this.tagContext.getAllTags(filter));
     }
 
     /**
@@ -38,9 +39,8 @@ public class TagController extends AbstractController {
      * @throws Exception
      */
     @RequestMapping(value = "/tag/{id}", method = RequestMethod.PUT, produces = "application/json")
-    public String update(@PathVariable("id") final int id, @RequestBody final TagDto request) throws Exception {
-        request.setId(id);
-        return this.sendResponse(this.tagContext.updateTag(request));
+    public String update(@PathVariable("id") final int id, @RequestBody final TagRequestBody request) throws Exception {
+        return this.sendResponse(this.tagContext.updateTag(id, request));
     }
 
     /**

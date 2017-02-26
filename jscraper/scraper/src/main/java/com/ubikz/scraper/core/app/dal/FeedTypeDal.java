@@ -14,7 +14,7 @@ public class FeedTypeDal extends AbstractDal {
      */
     public FeedTypeDal(DBWrapper dbWrapper) {
         super(dbWrapper);
-        this.tableName = "feed_item";
+        this.tableName = "feed_type";
     }
 
     /**

@@ -1,13 +1,13 @@
-package com.ubikz.scraper.core.app.service.filter;
+package com.ubikz.scraper.api.controller.filter;
 
 import java.util.Date;
 
-abstract public class AbstractServiceFilter {
+abstract public class AbstractFilterBody {
     private Integer id;
+    private Boolean isEnabled;
     private String label;
     private Date startDate;
     private Date endDate;
-    private Boolean isEnabled;
 
     public Integer getId() {
         return id;
@@ -25,6 +25,14 @@ abstract public class AbstractServiceFilter {
         this.label = label;
     }
 
+    public Boolean getEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        isEnabled = enabled;
+    }
+
     public Date getStartDate() {
         return startDate;
     }
@@ -40,13 +48,4 @@ abstract public class AbstractServiceFilter {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
-
-    public Boolean getEnabled() {
-        return isEnabled;
-    }
-
-    public void setEnabled(Boolean enabled) {
-        isEnabled = enabled;
-    }
 }
-

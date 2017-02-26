@@ -41,7 +41,7 @@ abstract public class AbstractDalFilter {
         this.endDate = endDate;
     }
 
-    public Boolean isEnabled() {
+    public Boolean getEnabled() {
         return isEnabled;
     }
 

@@ -1,5 +1,7 @@
 package com.ubikz.scraper.core.app.context;
 
+import com.ubikz.scraper.api.controller.filter.AbstractFilterBody;
+import com.ubikz.scraper.api.controller.request.AbstractRequestBody;
 import com.ubikz.scraper.core.app.dto.AbstractDto;
 import com.ubikz.scraper.core.app.service.filter.AbstractServiceFilter;
 import com.ubikz.scraper.core.app.service.message.BaseMessage;
@@ -90,23 +92,22 @@ abstract class AbstractContext {
      * @param request
      * @return
      */
-    abstract protected AbstractServiceRequest parseRequest(AbstractDto data, AbstractServiceRequest request);
+    abstract protected AbstractServiceRequest parseRequest(AbstractRequestBody data, AbstractServiceRequest request);
 
     /**
      * @param filter
      * @return
      */
-    abstract protected AbstractServiceFilter parseFilter(AbstractDto data, AbstractServiceFilter filter);
+    abstract protected AbstractServiceFilter parseFilter(AbstractFilterBody data, AbstractServiceFilter filter);
 
     /**
      * @param data
      * @param request
      * @return
      */
-    final protected AbstractServiceRequest parseBaseRequest(AbstractDto data, AbstractServiceRequest request) {
-        request.setId(data.getId());
+    final protected AbstractServiceRequest parseBaseRequest(AbstractRequestBody data, AbstractServiceRequest request) {
         request.setLabel(data.getLabel());
-        request.setEnabled(data.isEnabled());
+        request.setEnabled(data.getEnabled());
 
         return request;
     }
@@ -116,10 +117,10 @@ abstract class AbstractContext {
      * @param filter
      * @return
      */
-    final protected AbstractServiceFilter parseBaseFilter(AbstractDto data, AbstractServiceFilter filter) {
+    final protected AbstractServiceFilter parseBaseFilter(AbstractFilterBody data, AbstractServiceFilter filter) {
         filter.setId(data.getId());
         filter.setLabel(data.getLabel());
-        filter.setEnabled(data.isEnabled());
+        filter.setEnabled(data.getEnabled());
 
         return filter;
     }

@@ -1,5 +1,7 @@
 package com.ubikz.scraper.api.controller;
 
+import com.ubikz.scraper.api.controller.filter.FeedTypeFilterBody;
+import com.ubikz.scraper.api.controller.request.FeedTypeRequestBody;
 import com.ubikz.scraper.core.app.context.FeedTypeContext;
 import com.ubikz.scraper.core.app.dto.FeedTypeDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +25,13 @@ public class FeedTypeController extends AbstractController {
      * @throws Exception
      */
     @RequestMapping(value = "/feed-type", method = RequestMethod.POST, produces = "application/json")
-    public String create(@RequestBody final FeedTypeDto request) throws Exception {
+    public String create(@RequestBody final FeedTypeRequestBody request) throws Exception {
         return this.sendResponse(this.feedTypeContext.createFeedType(request));
     }
 
     @RequestMapping(value = "/feed-type", method = RequestMethod.GET, produces = "application/json")
-    public String get(@RequestParam(required = false) final Boolean enabled) throws Exception {
-        return this.sendResponse(this.feedTypeContext.getAllFeedTypes(enabled));
+    public String get(final FeedTypeFilterBody filter) throws Exception {
+        return this.sendResponse(this.feedTypeContext.getAllFeedTypes(filter));
     }
 
     /**
@@ -38,9 +40,8 @@ public class FeedTypeController extends AbstractController {
      * @throws Exception
      */
     @RequestMapping(value = "/feed-type/{id}", method = RequestMethod.PUT, produces = "application/json")
-    public String update(@PathVariable("id") final int id, @RequestBody final FeedTypeDto request) throws Exception {
-        request.setId(id);
-        return this.sendResponse(this.feedTypeContext.updateFeedType(request));
+    public String update(@PathVariable("id") final int id, @RequestBody final FeedTypeRequestBody request) throws Exception {
+        return this.sendResponse(this.feedTypeContext.updateFeedType(id, request));
     }
 
     /**

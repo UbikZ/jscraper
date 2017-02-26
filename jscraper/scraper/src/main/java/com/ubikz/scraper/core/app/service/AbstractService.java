@@ -30,7 +30,7 @@ abstract class AbstractService {
     final protected void parseBaseServiceToEntityRequest(AbstractServiceRequest sRequest, AbstractEntityRequest eRequest) {
         eRequest.setId(sRequest.getId());
         eRequest.setLabel(sRequest.getLabel());
-        eRequest.setEnabled(sRequest.isEnabled());
+        eRequest.setEnabled(sRequest.getEnabled());
     }
 
     /**
@@ -41,6 +41,6 @@ abstract class AbstractService {
     final protected void parseBaseServiceToEntityFilter(AbstractServiceFilter sFilter, AbstractEntityFilter eFilter) {
         eFilter.setId(sFilter.getId());
         eFilter.setLabel(sFilter.getLabel());
-        eFilter.setEnabled(sFilter.isEnabled());
+        eFilter.setEnabled(sFilter.getEnabled());
     }
 }

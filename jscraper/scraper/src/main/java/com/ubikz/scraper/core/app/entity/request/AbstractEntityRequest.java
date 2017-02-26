@@ -21,7 +21,7 @@ public class AbstractEntityRequest {
         this.label = label;
     }
 
-    public Boolean isEnabled() {
+    public Boolean getEnabled() {
         return isEnabled;
     }
 
