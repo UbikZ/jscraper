@@ -18,9 +18,11 @@ RUN wget  https://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.z
     ln -s gradle-$GRADLE_VERSION gradle && \
     echo -ne "- with Gradle $GRADLE_VERSION\n" >> /root/.built
 
-COPY scripts/entrypoint.sh /entrypoint.sh
-
 ADD . /jscraper
 WORKDIR /jscraper
+
+RUN /install/gradle/bin/gradle compileJava
+
+COPY scripts/entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]

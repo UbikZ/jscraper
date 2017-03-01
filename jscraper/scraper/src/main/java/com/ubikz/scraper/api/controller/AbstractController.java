@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping(value="/api")
 @RestController
+@RequestMapping(value = "/api")
 public class AbstractController {
     protected final Logger logger = LoggerFactory.getLogger(AbstractController.class);
 

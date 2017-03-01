@@ -1,12 +1,12 @@
 buildscript {
     ext {
-        springBootVersion = '1.4.3.RELEASE'
+        springBootVersion = '1.5.1.RELEASE'
     }
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
     }
 }
 
@@ -26,7 +26,7 @@ subprojects {
 }
 
 project(':database') {
-    mainClassName = "com.ubikz.database.test.PostgreSQL"
+    mainClassName = 'com.ubikz.database.test.PostgreSQL'
 
     jar {
         baseName = 'dbConnect'
@@ -42,15 +42,16 @@ project(':database') {
     }
 
     dependencies {
-        compile("org.postgresql:postgresql:9.4.1212.jre6")
-        compile("org.flywaydb:flyway-core:4.0.3")
+        compile 'org.postgresql:postgresql:9.4.1212.jre6'
+        compile 'org.flywaydb:flyway-core:4.0.3'
+        testCompile 'junit:junit:4.12'
     }
 }
 
 project(':scraper') {
     apply plugin: 'org.springframework.boot'
 
-    mainClassName = "com.ubikz.scraper.Application"
+    mainClassName = 'com.ubikz.scraper.Application'
 
     jar {
         baseName = 'jscraper'
@@ -66,15 +67,17 @@ project(':scraper') {
     }
 
     dependencies {
-        compile("org.springframework.boot:spring-boot-starter-web:1.4.3.RELEASE")
-        compile("org.springframework:spring-jdbc:4.3.6.RELEASE")
-        compile("org.springframework.boot:spring-boot-starter-undertow:1.4.3.RELEASE")
-        compile("org.springframework.boot:spring-boot-gradle-plugin:1.4.3.RELEASE")
-        compile("org.postgresql:postgresql:9.4.1212.jre6")
-        compile("redis.clients:jedis:2.9.0")
+        compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+        compile "org.springframework.boot:spring-boot-starter-undertow:$springBootVersion"
+        compile "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
+        compile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+        compile 'org.springframework:spring-jdbc:4.3.6.RELEASE'
+        compile 'org.postgresql:postgresql:9.4.1212.jre6'
+        compile 'com.rometools:rome:1.7.1'
+        compile 'redis.clients:jedis:2.9.0'
     }
 
     configurations {
-        compile.exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
+        compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
     }
 }

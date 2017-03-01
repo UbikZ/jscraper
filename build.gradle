@@ -16,6 +16,7 @@ dependencies {
     compile("org.springframework:spring-jdbc:4.3.6.RELEASE")
     compile("org.postgresql:postgresql:9.4.1212.jre6")
     compile("org.flywaydb:flyway-core:4.0.3")
+    compile("com.rometools:rome:1.7.1")
     compile("redis.clients:jedis:2.9.0")
 }
 

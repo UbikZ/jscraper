@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class FeedItemController extends AbstractController {
+    private final String uriPath = "/feed-item";
     private FeedItemContext feedItemContext;
 
     /**
@@ -19,16 +20,25 @@ public class FeedItemController extends AbstractController {
     }
 
     /**
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = uriPath + "/generate", method = RequestMethod.GET, produces = "application/json")
+    public String createItems() throws Exception {
+        return this.sendResponse(null);
+    }
+
+    /**
      * @param request
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/feed-item", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = uriPath, method = RequestMethod.POST, produces = "application/json")
     public String create(@RequestBody final FeedItemRequestBody request) throws Exception {
         return this.sendResponse(this.feedItemContext.createFeedItem(request));
     }
 
-    @RequestMapping(value = "/feed-item", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = uriPath, method = RequestMethod.GET, produces = "application/json")
     public String get(final FeedItemFilterBody filter) throws Exception {
         return this.sendResponse(this.feedItemContext.getAllFeedItems(filter));
     }
@@ -38,7 +48,7 @@ public class FeedItemController extends AbstractController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/feed-item/{id}", method = RequestMethod.PUT, produces = "application/json")
+    @RequestMapping(value = uriPath + "/{id}", method = RequestMethod.PUT, produces = "application/json")
     public String update(@PathVariable("id") final int id, @RequestBody final FeedItemRequestBody request) throws Exception {
         return this.sendResponse(this.feedItemContext.updateFeedItem(id, request));
     }
@@ -48,7 +58,7 @@ public class FeedItemController extends AbstractController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/feed-item/{id}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = uriPath + "/{id}", method = RequestMethod.GET, produces = "application/json")
     public String getById(@PathVariable("id") final int id) throws Exception {
         return this.sendResponse(this.feedItemContext.getFeedItemById(id));
     }
@@ -58,7 +68,7 @@ public class FeedItemController extends AbstractController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/feed-item/{id}", method = RequestMethod.DELETE, produces = "application/json")
+    @RequestMapping(value = uriPath + "/{id}", method = RequestMethod.DELETE, produces = "application/json")
     public String deleteById(@PathVariable("id") final int id) throws Exception {
         return this.sendResponse(this.feedItemContext.deleteFeedItemById(id));
     }

@@ -22,10 +22,10 @@ public class PostgreSQL {
 
         switch (mode) {
             case "check":
-                checkDatabase(connexionString, username, password);
+                PostgreSQL.checkDatabase(connexionString, username, password);
                 break;
             case "migrate":
-                migrate(connexionString, username, password);
+                PostgreSQL.migrate(connexionString, username, password);
                 break;
             default:
                 throw new Exception("Wrong mode provided.");
