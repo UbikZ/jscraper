@@ -14,7 +14,8 @@ CREATE TABLE public.feed
   CONSTRAINT feed_url_ucc UNIQUE (url),
   CONSTRAINT feed_label_ucc UNIQUE (label)
 );
-CREATE INDEX feed_label_idx ON public.feed (label);
+CREATE INDEX feed_label_idx
+  ON public.feed (label);
 
 CREATE TABLE public.feed_type
 (
@@ -25,7 +26,8 @@ CREATE TABLE public.feed_type
   content_regex TEXT                    NOT NULL,
   enabled       BOOLEAN DEFAULT TRUE    NOT NULL
 );
-CREATE INDEX feedType_label_idx ON public.feed_type (label);
+CREATE INDEX feedType_label_idx
+  ON public.feed_type (label);
 
 CREATE TABLE public.feed_item
 (
@@ -36,7 +38,7 @@ CREATE TABLE public.feed_item
   checksum     VARCHAR(255)            NOT NULL,
   viewed       BOOLEAN DEFAULT FALSE   NOT NULL,
   approved     BOOLEAN DEFAULT FALSE   NOT NULL,
-  reposted    BOOLEAN DEFAULT FALSE   NOT NULL,
+  reposted     BOOLEAN DEFAULT FALSE   NOT NULL,
   sent         BOOLEAN DEFAULT FALSE   NOT NULL,
   enabled      BOOLEAN DEFAULT TRUE    NOT NULL,
   feed_id      INT                     NOT NULL,
@@ -49,7 +51,8 @@ CREATE TABLE public.feed_item
   CONSTRAINT feedItem_label_ucc UNIQUE (label),
   CONSTRAINT feedItem_checksum_ucc UNIQUE (checksum)
 );
-CREATE INDEX feedItem_label_idx ON public.feed_item (label);
+CREATE INDEX feedItem_label_idx
+  ON public.feed_item (label);
 
 CREATE TABLE public.tag
 (
@@ -59,7 +62,8 @@ CREATE TABLE public.tag
   enabled BOOLEAN DEFAULT TRUE    NOT NULL,
   CONSTRAINT tag_label_ucc UNIQUE (label)
 );
-CREATE INDEX tag_label_idx ON public.tag (label);
+CREATE INDEX tag_label_idx
+  ON public.tag (label);
 
 CREATE TABLE public.feed_item_tag
 (

@@ -5,9 +5,11 @@ import com.ubikz.scraper.core.app.dal.filter.AbstractDalFilter;
 import com.ubikz.scraper.core.app.dal.filter.FeedDalFilter;
 import com.ubikz.scraper.core.app.dal.request.AbstractDalRequest;
 import com.ubikz.scraper.core.app.dal.request.FeedDalRequest;
+import com.ubikz.scraper.core.app.dto.FeedArticleDto;
 import com.ubikz.scraper.core.app.dto.FeedDto;
 import com.ubikz.scraper.core.app.entity.filter.AbstractEntityFilter;
 import com.ubikz.scraper.core.app.entity.filter.FeedEntityFilter;
+import com.ubikz.scraper.core.app.entity.helper.FeedArticleEntityHelper;
 import com.ubikz.scraper.core.app.entity.helper.FeedEntityHelper;
 import com.ubikz.scraper.core.app.entity.request.AbstractEntityRequest;
 import com.ubikz.scraper.core.app.entity.request.FeedEntityRequest;
@@ -23,6 +25,17 @@ public class FeedEntity extends AbstractEntity {
     @Autowired
     public FeedEntity(FeedDal feedDal) {
         this.feedDal = feedDal;
+    }
+
+    /**
+     * @param filter
+     * @return
+     * @throws Exception
+     */
+    public List<FeedArticleDto> getRssFeedArticleList(FeedEntityFilter filter) throws Exception {
+        return FeedArticleEntityHelper.getDtoListFromDal(
+                this.feedDal.getRssFeedList(filter.getUrl())
+        );
     }
 
     /**

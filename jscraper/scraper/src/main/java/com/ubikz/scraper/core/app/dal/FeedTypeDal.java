@@ -2,7 +2,7 @@ package com.ubikz.scraper.core.app.dal;
 
 import com.ubikz.scraper.core.app.dal.request.AbstractDalRequest;
 import com.ubikz.scraper.core.app.dal.request.FeedTypeDalRequest;
-import com.ubikz.scraper.core.lib.db.DBWrapper;
+import com.ubikz.scraper.core.provider.db.DBWrapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.Map;

@@ -1,13 +1,19 @@
 package com.ubikz.scraper.core.app.dal;
 
+import com.rometools.rome.feed.synd.SyndEntry;
 import com.ubikz.scraper.core.app.dal.filter.AbstractDalFilter;
 import com.ubikz.scraper.core.app.dal.filter.FeedDalFilter;
 import com.ubikz.scraper.core.app.dal.request.AbstractDalRequest;
 import com.ubikz.scraper.core.app.dal.request.FeedDalRequest;
-import com.ubikz.scraper.core.lib.db.DBWrapper;
-import com.ubikz.scraper.core.lib.db.qb.AbstractQuery;
+import com.ubikz.scraper.core.provider.db.DBWrapper;
+import com.ubikz.scraper.core.provider.db.qb.AbstractQuery;
+import com.ubikz.scraper.core.provider.rss.RssEntry;
+import com.ubikz.scraper.core.provider.rss.RssParser;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -18,6 +24,31 @@ public class FeedDal extends AbstractDal {
     public FeedDal(DBWrapper dbWrapper) {
         super(dbWrapper);
         this.tableName = "feed";
+    }
+
+    /**
+     * @param url
+     * @return
+     * @throws Exception
+     */
+    public List<Map<String, Object>> getRssFeedList(String url) throws Exception {
+        List<Map<String, Object>> resultList = new ArrayList<>();
+
+        for (RssEntry rssEntry : (new RssParser(url)).getEntryList()) {
+            Map<String, Object> article = new HashMap<>();
+            SyndEntry entry = rssEntry.getEntry();
+
+            // We build base object article
+            article.put("url", entry.getLink());
+            article.put("label", entry.getTitle());
+            article.put("date", entry.getPublishedDate());
+            article.put("author", entry.getAuthor());
+            article.put("tags", rssEntry.buildTagList());
+
+            resultList.add(article);
+        }
+
+        return resultList;
     }
 
     /**

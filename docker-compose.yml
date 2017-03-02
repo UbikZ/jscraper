@@ -7,6 +7,7 @@ jscraper:
       - "3000:3000"
   volumes:
       - ./docker/scraper/log:/var/log
+      - ./docker/scraper/gradle:/jscraper/cache
   env_file: .env
 pgsql:
   image: postgres:9.6.1-alpine

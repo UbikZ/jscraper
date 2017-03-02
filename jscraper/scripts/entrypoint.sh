@@ -13,7 +13,7 @@ sed -i \
 echo "[DEBUG] > Configuration ok."
 
 echo "[DEBUG] > Build packages"
-/install/gradle/bin/gradle build -x test 1>/dev/null || exit 1
+export GRADLE_USER_HOME=cache && /install/gradle/bin/gradle build -x test || exit 1
 echo "[DEBUG] > Build OK."
 
 maxTriesPostgres=10

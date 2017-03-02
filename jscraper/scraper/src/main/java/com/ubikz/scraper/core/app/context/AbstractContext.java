@@ -2,7 +2,6 @@ package com.ubikz.scraper.core.app.context;
 
 import com.ubikz.scraper.api.controller.filter.AbstractFilterBody;
 import com.ubikz.scraper.api.controller.request.AbstractRequestBody;
-import com.ubikz.scraper.core.app.dto.AbstractDto;
 import com.ubikz.scraper.core.app.service.filter.AbstractServiceFilter;
 import com.ubikz.scraper.core.app.service.message.BaseMessage;
 import com.ubikz.scraper.core.app.service.message.ErrorMessage;

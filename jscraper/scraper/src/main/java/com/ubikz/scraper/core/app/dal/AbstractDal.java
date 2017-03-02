@@ -2,10 +2,10 @@ package com.ubikz.scraper.core.app.dal;
 
 import com.ubikz.scraper.core.app.dal.filter.AbstractDalFilter;
 import com.ubikz.scraper.core.app.dal.request.AbstractDalRequest;
-import com.ubikz.scraper.core.lib.db.DBWrapper;
-import com.ubikz.scraper.core.lib.db.qb.AbstractQuery;
-import com.ubikz.scraper.core.lib.db.qb.QueryBuilder;
-import com.ubikz.scraper.core.lib.db.qb.Select;
+import com.ubikz.scraper.core.provider.db.DBWrapper;
+import com.ubikz.scraper.core.provider.db.qb.AbstractQuery;
+import com.ubikz.scraper.core.provider.db.qb.QueryBuilder;
+import com.ubikz.scraper.core.provider.db.qb.Select;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

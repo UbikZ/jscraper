@@ -1,4 +1,4 @@
-package com.ubikz.scraper.core.lib.db;
+package com.ubikz.scraper.core.provider.db;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

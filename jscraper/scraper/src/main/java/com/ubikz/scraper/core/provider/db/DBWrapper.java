@@ -1,4 +1,4 @@
-package com.ubikz.scraper.core.lib.db;
+package com.ubikz.scraper.core.provider.db;
 
 import org.postgresql.ds.PGSimpleDataSource;
 import org.springframework.beans.factory.annotation.Autowired;

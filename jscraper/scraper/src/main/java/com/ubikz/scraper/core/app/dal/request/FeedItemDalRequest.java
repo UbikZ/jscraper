@@ -1,7 +1,5 @@
 package com.ubikz.scraper.core.app.dal.request;
 
-import java.util.List;
-
 public class FeedItemDalRequest extends AbstractDalRequest {
     private Integer feedId;
     private Integer feedTypeId;

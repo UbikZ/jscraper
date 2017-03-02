@@ -21,8 +21,6 @@ RUN wget  https://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.z
 ADD . /jscraper
 WORKDIR /jscraper
 
-RUN /install/gradle/bin/gradle compileJava
-
 COPY scripts/entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]

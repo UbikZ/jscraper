@@ -1,7 +1,5 @@
 package com.ubikz.scraper.core.app.dal.filter;
 
-import com.ubikz.scraper.core.app.dal.request.AbstractDalRequest;
-
 import java.util.List;
 
 public class FeedItemDalFilter extends AbstractDalFilter {

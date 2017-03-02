@@ -25,7 +25,7 @@ public class FeedItemController extends AbstractController {
      */
     @RequestMapping(value = uriPath + "/generate", method = RequestMethod.GET, produces = "application/json")
     public String createItems() throws Exception {
-        return this.sendResponse(null);
+        return this.sendResponse(this.feedItemContext.generate());
     }
 
     /**

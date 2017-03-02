@@ -5,10 +5,10 @@ import com.ubikz.scraper.core.app.dal.filter.FeedItemDalFilter;
 import com.ubikz.scraper.core.app.dal.request.AbstractDalRequest;
 import com.ubikz.scraper.core.app.dal.request.FeedItemDalRequest;
 import com.ubikz.scraper.core.app.dal.request.FeedItemTagDalRequest;
-import com.ubikz.scraper.core.lib.db.DBWrapper;
-import com.ubikz.scraper.core.lib.db.qb.AbstractQuery;
-import com.ubikz.scraper.core.lib.db.qb.QueryBuilder;
-import com.ubikz.scraper.core.lib.db.qb.Select;
+import com.ubikz.scraper.core.provider.db.DBWrapper;
+import com.ubikz.scraper.core.provider.db.qb.AbstractQuery;
+import com.ubikz.scraper.core.provider.db.qb.QueryBuilder;
+import com.ubikz.scraper.core.provider.db.qb.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -31,7 +31,9 @@ public class FeedItemDal extends AbstractDal {
                 .from(this.tableName, "fi")
                 .join("feed_item_tag", "fit", "fi.id = fit.feed_item_id")
                 .groupBy("fi.id")
-                .aliases(new HashMap<String, String>() {{ put("id", "fi.id"); }});
+                .aliases(new HashMap<String, String>() {{
+                    put("id", "fi.id");
+                }});
 
         this.parseFilter(filter, select);
         return (Select) select;

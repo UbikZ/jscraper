@@ -1,8 +1,12 @@
 package com.ubikz.scraper.core.app.service;
 
+import com.ubikz.scraper.core.app.dto.FeedArticleDto;
+import com.ubikz.scraper.core.app.dto.FeedDto;
 import com.ubikz.scraper.core.app.dto.FeedItemDto;
+import com.ubikz.scraper.core.app.entity.FeedEntity;
 import com.ubikz.scraper.core.app.entity.FeedItemEntity;
 import com.ubikz.scraper.core.app.entity.filter.AbstractEntityFilter;
+import com.ubikz.scraper.core.app.entity.filter.FeedEntityFilter;
 import com.ubikz.scraper.core.app.entity.filter.FeedItemEntityFilter;
 import com.ubikz.scraper.core.app.entity.request.AbstractEntityRequest;
 import com.ubikz.scraper.core.app.entity.request.FeedItemEntityRequest;
@@ -10,18 +14,42 @@ import com.ubikz.scraper.core.app.service.filter.AbstractServiceFilter;
 import com.ubikz.scraper.core.app.service.filter.FeedItemServiceFilter;
 import com.ubikz.scraper.core.app.service.request.AbstractServiceRequest;
 import com.ubikz.scraper.core.app.service.request.FeedItemServiceRequest;
+import com.ubikz.scraper.core.app.service.request.FeedListServiceRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class FeedItemService extends AbstractService {
     private FeedItemEntity feedItemEntity;
+    private FeedEntity feedEntity;
 
     @Autowired
-    public FeedItemService(FeedItemEntity feedItemEntity) {
+    public FeedItemService(FeedItemEntity feedItemEntity, FeedEntity feedEntity) {
         this.feedItemEntity = feedItemEntity;
+        this.feedEntity = feedEntity;
+    }
+
+    /**
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    public int generate(FeedListServiceRequest request) throws Exception {
+        Map<String, List<FeedArticleDto>> articleMap = new HashMap<>();
+
+        for (FeedDto feed : request.getFeedList()) {
+            FeedEntityFilter filter = new FeedEntityFilter();
+            filter.setUrl(feed.getUrl());
+            articleMap.put(feed.getUrl(), this.feedEntity.getRssFeedArticleList(filter));
+        }
+
+        // todo
+
+        return 1;
     }
 
     /**

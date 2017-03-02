@@ -1,4 +1,4 @@
-package com.ubikz.scraper.core.lib.db.qb;
+package com.ubikz.scraper.core.provider.db.qb;
 
 public class QueryBuilder {
     public QueryBuilder() {

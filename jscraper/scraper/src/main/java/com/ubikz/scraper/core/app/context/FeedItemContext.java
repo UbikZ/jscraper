@@ -6,11 +6,14 @@ import com.ubikz.scraper.api.controller.request.AbstractRequestBody;
 import com.ubikz.scraper.api.controller.request.FeedItemRequestBody;
 import com.ubikz.scraper.core.app.exception.MissingParameterException;
 import com.ubikz.scraper.core.app.service.FeedItemService;
+import com.ubikz.scraper.core.app.service.FeedService;
 import com.ubikz.scraper.core.app.service.filter.AbstractServiceFilter;
 import com.ubikz.scraper.core.app.service.filter.FeedItemServiceFilter;
+import com.ubikz.scraper.core.app.service.filter.FeedServiceFilter;
 import com.ubikz.scraper.core.app.service.message.BaseMessage;
 import com.ubikz.scraper.core.app.service.request.AbstractServiceRequest;
 import com.ubikz.scraper.core.app.service.request.FeedItemServiceRequest;
+import com.ubikz.scraper.core.app.service.request.FeedListServiceRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -22,12 +25,30 @@ public class FeedItemContext extends AbstractContext {
     final private int FEED_ITEM_GET_ONE = 42;
     final private int FEED_ITEM_GET_ALL = 42;
     final private int FEED_ITEM_DELETE = 43;
+    final private int FEED_ITEM_GENERATED = 44;
 
     private FeedItemService feedItemService;
+    private FeedService feedService;
 
     @Autowired
-    public FeedItemContext(FeedItemService feedItemService) {
+    public FeedItemContext(FeedItemService feedItemService, FeedService feedService) {
         this.feedItemService = feedItemService;
+        this.feedService = feedService;
+    }
+
+    /**
+     * @return
+     * @throws Exception
+     */
+    public BaseMessage generate() throws Exception {
+        return this.handle(() -> {
+            FeedListServiceRequest request = new FeedListServiceRequest();
+            FeedServiceFilter feedServiceFilter = new FeedServiceFilter();
+            feedServiceFilter.setEnabled(true);
+            request.setFeedList(this.feedService.getAllFeeds(feedServiceFilter));
+
+            return this.feedItemService.generate(request);
+        }, HttpStatus.CREATED, FEED_ITEM_GENERATED);
     }
 
     /**
