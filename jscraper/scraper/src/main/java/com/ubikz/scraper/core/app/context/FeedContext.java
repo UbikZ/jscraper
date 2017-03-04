@@ -48,13 +48,14 @@ public class FeedContext extends AbstractContext {
      */
     public BaseMessage updateFeed(Integer id, FeedRequestBody request) throws Exception {
         return this.handle(() -> {
+            FeedServiceRequest serviceRequest = new FeedServiceRequest();
+            serviceRequest.setId(id);
+
             if (id == null) {
                 throw new MissingParameterException();
             }
 
-            return this.feedService.updateFeed(
-                    (FeedServiceRequest) this.parseRequest(request, new FeedServiceRequest())
-            );
+            return this.feedService.updateFeed((FeedServiceRequest) this.parseRequest(request, serviceRequest));
         }, HttpStatus.OK, FEED_UPDATED);
     }
 
@@ -96,6 +97,7 @@ public class FeedContext extends AbstractContext {
                 (FeedServiceFilter) this.parseFilter(filter, new FeedServiceFilter())
         ), HttpStatus.OK, FEED_GET_ALL);
     }
+
 
     @Override
     protected AbstractServiceRequest parseRequest(AbstractRequestBody data, AbstractServiceRequest request) {

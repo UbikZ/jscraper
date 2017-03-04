@@ -74,3 +74,23 @@ CREATE TABLE public.feed_item_tag
   CONSTRAINT feedItemTag_tagId_fk FOREIGN KEY (tag_id) REFERENCES tag (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT feedItemTag_feedItemId_tagId_ucc UNIQUE (feed_item_id, tag_id)
 );
+
+CREATE TABLE public.tag_prohibited
+(
+  id      SERIAL PRIMARY KEY      NOT NULL,
+  label   VARCHAR(255)            NOT NULL,
+  enabled BOOLEAN DEFAULT TRUE    NOT NULL,
+  CONSTRAINT tagProhibited_label_ucc UNIQUE (label)
+);
+CREATE INDEX tagProhibited_label_idx
+  ON public.tag_prohibited (label);
+
+CREATE TABLE public.feed_prohibited
+(
+  id      SERIAL PRIMARY KEY      NOT NULL,
+  label   VARCHAR(255)            NOT NULL,
+  enabled BOOLEAN DEFAULT TRUE    NOT NULL,
+  CONSTRAINT feedProhibited_label_ucc UNIQUE (label)
+);
+CREATE INDEX feedProhibited_label_idx
+  ON public.feed_prohibited (label);

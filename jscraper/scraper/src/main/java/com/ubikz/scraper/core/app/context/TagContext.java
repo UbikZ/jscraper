@@ -18,11 +18,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TagContext extends AbstractContext {
-    final private int TAG_TYPE_CREATED = 30;
-    final private int TAG_TYPE_UPDATED = 31;
-    final private int TAG_TYPE_GET_ONE = 32;
-    final private int TAG_TYPE_GET_ALL = 33;
-    final private int TAG_TYPE_DELETE = 34;
+    final private int TAG_CREATED = 30;
+    final private int TAG_UPDATED = 31;
+    final private int TAG_GET_ONE = 32;
+    final private int TAG_GET_ALL = 33;
+    final private int TAG_DELETE = 34;
 
     private TagService tagService;
 
@@ -39,7 +39,7 @@ public class TagContext extends AbstractContext {
     public BaseMessage createTag(TagRequestBody request) throws Exception {
         return this.handle(() -> this.tagService.createTag(
                 (TagServiceRequest) this.parseRequest(request, new TagServiceRequest())
-        ), HttpStatus.CREATED, TAG_TYPE_CREATED);
+        ), HttpStatus.CREATED, TAG_CREATED);
     }
 
     /**
@@ -49,14 +49,17 @@ public class TagContext extends AbstractContext {
      */
     public BaseMessage updateTag(Integer id, TagRequestBody request) throws Exception {
         return this.handle(() -> {
+            TagServiceRequest serviceRequest = new TagServiceRequest();
+            serviceRequest.setId(id);
+
             if (id == null) {
                 throw new MissingParameterException();
             }
 
             return this.tagService.createTag(
-                    (TagServiceRequest) this.parseRequest(request, new TagServiceRequest())
+                    (TagServiceRequest) this.parseRequest(request, serviceRequest)
             );
-        }, HttpStatus.OK, TAG_TYPE_UPDATED);
+        }, HttpStatus.OK, TAG_UPDATED);
     }
 
     /**
@@ -67,7 +70,7 @@ public class TagContext extends AbstractContext {
     public BaseMessage getAllTags(TagFilterBody filter) throws Exception {
         return this.handle(() -> this.tagService.getAllTags(
                 (TagServiceFilter) this.parseFilter(filter, new TagServiceFilter())
-        ), HttpStatus.OK, TAG_TYPE_GET_ALL);
+        ), HttpStatus.OK, TAG_GET_ALL);
     }
 
     /**
@@ -81,7 +84,7 @@ public class TagContext extends AbstractContext {
 
         return this.handle(() -> this.tagService.delete(
                 (TagServiceFilter) this.parseFilter(filter, new TagServiceFilter())
-        ), HttpStatus.OK, TAG_TYPE_DELETE);
+        ), HttpStatus.OK, TAG_DELETE);
     }
 
     /**
@@ -95,7 +98,7 @@ public class TagContext extends AbstractContext {
 
         return this.handle(() -> this.tagService.getOneTag(
                 (TagServiceFilter) this.parseFilter(filter, new TagServiceFilter())
-        ), HttpStatus.OK, TAG_TYPE_GET_ONE);
+        ), HttpStatus.OK, TAG_GET_ONE);
     }
 
     @Override

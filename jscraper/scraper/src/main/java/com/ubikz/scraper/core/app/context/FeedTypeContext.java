@@ -48,12 +48,15 @@ public class FeedTypeContext extends AbstractContext {
      */
     public BaseMessage updateFeedType(Integer id, FeedTypeRequestBody request) throws Exception {
         return this.handle(() -> {
+            FeedTypeServiceRequest serviceRequest = new FeedTypeServiceRequest();
+            serviceRequest.setId(id);
+
             if (id == null) {
                 throw new MissingParameterException();
             }
 
             return this.feedTypeService.createFeedType(
-                    (FeedTypeServiceRequest) this.parseRequest(request, new FeedTypeServiceRequest())
+                    (FeedTypeServiceRequest) this.parseRequest(request, serviceRequest)
             );
         }, HttpStatus.OK, FEED_TYPE_UPDATED);
     }

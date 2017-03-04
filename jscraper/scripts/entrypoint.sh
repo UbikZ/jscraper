@@ -26,16 +26,16 @@ do
 done
 echo "[DEBUG] > POSTGRES is available."
 
-maxTriesRedis=10
-echo "[DEBUG] > Check REDIS availability"
-
-while ! nc -w 1 "${REDIS_HOST}" "${REDIS_PORT}" 1>/dev/null 2>&1
-do
-    [[ "${maxTriesRedis}" -eq 0 ]] && echo "Redis database is not available." && exit 1
-    sleep 5
-    maxTriesRedis=$((maxTriesRedis - 1))
-done
-echo "[DEBUG] > REDIS is available."
+#maxTriesRedis=10
+#echo "[DEBUG] > Check REDIS availability"
+#
+#while ! nc -w 1 "${REDIS_HOST}" "${REDIS_PORT}" 1>/dev/null 2>&1
+#do
+#    [[ "${maxTriesRedis}" -eq 0 ]] && echo "Redis database is not available." && exit 1
+#    sleep 5
+#    maxTriesRedis=$((maxTriesRedis - 1))
+#done
+#echo "[DEBUG] > REDIS is available."
 
 echo "[DEBUG] > Check database connection"
 java -jar /jscraper/database/build/libs/dbConnect-0.0.1.jar \

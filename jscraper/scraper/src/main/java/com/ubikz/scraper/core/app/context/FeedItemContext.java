@@ -69,12 +69,15 @@ public class FeedItemContext extends AbstractContext {
      */
     public BaseMessage updateFeedItem(Integer id, FeedItemRequestBody request) throws Exception {
         return this.handle(() -> {
+            FeedItemServiceRequest serviceRequest = new FeedItemServiceRequest();
+            serviceRequest.setId(id);
+
             if (id == null) {
                 throw new MissingParameterException();
             }
 
             return this.feedItemService.updateFeedItem(
-                    (FeedItemServiceRequest) this.parseRequest(request, new FeedItemServiceRequest())
+                    (FeedItemServiceRequest) this.parseRequest(request, serviceRequest)
             );
         }, HttpStatus.OK, FEED_ITEM_UPDATED);
     }

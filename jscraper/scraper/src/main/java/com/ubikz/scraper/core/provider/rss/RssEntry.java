@@ -5,21 +5,20 @@ import com.rometools.rome.feed.synd.SyndEntry;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class RssEntry {
-    private final String[] tagList = new String[]{""};
-    private final HashSet<String> prohibitedTags = new HashSet<>(Arrays.asList(tagList));
+    private final String pattern = "[a-z0-9]+";
     private SyndEntry entry;
 
     public RssEntry(SyndEntry entry) {
         this.entry = entry;
     }
 
-    public List<String> buildTagList() {
+    public List<String> buildTagList(List<String> prohibitedTags) {
         List<String> titleTagList = new ArrayList<>();
         List<String> categoryTagList = new ArrayList<>();
 
@@ -28,7 +27,8 @@ public class RssEntry {
             List<String> splittedTitle = Arrays.asList(entry.getTitle().split(" "));
             titleTagList = splittedTitle
                     .stream()
-                    .filter(name -> !prohibitedTags.contains(name))
+                    .map(String::toLowerCase)
+                    .filter(name -> !prohibitedTags.contains(name) && Pattern.matches(pattern, name))
                     .collect(Collectors.toList());
         }
 
@@ -37,12 +37,17 @@ public class RssEntry {
             categoryTagList = entry.getCategories()
                     .stream()
                     .map(SyndCategory::getName)
-                    .filter(name -> !prohibitedTags.contains(name))
+                    .map(String::toLowerCase)
+                    .filter(name -> !prohibitedTags.contains(name) && Pattern.matches(pattern, name))
                     .collect(Collectors.toList());
         }
 
         return Stream.concat(titleTagList.stream(), categoryTagList.stream()).collect(Collectors.toList());
     }
+
+//    public String getImageLink() {
+//
+//    }
 
     public SyndEntry getEntry() {
         return entry;

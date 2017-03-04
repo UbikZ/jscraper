@@ -1,13 +1,11 @@
 package com.ubikz.scraper.core.app.service;
 
-import com.ubikz.scraper.core.app.dto.FeedArticleDto;
-import com.ubikz.scraper.core.app.dto.FeedDto;
-import com.ubikz.scraper.core.app.dto.FeedItemDto;
+import com.ubikz.scraper.core.app.dto.*;
 import com.ubikz.scraper.core.app.entity.FeedEntity;
 import com.ubikz.scraper.core.app.entity.FeedItemEntity;
-import com.ubikz.scraper.core.app.entity.filter.AbstractEntityFilter;
-import com.ubikz.scraper.core.app.entity.filter.FeedEntityFilter;
-import com.ubikz.scraper.core.app.entity.filter.FeedItemEntityFilter;
+import com.ubikz.scraper.core.app.entity.FeedProhibitedEntity;
+import com.ubikz.scraper.core.app.entity.TagProhibitedEntity;
+import com.ubikz.scraper.core.app.entity.filter.*;
 import com.ubikz.scraper.core.app.entity.request.AbstractEntityRequest;
 import com.ubikz.scraper.core.app.entity.request.FeedItemEntityRequest;
 import com.ubikz.scraper.core.app.service.filter.AbstractServiceFilter;
@@ -21,16 +19,25 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class FeedItemService extends AbstractService {
     private FeedItemEntity feedItemEntity;
     private FeedEntity feedEntity;
+    private FeedProhibitedEntity feedProhibitedEntity;
+    private TagProhibitedEntity tagProhibitedEntity;
 
     @Autowired
-    public FeedItemService(FeedItemEntity feedItemEntity, FeedEntity feedEntity) {
+    public FeedItemService(
+            FeedItemEntity feedItemEntity,
+            FeedEntity feedEntity,
+            FeedProhibitedEntity feedProhibitedEntity,
+            TagProhibitedEntity tagProhibitedEntity) {
         this.feedItemEntity = feedItemEntity;
         this.feedEntity = feedEntity;
+        this.feedProhibitedEntity = feedProhibitedEntity;
+        this.tagProhibitedEntity = tagProhibitedEntity;
     }
 
     /**
@@ -38,18 +45,31 @@ public class FeedItemService extends AbstractService {
      * @return
      * @throws Exception
      */
-    public int generate(FeedListServiceRequest request) throws Exception {
+    public Map<String, List<FeedArticleDto>> generate(FeedListServiceRequest request) throws Exception {
         Map<String, List<FeedArticleDto>> articleMap = new HashMap<>();
+
+        List<String> feedProhibitedList = this
+                .feedProhibitedEntity
+                .getAllFeedsProhibited(new FeedProhibitedEntityFilter())
+                .stream()
+                .map(FeedProhibitedDto::getLabel)
+                .collect(Collectors.toList());
+        List<String> tagProhibitedList = this
+                .tagProhibitedEntity
+                .getAllTagsProhibited(new TagProhibitedEntityFilter())
+                .stream()
+                .map(TagProhibitedDto::getLabel)
+                .collect(Collectors.toList());
 
         for (FeedDto feed : request.getFeedList()) {
             FeedEntityFilter filter = new FeedEntityFilter();
             filter.setUrl(feed.getUrl());
+            filter.setProhibitedFeedList(feedProhibitedList);
+            filter.setProhibitedTagList(tagProhibitedList);
             articleMap.put(feed.getUrl(), this.feedEntity.getRssFeedArticleList(filter));
         }
 
-        // todo
-
-        return 1;
+        return articleMap;
     }
 
     /**

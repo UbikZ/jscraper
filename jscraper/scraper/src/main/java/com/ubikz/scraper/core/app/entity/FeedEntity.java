@@ -34,7 +34,7 @@ public class FeedEntity extends AbstractEntity {
      */
     public List<FeedArticleDto> getRssFeedArticleList(FeedEntityFilter filter) throws Exception {
         return FeedArticleEntityHelper.getDtoListFromDal(
-                this.feedDal.getRssFeedList(filter.getUrl())
+                this.feedDal.getRssFeedList((FeedDalFilter) this.parseEntityToDalFilter(filter))
         );
     }
 
@@ -108,6 +108,8 @@ public class FeedEntity extends AbstractEntity {
 
         feedDalFilter = (FeedDalFilter) this.parseBaseEntityToDalFilter(feedEntityFilter, feedDalFilter);
         feedDalFilter.setUrl(feedEntityFilter.getUrl());
+        feedDalFilter.setProhibitedTagList(feedEntityFilter.getProhibitedTagList());
+        feedDalFilter.setProhibitedFeedList(feedDalFilter.getProhibitedFeedList());
 
         return feedDalFilter;
     }

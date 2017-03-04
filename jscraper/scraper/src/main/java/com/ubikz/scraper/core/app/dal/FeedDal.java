@@ -27,14 +27,14 @@ public class FeedDal extends AbstractDal {
     }
 
     /**
-     * @param url
+     * @param filter
      * @return
      * @throws Exception
      */
-    public List<Map<String, Object>> getRssFeedList(String url) throws Exception {
+    public List<Map<String, Object>> getRssFeedList(FeedDalFilter filter) throws Exception {
         List<Map<String, Object>> resultList = new ArrayList<>();
 
-        for (RssEntry rssEntry : (new RssParser(url)).getEntryList()) {
+        for (RssEntry rssEntry : (new RssParser(filter.getUrl())).getEntryList()) {
             Map<String, Object> article = new HashMap<>();
             SyndEntry entry = rssEntry.getEntry();
 
@@ -43,7 +43,7 @@ public class FeedDal extends AbstractDal {
             article.put("label", entry.getTitle());
             article.put("date", entry.getPublishedDate());
             article.put("author", entry.getAuthor());
-            article.put("tags", rssEntry.buildTagList());
+            article.put("tags", rssEntry.buildTagList(filter.getProhibitedTagList()));
 
             resultList.add(article);
         }

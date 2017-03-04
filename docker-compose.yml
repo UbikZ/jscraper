@@ -1,7 +1,7 @@
 jscraper:
   build: jscraper
   links:
-    - redis
+#    - redis
     - pgsql
   ports:
       - "3000:3000"
@@ -16,10 +16,10 @@ pgsql:
   volumes:
     - ./docker/pgsql/data:/var/lib/postgresql/data
   env_file: .env
-redis:
-  build: redis
-  ports:
-      - "6379:6379"
-  volumes:
-      - ./docker/redis/data:/data
-  env_file: .env
+#redis:
+#  build: redis
+#  ports:
+#      - "6379:6379"
+#  volumes:
+#      - ./docker/redis/data:/data
+#  env_file: .env

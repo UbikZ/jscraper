@@ -12,6 +12,7 @@ public class Select extends AbstractQuery {
     // Key use within maps
     private final String KEY_DISTINCT = "distinct";
     private final String KEY_ORDER = "order";
+    private final String KEY_DIRECTION = "direction";
     private final String KEY_GROUP = "group";
     private final String KEY_JOIN = "inner_join";
     // SQL elements
@@ -108,6 +109,25 @@ public class Select extends AbstractQuery {
         return this;
     }
 
+    /**
+     * @param column
+     * @return
+     */
+    public Select orderBy(String column) {
+        return this.orderBy(column, true);
+    }
+
+    /**
+     * @param column
+     * @param isAsc
+     * @return
+     */
+    public Select orderBy(String column, boolean isAsc) {
+        this.parts.put(KEY_ORDER, column);
+        this.parts.put(KEY_DIRECTION, isAsc ? SQL_ASC : SQL_DESC);
+        return this;
+    }
+
     @Override
     public Select where(String where) {
         return (Select) super.where(where);
@@ -155,6 +175,13 @@ public class Select extends AbstractQuery {
             this.sql.add(wheres.stream().collect(Collectors.joining(" " + SQL_AND + " ")));
         }
 
+        String orderBy = (String) this.parts.get(KEY_ORDER);
+        if (orderBy != null) {
+            this.sql.add(SQL_ORDER_BY);
+            this.sql.add(orderBy);
+            this.sql.add((String) this.parts.get(KEY_DIRECTION));
+        }
+
         List<String> groupBy = (List<String>) this.parts.get(KEY_GROUP);
         if (groupBy.size() > 0) {
             this.sql.add(SQL_GROUP_BY);
@@ -169,7 +196,8 @@ public class Select extends AbstractQuery {
         this.parts.put(KEY_FROM, null);
         this.parts.put(KEY_JOIN, new ArrayList<>());
         this.parts.put(KEY_WHERE, new ArrayList<>());
-        this.parts.put(KEY_ORDER, new ArrayList<>());
+        this.parts.put(KEY_ORDER, null);
+        this.parts.put(KEY_DIRECTION, null);
         this.parts.put(KEY_GROUP, new ArrayList<>());
     }
 
