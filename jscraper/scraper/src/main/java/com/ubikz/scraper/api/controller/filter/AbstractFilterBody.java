@@ -1,13 +1,23 @@
 package com.ubikz.scraper.api.controller.filter;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 abstract public class AbstractFilterBody {
     private Integer id;
+    @JsonProperty("enabled")
     private Boolean isEnabled;
+    @JsonProperty("label")
     private String label;
+    @JsonProperty("startDate")
     private Date startDate;
+    @JsonProperty("endDate")
     private Date endDate;
+    @JsonProperty("lazy")
+    private boolean isLazy = false;
 
     public Integer getId() {
         return id;
@@ -47,5 +57,13 @@ abstract public class AbstractFilterBody {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public boolean isLazy() {
+        return isLazy;
+    }
+
+    public void setLazy(boolean lazy) {
+        isLazy = lazy;
     }
 }

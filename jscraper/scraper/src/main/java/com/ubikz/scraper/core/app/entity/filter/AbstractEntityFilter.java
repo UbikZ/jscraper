@@ -8,7 +8,7 @@ abstract public class AbstractEntityFilter {
     private Date startDate;
     private Date endDate;
     private Boolean isEnabled;
-    private boolean lazyLoading;
+    private boolean isLazy = false;
 
     public Integer getId() {
         return id;
@@ -50,12 +50,12 @@ abstract public class AbstractEntityFilter {
         isEnabled = enabled;
     }
 
-    public boolean isLazyLoading() {
-        return lazyLoading;
+    public boolean isLazy() {
+        return isLazy;
     }
 
-    public void setLazyLoading(boolean lazyLoading) {
-        this.lazyLoading = lazyLoading;
+    public void setLazy(boolean lazy) {
+        isLazy = lazy;
     }
 }
 

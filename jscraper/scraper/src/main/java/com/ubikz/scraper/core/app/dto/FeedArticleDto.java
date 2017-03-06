@@ -1,6 +1,5 @@
 package com.ubikz.scraper.core.app.dto;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +7,7 @@ public class FeedArticleDto extends AbstractDto {
     private String url;
     private String author;
     private List<String> tagList = new ArrayList<>();
-    private List<URL> imageList = new ArrayList<>();
+    private List<String> pictureList = new ArrayList<>();
 
     public String getUrl() {
         return url;
@@ -34,11 +33,11 @@ public class FeedArticleDto extends AbstractDto {
         this.tagList = tagList;
     }
 
-    public List<URL> getImageList() {
-        return imageList;
+    public List<String> getPictureList() {
+        return pictureList;
     }
 
-    public void setImageList(List<URL> imageList) {
-        this.imageList = imageList;
+    public void setPictureList(List<String> pictureList) {
+        this.pictureList = pictureList;
     }
 }

@@ -40,10 +40,26 @@ abstract public class AbstractQuery implements IQuery {
     public AbstractQuery where(String column, String op, Object value) {
         String aliasedColumn = this.aliases.getOrDefault(column, column);
         String whereColumn = "w_" + column;
-        this.parameters.put(whereColumn, value);
+        String whereColumnPlaceholder = ":" + whereColumn;
 
         List<String> existingWhere = (List<String>) this.parts.get(KEY_WHERE);
-        existingWhere.add(aliasedColumn + op + ":" + whereColumn);
+
+        if (op.toLowerCase().equals("in")) {
+            if (value instanceof List) {
+                List<String> inConditions = new ArrayList<>();
+                int index = 0;
+                for (Object element : (List<Object>) value) {
+                    inConditions.add(whereColumnPlaceholder + index);
+                    this.parameters.put(whereColumn + index, element);
+                    index++;
+                }
+                whereColumnPlaceholder = "(" + inConditions.stream().collect(Collectors.joining(",")) + ")";
+            }
+        } else {
+            this.parameters.put(whereColumn, value);
+        }
+
+        existingWhere.add(aliasedColumn + " " + op + " " + whereColumnPlaceholder);
         this.parts.put(KEY_WHERE, existingWhere);
         return this;
     }

@@ -1,8 +1,11 @@
 package com.ubikz.scraper.core.app.dal;
 
+import com.ubikz.scraper.core.app.dal.filter.AbstractDalFilter;
+import com.ubikz.scraper.core.app.dal.filter.FeedTypeDalFilter;
 import com.ubikz.scraper.core.app.dal.request.AbstractDalRequest;
 import com.ubikz.scraper.core.app.dal.request.FeedTypeDalRequest;
 import com.ubikz.scraper.core.provider.db.DBWrapper;
+import com.ubikz.scraper.core.provider.db.qb.AbstractQuery;
 import org.springframework.stereotype.Repository;
 
 import java.util.Map;
@@ -36,5 +39,18 @@ public class FeedTypeDal extends AbstractDal {
         }
 
         return values;
+    }
+
+    /**
+     * @param filter
+     * @return
+     */
+    protected void parseFilter(AbstractDalFilter filter, AbstractQuery select) {
+        FeedTypeDalFilter feedTypeDalFilter = (FeedTypeDalFilter) filter;
+        super.parseFilter(feedTypeDalFilter, select);
+
+        if (feedTypeDalFilter.getIdsList() != null) {
+            select.where("id", "in", feedTypeDalFilter.getIdsList());
+        }
     }
 }

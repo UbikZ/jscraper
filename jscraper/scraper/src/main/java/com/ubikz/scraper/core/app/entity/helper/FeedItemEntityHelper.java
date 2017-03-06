@@ -32,12 +32,6 @@ public class FeedItemEntityHelper extends AbstractEntityHelper {
             feedItemDto.setFeed(feedDto);
         }
 
-        if (data.containsKey("feed_type_id")) {
-            FeedTypeDto feedTypeDto = new FeedTypeDto();
-            feedTypeDto.setId((int) data.get("feed_type_id"));
-            feedItemDto.setFeedType(feedTypeDto);
-        }
-
         if (data.containsKey("approved")) {
             feedItemDto.setApproved((boolean) data.get("approved"));
         }

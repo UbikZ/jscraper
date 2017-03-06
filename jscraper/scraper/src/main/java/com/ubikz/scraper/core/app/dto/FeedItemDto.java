@@ -4,7 +4,6 @@ import java.util.List;
 
 public class FeedItemDto extends AbstractDto {
     private FeedDto feed;
-    private FeedTypeDto feedType;
     private String url;
     private String checksum;
     private List<TagDto> tags;
@@ -19,14 +18,6 @@ public class FeedItemDto extends AbstractDto {
 
     public void setFeed(FeedDto feed) {
         this.feed = feed;
-    }
-
-    public FeedTypeDto getFeedType() {
-        return feedType;
-    }
-
-    public void setFeedType(FeedTypeDto feedType) {
-        this.feedType = feedType;
     }
 
     public String getUrl() {

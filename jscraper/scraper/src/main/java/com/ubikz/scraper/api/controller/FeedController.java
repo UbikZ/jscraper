@@ -1,7 +1,10 @@
 package com.ubikz.scraper.api.controller;
 
+import com.ubikz.scraper.api.controller.filter.FeedFilterBody;
 import com.ubikz.scraper.api.controller.filter.FeedProhibitedFilterBody;
 import com.ubikz.scraper.api.controller.request.FeedProhibitedRequestBody;
+import com.ubikz.scraper.api.controller.request.FeedRequestBody;
+import com.ubikz.scraper.core.app.context.FeedContext;
 import com.ubikz.scraper.core.app.context.FeedProhibitedContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,14 +13,14 @@ import org.springframework.web.bind.annotation.*;
 public class FeedController extends AbstractController {
     private final String uriPath = "/feed";
     private final String uriProhibited = "/prohibited";
-    private FeedProhibitedContext feedContext;
+    private FeedContext feedContext;
     private FeedProhibitedContext feedProhibitedContext;
 
     /**
      * @param feedContext
      */
     @Autowired
-    public FeedController(FeedProhibitedContext feedContext, FeedProhibitedContext feedProhibitedContext) {
+    public FeedController(FeedContext feedContext, FeedProhibitedContext feedProhibitedContext) {
         this.feedContext = feedContext;
         this.feedProhibitedContext = feedProhibitedContext;
     }
@@ -28,13 +31,13 @@ public class FeedController extends AbstractController {
      * @throws Exception
      */
     @RequestMapping(value = uriPath, method = RequestMethod.POST, produces = "application/json")
-    public String create(@RequestBody final FeedProhibitedRequestBody request) throws Exception {
-        return this.sendResponse(this.feedContext.createFeedProhibited(request));
+    public String create(@RequestBody final FeedRequestBody request) throws Exception {
+        return this.sendResponse(this.feedContext.createFeed(request));
     }
 
     @RequestMapping(value = uriPath, method = RequestMethod.GET, produces = "application/json")
-    public String get(final FeedProhibitedFilterBody filter) throws Exception {
-        return this.sendResponse(this.feedContext.getAllFeedProhibiteds(filter));
+    public String get(final FeedFilterBody filter) throws Exception {
+return this.sendResponse(this.feedContext.getAllFeeds(filter));
     }
 
     /**
@@ -43,8 +46,8 @@ public class FeedController extends AbstractController {
      * @throws Exception
      */
     @RequestMapping(value = uriPath + "/{id}", method = RequestMethod.PUT, produces = "application/json")
-    public String update(@PathVariable("id") final int id, @RequestBody final FeedProhibitedRequestBody request) throws Exception {
-        return this.sendResponse(this.feedContext.updateFeedProhibited(id, request));
+    public String update(@PathVariable("id") final int id, @RequestBody final FeedRequestBody request) throws Exception {
+        return this.sendResponse(this.feedContext.updateFeed(id, request));
     }
 
     /**
@@ -54,7 +57,7 @@ public class FeedController extends AbstractController {
      */
     @RequestMapping(value = uriPath + "/{id}", method = RequestMethod.GET, produces = "application/json")
     public String getById(@PathVariable("id") final int id) throws Exception {
-        return this.sendResponse(this.feedContext.getFeedProhibitedById(id));
+        return this.sendResponse(this.feedContext.getFeedById(id));
     }
 
     /**
@@ -64,7 +67,7 @@ public class FeedController extends AbstractController {
      */
     @RequestMapping(value = uriPath + "/{id}", method = RequestMethod.DELETE, produces = "application/json")
     public String deleteById(@PathVariable("id") final int id) throws Exception {
-        return this.sendResponse(this.feedContext.deleteFeedProhibitedById(id));
+        return this.sendResponse(this.feedContext.deleteFeedById(id));
     }
 
     /**

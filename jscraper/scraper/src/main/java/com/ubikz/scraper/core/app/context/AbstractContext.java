@@ -120,6 +120,7 @@ abstract class AbstractContext {
         filter.setId(data.getId());
         filter.setLabel(data.getLabel());
         filter.setEnabled(data.getEnabled());
+        filter.setLazy(data.isLazy());
 
         return filter;
     }

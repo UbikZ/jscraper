@@ -1,30 +1,40 @@
 package com.ubikz.scraper.core.app.entity;
 
 import com.ubikz.scraper.core.app.dal.FeedDal;
+import com.ubikz.scraper.core.app.dal.FeedTypeDal;
 import com.ubikz.scraper.core.app.dal.filter.AbstractDalFilter;
 import com.ubikz.scraper.core.app.dal.filter.FeedDalFilter;
+import com.ubikz.scraper.core.app.dal.filter.FeedTypeDalFilter;
 import com.ubikz.scraper.core.app.dal.request.AbstractDalRequest;
 import com.ubikz.scraper.core.app.dal.request.FeedDalRequest;
 import com.ubikz.scraper.core.app.dto.FeedArticleDto;
 import com.ubikz.scraper.core.app.dto.FeedDto;
+import com.ubikz.scraper.core.app.dto.FeedTypeDto;
 import com.ubikz.scraper.core.app.entity.filter.AbstractEntityFilter;
 import com.ubikz.scraper.core.app.entity.filter.FeedEntityFilter;
 import com.ubikz.scraper.core.app.entity.helper.FeedArticleEntityHelper;
 import com.ubikz.scraper.core.app.entity.helper.FeedEntityHelper;
+import com.ubikz.scraper.core.app.entity.helper.FeedTypeEntityHelper;
 import com.ubikz.scraper.core.app.entity.request.AbstractEntityRequest;
 import com.ubikz.scraper.core.app.entity.request.FeedEntityRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class FeedEntity extends AbstractEntity {
     protected FeedDal feedDal;
+    protected FeedTypeDal feedTypeDal;
 
     @Autowired
-    public FeedEntity(FeedDal feedDal) {
+    public FeedEntity(FeedDal feedDal, FeedTypeDal feedTypeDal) {
         this.feedDal = feedDal;
+        this.feedTypeDal = feedTypeDal;
     }
 
     /**
@@ -43,9 +53,15 @@ public class FeedEntity extends AbstractEntity {
      * @return
      */
     public List<FeedDto> getAllFeeds(FeedEntityFilter filter) {
-        return FeedEntityHelper.getDtoListFromDal(
+        List<FeedDto> result = FeedEntityHelper.getDtoListFromDal(
                 this.feedDal.getAll(this.parseEntityToDalFilter(filter))
         );
+
+        if (filter.isLazy()) {
+            this.computeFeedTypeLazy(result);
+        }
+
+        return result;
     }
 
     /**
@@ -53,9 +69,30 @@ public class FeedEntity extends AbstractEntity {
      * @return
      */
     public FeedDto getOneFeed(FeedEntityFilter filter) {
-        return FeedEntityHelper.getDtoFromDal(
+        FeedDto result = FeedEntityHelper.getDtoFromDal(
                 this.feedDal.getOne(this.parseEntityToDalFilter(filter))
         );
+
+        if (filter.isLazy()) {
+            this.computeFeedTypeLazy(Collections.singletonList(result));
+        }
+
+        return result;
+    }
+
+    /**
+     * @param feedList
+     */
+    private void computeFeedTypeLazy(List<FeedDto> feedList) {
+        FeedTypeDalFilter feedTypeDalFilter = new FeedTypeDalFilter();
+        feedTypeDalFilter.setIdsList(feedList.stream().map(FeedDto::getId).collect(Collectors.toList()));
+
+        Map<Integer, FeedTypeDto> feedTypeMap =
+                FeedTypeEntityHelper.getDtoMapFromDal(this.feedTypeDal.getAll(feedTypeDalFilter));
+
+        for (FeedDto feed : feedList) {
+            feed.setTypeDto(feedTypeMap.get(feed.getId()));
+        }
     }
 
     /**
@@ -93,6 +130,7 @@ public class FeedEntity extends AbstractEntity {
 
         feedDalRequest = (FeedDalRequest) this.parseBaseEntityToDalRequest(feedEntityRequest, feedDalRequest);
         feedDalRequest.setUrl(feedEntityRequest.getUrl());
+        feedDalRequest.setFeedTypeId(feedEntityRequest.getFeedTypeId());
 
         return feedDalRequest;
     }
@@ -109,7 +147,7 @@ public class FeedEntity extends AbstractEntity {
         feedDalFilter = (FeedDalFilter) this.parseBaseEntityToDalFilter(feedEntityFilter, feedDalFilter);
         feedDalFilter.setUrl(feedEntityFilter.getUrl());
         feedDalFilter.setProhibitedTagList(feedEntityFilter.getProhibitedTagList());
-        feedDalFilter.setProhibitedFeedList(feedDalFilter.getProhibitedFeedList());
+        feedDalFilter.setProhibitedFeedList(feedEntityFilter.getProhibitedFeedList());
 
         return feedDalFilter;
     }

@@ -83,6 +83,7 @@ public class FeedService extends AbstractService {
 
         this.parseBaseServiceToEntityRequest(feedServiceRequest, feedEntityRequest);
         feedEntityRequest.setUrl(feedServiceRequest.getUrl());
+        feedEntityRequest.setFeedTypeId(feedServiceRequest.getFeedTypeId());
 
         return feedEntityRequest;
     }

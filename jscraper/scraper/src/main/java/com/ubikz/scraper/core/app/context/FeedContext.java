@@ -104,6 +104,7 @@ public class FeedContext extends AbstractContext {
         FeedRequestBody requestBody = (FeedRequestBody) data;
         FeedServiceRequest serviceRequest = (FeedServiceRequest) this.parseBaseRequest(requestBody, request);
         serviceRequest.setUrl(requestBody.getUrl());
+        serviceRequest.setFeedTypeId(requestBody.getFeedTypeId());
 
         return serviceRequest;
     }

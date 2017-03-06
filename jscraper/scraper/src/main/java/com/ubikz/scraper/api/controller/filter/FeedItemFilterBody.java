@@ -1,16 +1,27 @@
 package com.ubikz.scraper.api.controller.filter;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class FeedItemFilterBody extends AbstractFilterBody {
+    @JsonProperty("feed")
     private Integer feedId;
+    @JsonProperty("feedType")
     private Integer feedTypeId;
+    @JsonProperty("url")
     private String url;
+    @JsonProperty("checksum")
     private String checksum;
+    @JsonProperty("tags")
     private List<String> tagNames;
+    @JsonProperty("viewed")
     private Boolean isViewed;
+    @JsonProperty("approved")
     private Boolean isApproved;
+    @JsonProperty("reposted")
     private Boolean isReposted;
+    @JsonProperty("sent")
     private Boolean isSent;
 
     public Integer getFeedId() {

@@ -34,7 +34,7 @@ public class FeedDal extends AbstractDal {
     public List<Map<String, Object>> getRssFeedList(FeedDalFilter filter) throws Exception {
         List<Map<String, Object>> resultList = new ArrayList<>();
 
-        for (RssEntry rssEntry : (new RssParser(filter.getUrl())).getEntryList()) {
+        for (RssEntry rssEntry : (new RssParser(filter.getUrl(), filter.getProhibitedFeedList())).getEntryList()) {
             Map<String, Object> article = new HashMap<>();
             SyndEntry entry = rssEntry.getEntry();
 
@@ -44,6 +44,7 @@ public class FeedDal extends AbstractDal {
             article.put("date", entry.getPublishedDate());
             article.put("author", entry.getAuthor());
             article.put("tags", rssEntry.buildTagList(filter.getProhibitedTagList()));
+            article.put("pictures", rssEntry.getPictureLinks());
 
             resultList.add(article);
         }
@@ -63,6 +64,10 @@ public class FeedDal extends AbstractDal {
 
         if (feedDalRequest.getUrl() != null) {
             values.put("url", feedDalRequest.getUrl());
+        }
+
+        if (feedDalRequest.getFeedTypeId() != null) {
+            values.put("feed_type_id", feedDalRequest.getFeedTypeId());
         }
 
         return values;

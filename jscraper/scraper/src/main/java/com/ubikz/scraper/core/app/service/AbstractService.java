@@ -42,5 +42,6 @@ abstract class AbstractService {
         eFilter.setId(sFilter.getId());
         eFilter.setLabel(sFilter.getLabel());
         eFilter.setEnabled(sFilter.getEnabled());
+        eFilter.setLazy(sFilter.isLazy());
     }
 }

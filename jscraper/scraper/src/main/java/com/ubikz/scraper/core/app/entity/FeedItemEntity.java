@@ -36,15 +36,15 @@ public class FeedItemEntity extends AbstractEntity {
      * @return
      */
     public List<FeedItemDto> getAllFeedItems(FeedItemEntityFilter filter) {
-        List<FeedItemDto> feedItemDtos = FeedItemEntityHelper.getDtoListFromDal(
+        List<FeedItemDto> feedItemList = FeedItemEntityHelper.getDtoListFromDal(
                 this.feedItemDal.getAll(this.parseEntityToDalFilter(filter))
         );
 
-        if (filter.isLazyLoading()) {
+        if (filter.isLazy()) {
             // todo
         }
 
-        return feedItemDtos;
+        return feedItemList;
     }
 
     /**
@@ -56,7 +56,7 @@ public class FeedItemEntity extends AbstractEntity {
                 this.feedItemDal.getOne(this.parseEntityToDalFilter(filter))
         );
 
-        if (filter.isLazyLoading()) {
+        if (filter.isLazy()) {
             // todo
         }
 

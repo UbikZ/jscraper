@@ -8,6 +8,7 @@ abstract public class AbstractServiceFilter {
     private Date startDate;
     private Date endDate;
     private Boolean isEnabled;
+    private boolean isLazy = false;
 
     public Integer getId() {
         return id;
@@ -47,6 +48,14 @@ abstract public class AbstractServiceFilter {
 
     public void setEnabled(Boolean enabled) {
         isEnabled = enabled;
+    }
+
+    public boolean isLazy() {
+        return isLazy;
+    }
+
+    public void setLazy(boolean lazy) {
+        isLazy = lazy;
     }
 }
 

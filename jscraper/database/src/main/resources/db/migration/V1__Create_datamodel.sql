@@ -2,13 +2,27 @@
 -- * ucc  : unique constraint check
 -- * fk   : foreign key
 
+CREATE TABLE public.feed_type
+(
+  id            SERIAL PRIMARY KEY      NOT NULL,
+  label         VARCHAR(255),
+  date          TIMESTAMP DEFAULT NOW() NOT NULL,
+  url_regex     TEXT                    NOT NULL,
+  content_regex TEXT DEFAULT ''         NOT NULL,
+  enabled       BOOLEAN DEFAULT TRUE    NOT NULL
+);
+CREATE INDEX feedType_label_idx
+  ON public.feed_type (label);
+
 CREATE TABLE public.feed
 (
-  id      SERIAL PRIMARY KEY      NOT NULL,
-  label   VARCHAR(255),
-  date    TIMESTAMP DEFAULT NOW() NOT NULL,
-  url     TEXT                    NOT NULL,
-  enabled BOOLEAN DEFAULT TRUE    NOT NULL,
+  id           SERIAL PRIMARY KEY      NOT NULL,
+  label        VARCHAR(255),
+  date         TIMESTAMP DEFAULT NOW() NOT NULL,
+  url          TEXT                    NOT NULL,
+  enabled      BOOLEAN DEFAULT TRUE    NOT NULL,
+  feed_type_id INT                     NOT NULL,
+  CONSTRAINT feedItem_feedTypeId_fk FOREIGN KEY (feed_type_id) REFERENCES feed_type (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT feed_url_cc CHECK (url ~*
                                 '^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&''\(\)\*\+,;=.]+$'),
   CONSTRAINT feed_url_ucc UNIQUE (url),
@@ -17,35 +31,21 @@ CREATE TABLE public.feed
 CREATE INDEX feed_label_idx
   ON public.feed (label);
 
-CREATE TABLE public.feed_type
-(
-  id            SERIAL PRIMARY KEY      NOT NULL,
-  label         VARCHAR(255),
-  date          TIMESTAMP DEFAULT NOW() NOT NULL,
-  url_regex     TEXT                    NOT NULL,
-  content_regex TEXT                    NOT NULL,
-  enabled       BOOLEAN DEFAULT TRUE    NOT NULL
-);
-CREATE INDEX feedType_label_idx
-  ON public.feed_type (label);
-
 CREATE TABLE public.feed_item
 (
-  id           SERIAL PRIMARY KEY      NOT NULL,
-  label        VARCHAR(255)            NOT NULL,
-  url          TEXT                    NOT NULL,
-  date         TIMESTAMP DEFAULT NOW() NOT NULL,
-  checksum     VARCHAR(255)            NOT NULL,
-  viewed       BOOLEAN DEFAULT FALSE   NOT NULL,
-  approved     BOOLEAN DEFAULT FALSE   NOT NULL,
-  reposted     BOOLEAN DEFAULT FALSE   NOT NULL,
-  sent         BOOLEAN DEFAULT FALSE   NOT NULL,
-  enabled      BOOLEAN DEFAULT TRUE    NOT NULL,
-  feed_id      INT                     NOT NULL,
-  feed_type_id INT                     NOT NULL,
+  id       SERIAL PRIMARY KEY      NOT NULL,
+  label    VARCHAR(255)            NOT NULL,
+  url      TEXT                    NOT NULL,
+  date     TIMESTAMP DEFAULT NOW() NOT NULL,
+  checksum VARCHAR(255)            NOT NULL,
+  viewed   BOOLEAN DEFAULT FALSE   NOT NULL,
+  approved BOOLEAN DEFAULT FALSE   NOT NULL,
+  reposted BOOLEAN DEFAULT FALSE   NOT NULL,
+  sent     BOOLEAN DEFAULT FALSE   NOT NULL,
+  enabled  BOOLEAN DEFAULT TRUE    NOT NULL,
+  feed_id  INT                     NOT NULL,
   CONSTRAINT feedItem_url_cc CHECK (url ~*
                                     '^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&''\(\)\*\+,;=.]+$'),
-  CONSTRAINT feedItem_feedTypeId_fk FOREIGN KEY (feed_type_id) REFERENCES feed_type (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT feedItem_feedId_fk FOREIGN KEY (feed_id) REFERENCES feed (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT feedItem_url_ucc UNIQUE (url),
   CONSTRAINT feedItem_label_ucc UNIQUE (label),

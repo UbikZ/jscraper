@@ -35,6 +35,10 @@ public class FeedArticleEntityHelper {
             dto.setTagList((List<String>) data.get("tags"));
         }
 
+        if (data.containsKey("pictures")) {
+            dto.setPictureList(((List<String>) data.get("pictures")));
+        }
+
         return dto;
     }
 
