@@ -37,7 +37,7 @@ public class FeedController extends AbstractController {
 
     @RequestMapping(value = uriPath, method = RequestMethod.GET, produces = "application/json")
     public String get(final FeedFilterBody filter) throws Exception {
-return this.sendResponse(this.feedContext.getAllFeeds(filter));
+        return this.sendResponse(this.feedContext.getAllFeeds(filter));
     }
 
     /**

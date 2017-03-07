@@ -1,6 +1,8 @@
 package com.ubikz.scraper.core.app.dto;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FeedItemDto extends AbstractDto {
     private FeedDto feed;
@@ -74,5 +76,20 @@ public class FeedItemDto extends AbstractDto {
 
     public void setSent(Boolean sent) {
         isSent = sent;
+    }
+
+    @Override
+    public String toString() {
+        List<String> str = new ArrayList<>();
+        str.add("url = " + this.url);
+        str.add("checksum = " + this.checksum);
+        str.add("feed = " + this.feed);
+        str.add("tags = " + this.tags);
+        str.add("viewed = " + this.isViewed);
+        str.add("approved = " + this.isApproved);
+        str.add("reposted = " + this.isReposted);
+        str.add("sent = " + this.isSent);
+
+        return super.toString().concat(", " + str.stream().collect(Collectors.joining(", ")));
     }
 }

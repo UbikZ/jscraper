@@ -1,6 +1,9 @@
 package com.ubikz.scraper.core.app.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 abstract public class AbstractDto {
     private Integer id;
@@ -41,5 +44,15 @@ abstract public class AbstractDto {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        List<String> str = new ArrayList<>();
+        str.add("id = " + this.id);
+        str.add("label = " + this.label);
+        str.add("date = " + this.date);
+        str.add("isEnabled = " + this.isEnabled);
+        return str.stream().collect(Collectors.joining(", "));
     }
 }

@@ -45,6 +45,7 @@ public class FeedItemContext extends AbstractContext {
             FeedListServiceRequest request = new FeedListServiceRequest();
             FeedServiceFilter feedServiceFilter = new FeedServiceFilter();
             feedServiceFilter.setEnabled(true);
+            feedServiceFilter.setLazy(true);
             request.setFeedList(this.feedService.getAllFeeds(feedServiceFilter));
 
             return this.feedItemService.generate(request);

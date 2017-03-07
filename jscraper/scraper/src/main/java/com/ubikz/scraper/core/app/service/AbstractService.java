@@ -4,12 +4,8 @@ import com.ubikz.scraper.core.app.entity.filter.AbstractEntityFilter;
 import com.ubikz.scraper.core.app.entity.request.AbstractEntityRequest;
 import com.ubikz.scraper.core.app.service.filter.AbstractServiceFilter;
 import com.ubikz.scraper.core.app.service.request.AbstractServiceRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 abstract class AbstractService {
-    protected final Logger logger = LoggerFactory.getLogger(AbstractService.class);
-
     /**
      * @param request
      * @return

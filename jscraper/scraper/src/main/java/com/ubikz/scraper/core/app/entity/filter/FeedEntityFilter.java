@@ -6,6 +6,7 @@ public class FeedEntityFilter extends AbstractEntityFilter {
     private String url;
     private List<String> prohibitedTagList;
     private List<String> prohibitedFeedList;
+    private String urlRegex;
 
     public String getUrl() {
         return url;
@@ -29,5 +30,13 @@ public class FeedEntityFilter extends AbstractEntityFilter {
 
     public void setProhibitedFeedList(List<String> prohibitedFeedList) {
         this.prohibitedFeedList = prohibitedFeedList;
+    }
+
+    public String getUrlRegex() {
+        return urlRegex;
+    }
+
+    public void setUrlRegex(String urlRegex) {
+        this.urlRegex = urlRegex;
     }
 }

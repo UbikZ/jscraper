@@ -64,8 +64,10 @@ public class FeedItemService extends AbstractService {
         for (FeedDto feed : request.getFeedList()) {
             FeedEntityFilter filter = new FeedEntityFilter();
             filter.setUrl(feed.getUrl());
+            filter.setUrlRegex(feed.getFeedTypeDto().getUrlRegex());
             filter.setProhibitedFeedList(feedProhibitedList);
             filter.setProhibitedTagList(tagProhibitedList);
+
             articleMap.put(feed.getUrl(), this.feedEntity.getRssFeedArticleList(filter));
         }
 

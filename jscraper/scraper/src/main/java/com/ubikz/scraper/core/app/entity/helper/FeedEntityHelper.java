@@ -1,6 +1,7 @@
 package com.ubikz.scraper.core.app.entity.helper;
 
 import com.ubikz.scraper.core.app.dto.FeedDto;
+import com.ubikz.scraper.core.app.dto.FeedTypeDto;
 
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,12 @@ public class FeedEntityHelper extends AbstractEntityHelper {
 
         if (data.containsKey("url")) {
             feedDto.setUrl((String) data.get("url"));
+        }
+
+        if (data.containsKey("feed_type_id")) {
+            FeedTypeDto feedTypeDto = new FeedTypeDto();
+            feedTypeDto.setId((int) data.get("feed_type_id"));
+            feedDto.setFeedTypeDto(feedTypeDto);
         }
 
         return feedDto;

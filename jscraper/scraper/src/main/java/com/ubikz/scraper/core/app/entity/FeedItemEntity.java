@@ -79,7 +79,9 @@ public class FeedItemEntity extends AbstractEntity {
     public int createFeedItem(FeedItemEntityRequest request) {
         int createdId = this.feedItemDal.create(this.parseEntityToDalRequest(request));
 
-        this.feedItemDal.createTags(this.parseEntityToTagDalRequest(createdId, request));
+        if (request.getTagIds() != null) {
+            this.feedItemDal.createTags(this.parseEntityToTagDalRequest(createdId, request));
+        }
 
         return createdId;
     }

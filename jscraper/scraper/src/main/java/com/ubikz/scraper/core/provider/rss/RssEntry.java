@@ -55,11 +55,11 @@ public class RssEntry {
      * @return
      * @throws Exception
      */
-    public List<String> getPictureLinks() throws Exception {
+    public List<String> getPictureLinks(String regex) throws Exception {
         List<String> links = new ArrayList<>();
         for (SyndContent entryContent : this.entry.getContents()) {
             HtmlParser htmlParser = new HtmlParser(entryContent.getValue());
-            links.addAll(htmlParser.searchPictures());
+            links.addAll(htmlParser.searchPictures(regex));
         }
 
         return links;

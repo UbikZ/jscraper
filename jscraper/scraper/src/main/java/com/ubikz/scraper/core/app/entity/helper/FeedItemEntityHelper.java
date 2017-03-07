@@ -2,7 +2,6 @@ package com.ubikz.scraper.core.app.entity.helper;
 
 import com.ubikz.scraper.core.app.dto.FeedDto;
 import com.ubikz.scraper.core.app.dto.FeedItemDto;
-import com.ubikz.scraper.core.app.dto.FeedTypeDto;
 
 import java.util.HashMap;
 import java.util.List;

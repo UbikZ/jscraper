@@ -44,7 +44,7 @@ public class FeedDal extends AbstractDal {
             article.put("date", entry.getPublishedDate());
             article.put("author", entry.getAuthor());
             article.put("tags", rssEntry.buildTagList(filter.getProhibitedTagList()));
-            article.put("pictures", rssEntry.getPictureLinks());
+            article.put("pictures", rssEntry.getPictureLinks(filter.getUrlRegex()));
 
             resultList.add(article);
         }

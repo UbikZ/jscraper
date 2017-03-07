@@ -20,7 +20,6 @@ import com.ubikz.scraper.core.app.entity.request.FeedEntityRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +90,9 @@ public class FeedEntity extends AbstractEntity {
                 FeedTypeEntityHelper.getDtoMapFromDal(this.feedTypeDal.getAll(feedTypeDalFilter));
 
         for (FeedDto feed : feedList) {
-            feed.setTypeDto(feedTypeMap.get(feed.getId()));
+            if (feedTypeMap.containsKey(feed.getFeedTypeDto().getId())) {
+                feed.setFeedTypeDto(feedTypeMap.get(feed.getFeedTypeDto().getId()));
+            }
         }
     }
 
@@ -148,6 +149,7 @@ public class FeedEntity extends AbstractEntity {
         feedDalFilter.setUrl(feedEntityFilter.getUrl());
         feedDalFilter.setProhibitedTagList(feedEntityFilter.getProhibitedTagList());
         feedDalFilter.setProhibitedFeedList(feedEntityFilter.getProhibitedFeedList());
+        feedDalFilter.setUrlRegex(feedEntityFilter.getUrlRegex());
 
         return feedDalFilter;
     }
