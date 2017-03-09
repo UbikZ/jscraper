@@ -4,7 +4,6 @@ import java.util.List;
 
 public class FeedItemEntityRequest extends AbstractEntityRequest {
     private Integer feedId;
-    private Integer feedTypeId;
     private String url;
     private String checksum;
     private List<Integer> tagIds;
@@ -19,14 +18,6 @@ public class FeedItemEntityRequest extends AbstractEntityRequest {
 
     public void setFeedId(Integer feedId) {
         this.feedId = feedId;
-    }
-
-    public Integer getFeedTypeId() {
-        return feedTypeId;
-    }
-
-    public void setFeedTypeId(Integer feedTypeId) {
-        this.feedTypeId = feedTypeId;
     }
 
     public String getUrl() {

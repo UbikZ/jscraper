@@ -72,6 +72,14 @@ public class FeedItemEntity extends AbstractEntity {
     }
 
     /**
+     * @param requestList
+     * @return
+     */
+    public int createFeedItems(List<FeedItemEntityRequest> requestList) {
+        return this.feedItemDal.createAll(this.parseListEntityToDalRequest(requestList));
+    }
+
+    /**
      * @param request
      * @return
      */
@@ -113,6 +121,20 @@ public class FeedItemEntity extends AbstractEntity {
     }
 
     /**
+     * @param requestList
+     * @return
+     */
+    private List<FeedItemDalRequest> parseListEntityToDalRequest(List<FeedItemEntityRequest> requestList) {
+        List<FeedItemDalRequest> dalRequestList = new ArrayList<>();
+
+        for (FeedItemEntityRequest feedItemEntityRequest : requestList) {
+            dalRequestList.add((FeedItemDalRequest) this.parseEntityToDalRequest(feedItemEntityRequest));
+        }
+
+        return dalRequestList;
+    }
+
+    /**
      * @param request
      * @return
      */
@@ -123,7 +145,6 @@ public class FeedItemEntity extends AbstractEntity {
 
         feedItemDalRequest = (FeedItemDalRequest) this.parseBaseEntityToDalRequest(feedItemEntityRequest, feedItemDalRequest);
         feedItemDalRequest.setFeedId(feedItemEntityRequest.getFeedId());
-        feedItemDalRequest.setFeedTypeId(feedItemEntityRequest.getFeedTypeId());
         feedItemDalRequest.setUrl(feedItemEntityRequest.getUrl());
         feedItemDalRequest.setChecksum(feedItemEntityRequest.getChecksum());
         feedItemDalRequest.setApproved(feedItemEntityRequest.getApproved());
@@ -146,7 +167,6 @@ public class FeedItemEntity extends AbstractEntity {
         feedItemDalFilter = (FeedItemDalFilter) this.parseBaseEntityToDalFilter(feedItemEntityFilter, feedItemDalFilter);
 
         feedItemDalFilter.setFeedId(feedItemEntityFilter.getFeedId());
-        feedItemDalFilter.setFeedTypeId(feedItemEntityFilter.getFeedTypeId());
         feedItemDalFilter.setUrl(feedItemEntityFilter.getUrl());
         feedItemDalFilter.setChecksum(feedItemEntityFilter.getChecksum());
         feedItemDalFilter.setApproved(feedItemEntityFilter.getApproved());

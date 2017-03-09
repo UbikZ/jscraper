@@ -43,7 +43,6 @@ abstract public class AbstractDal {
         return this.insert(insert);
     }
 
-
     /**
      * @param request
      * @return
@@ -161,6 +160,19 @@ abstract public class AbstractDal {
         this.logger.debug("# Insert Params > " + request.getParameters());
 
         return this.dbWrapper.jdbcTemplate.queryForObject(request.getSQL(), request.getParameters(), Integer.class);
+    }
+
+    /**
+     * @param request
+     * @return
+     */
+    protected int insertMultiple(AbstractQuery request) {
+        request.build();
+
+        this.logger.debug("# Insert Multiple SQL > " + request.getSQL());
+        this.logger.debug("# Insert Multiple Params > " + request.getParameters());
+
+        return this.dbWrapper.jdbcTemplate.update(request.getSQL(), request.getParameters());
     }
 
     /**

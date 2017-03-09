@@ -29,7 +29,7 @@ public class FeedItemDal extends AbstractDal {
         AbstractQuery select = qb
                 .select("fi.*", "string_agg(DISTINCT fit.tag_id::character varying, ',') AS tags")
                 .from(this.tableName, "fi")
-                .join("feed_item_tag", "fit", "fi.id = fit.feed_item_id")
+                .joinLeft("feed_item_tag", "fit", "fi.id = fit.feed_item_id")
                 .groupBy("fi.id")
                 .aliases(new HashMap<String, String>() {{
                     put("id", "fi.id");
@@ -37,6 +37,20 @@ public class FeedItemDal extends AbstractDal {
 
         this.parseFilter(filter, select);
         return (Select) select;
+    }
+
+    /**
+     * @param requestList
+     * @return
+     */
+    public int createAll(List<FeedItemDalRequest> requestList) {
+        QueryBuilder qb = new QueryBuilder();
+        AbstractQuery insert = qb
+                .insert(this.tableName)
+                .values(this.parseRequestList(requestList, true))
+                .onConflict("DO NOTHING");
+
+        return this.insertMultiple(insert);
     }
 
     /**
@@ -86,6 +100,21 @@ public class FeedItemDal extends AbstractDal {
     }
 
     /**
+     * @param requestList
+     * @param created
+     * @return
+     */
+    private List<Map<String, Object>> parseRequestList(List<FeedItemDalRequest> requestList, boolean created) {
+        List<Map<String, Object>> values = new ArrayList<>();
+
+        for (FeedItemDalRequest feedItemDalRequest : requestList) {
+            values.add(this.parseRequest(feedItemDalRequest, created));
+        }
+
+        return values;
+    }
+
+    /**
      * @param request
      * @param created
      * @return
@@ -97,10 +126,6 @@ public class FeedItemDal extends AbstractDal {
 
         if (feedItemDalRequest.getFeedId() != null) {
             values.put("feed_id", feedItemDalRequest.getFeedId());
-        }
-
-        if (feedItemDalRequest.getFeedTypeId() != null) {
-            values.put("feed_type_id", feedItemDalRequest.getFeedTypeId());
         }
 
         if (feedItemDalRequest.getUrl() != null) {
@@ -145,10 +170,6 @@ public class FeedItemDal extends AbstractDal {
 
         if (feedItemDalFilter.getFeedId() != null) {
             select.where("feed_id", feedItemDalFilter.getUrl());
-        }
-
-        if (feedItemDalFilter.getFeedTypeId() != null) {
-            select.where("feed_type_id", feedItemDalFilter.getFeedTypeId());
         }
 
         if (feedItemDalFilter.getUrl() != null) {

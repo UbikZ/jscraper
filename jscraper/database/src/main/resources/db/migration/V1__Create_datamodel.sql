@@ -13,6 +13,9 @@ CREATE TABLE public.feed_type
 );
 CREATE INDEX feedType_label_idx
   ON public.feed_type (label);
+CREATE INDEX feedType_date_idx
+  ON public.feed_type (date);
+
 
 CREATE TABLE public.feed
 (
@@ -30,6 +33,8 @@ CREATE TABLE public.feed
 );
 CREATE INDEX feed_label_idx
   ON public.feed (label);
+CREATE INDEX feed_date_idx
+  ON public.feed (date);
 
 CREATE TABLE public.feed_item
 (
@@ -53,6 +58,10 @@ CREATE TABLE public.feed_item
 );
 CREATE INDEX feedItem_label_idx
   ON public.feed_item (label);
+CREATE INDEX feedItem_date_idx
+  ON public.feed_item (date);
+CREATE INDEX feedItem_checksum_idx
+  ON public.feed_item (checksum);
 
 CREATE TABLE public.tag
 (
@@ -64,6 +73,8 @@ CREATE TABLE public.tag
 );
 CREATE INDEX tag_label_idx
   ON public.tag (label);
+CREATE INDEX tag_date_idx
+  ON public.tag (date);
 
 CREATE TABLE public.feed_item_tag
 (

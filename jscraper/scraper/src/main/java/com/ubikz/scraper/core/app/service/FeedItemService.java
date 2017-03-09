@@ -15,7 +15,10 @@ import com.ubikz.scraper.core.app.service.request.FeedItemServiceRequest;
 import com.ubikz.scraper.core.app.service.request.FeedListServiceRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.DigestUtils;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +50,7 @@ public class FeedItemService extends AbstractService {
      */
     public Map<String, List<FeedArticleDto>> generate(FeedListServiceRequest request) throws Exception {
         Map<String, List<FeedArticleDto>> articleMap = new HashMap<>();
+        List<FeedItemEntityRequest> entityRequestList = new ArrayList<>();
 
         List<String> feedProhibitedList = this
                 .feedProhibitedEntity
@@ -68,10 +72,38 @@ public class FeedItemService extends AbstractService {
             filter.setProhibitedFeedList(feedProhibitedList);
             filter.setProhibitedTagList(tagProhibitedList);
 
-            articleMap.put(feed.getUrl(), this.feedEntity.getRssFeedArticleList(filter));
+            List<FeedArticleDto> subList = this.feedEntity.getRssFeedArticleList(filter);
+
+            articleMap.put(feed.getUrl(), subList);
+            entityRequestList.addAll(this.parseServiceToEntityArticleListRequest(feed, subList));
         }
 
+        this.feedItemEntity.createFeedItems(entityRequestList);
+
         return articleMap;
+    }
+
+    /**
+     * @param feed
+     * @param articleList
+     * @return
+     */
+    private List<FeedItemEntityRequest> parseServiceToEntityArticleListRequest(
+            FeedDto feed,
+            List<FeedArticleDto> articleList
+    ) throws UnsupportedEncodingException {
+        List<FeedItemEntityRequest> request = new ArrayList<>();
+
+        for (FeedArticleDto articleDto : articleList) {
+            FeedItemEntityRequest entityRequest = new FeedItemEntityRequest();
+            entityRequest.setFeedId(feed.getId());
+            entityRequest.setLabel(articleDto.getLabel());
+            entityRequest.setUrl(articleDto.getPictureList().get(0));
+            entityRequest.setChecksum(DigestUtils.md5DigestAsHex(entityRequest.getUrl().getBytes("UTF-8")));
+            request.add(entityRequest);
+        }
+
+        return request;
     }
 
     /**
@@ -137,7 +169,6 @@ public class FeedItemService extends AbstractService {
         this.parseBaseServiceToEntityRequest(feedItemServiceRequest, feedItemEntityRequest);
         feedItemEntityRequest.setUrl(feedItemServiceRequest.getUrl());
         feedItemEntityRequest.setFeedId(feedItemServiceRequest.getFeedId());
-        feedItemEntityRequest.setFeedTypeId(feedItemServiceRequest.getFeedTypeId());
         feedItemEntityRequest.setChecksum(feedItemServiceRequest.getChecksum());
         feedItemEntityRequest.setTagIds(feedItemServiceRequest.getTagIds());
         feedItemEntityRequest.setViewed(feedItemServiceRequest.getViewed());
@@ -160,7 +191,6 @@ public class FeedItemService extends AbstractService {
         this.parseBaseServiceToEntityFilter(feedItemServiceFilter, feedItemEntityFilter);
         feedItemEntityFilter.setUrl(feedItemServiceFilter.getUrl());
         feedItemEntityFilter.setFeedId(feedItemServiceFilter.getFeedId());
-        feedItemEntityFilter.setFeedTypeId(feedItemServiceFilter.getFeedTypeId());
         feedItemEntityFilter.setChecksum(feedItemServiceFilter.getChecksum());
         feedItemEntityFilter.setViewed(feedItemServiceFilter.getViewed());
         feedItemEntityFilter.setApproved(feedItemServiceFilter.getApproved());

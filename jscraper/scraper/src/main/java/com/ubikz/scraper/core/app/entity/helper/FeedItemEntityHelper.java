@@ -50,13 +50,15 @@ public class FeedItemEntityHelper extends AbstractEntityHelper {
         // Computed column from database
         if (data.containsKey("tags")) {
             String strTags = (String) data.get("tags");
-            feedItemDto.setTags(
-                    Stream.of(strTags.split(",")).map(tagId ->
-                            TagEntityHelper.getDtoFromDal(new HashMap<String, Object>() {{
-                                put("id", Integer.valueOf(tagId));
-                            }})
-                    ).collect(Collectors.toList())
-            );
+            if (strTags != null) {
+                feedItemDto.setTags(
+                        Stream.of(strTags.split(",")).map(tagId ->
+                                TagEntityHelper.getDtoFromDal(new HashMap<String, Object>() {{
+                                    put("id", Integer.valueOf(tagId));
+                                }})
+                        ).collect(Collectors.toList())
+                );
+            }
         }
 
         return feedItemDto;

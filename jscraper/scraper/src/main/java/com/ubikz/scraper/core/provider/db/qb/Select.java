@@ -69,9 +69,30 @@ public class Select extends AbstractQuery {
      * @return
      */
     public Select join(String table, String alias, String on) {
+        return this.join(table, alias, on, null);
+    }
+
+    /**
+     * @param table
+     * @param alias
+     * @param on
+     * @return
+     */
+    public Select joinLeft(String table, String alias, String on) {
+        return this.join(table, alias, on, "LEFT");
+    }
+
+    /**
+     * @param table
+     * @param alias
+     * @param on
+     * @return
+     */
+    public Select join(String table, String alias, String on, String type) {
         @SuppressWarnings("unchecked")
         List<String> existingJoins = (List<String>) this.parts.get(KEY_JOIN);
-        existingJoins.add("JOIN " + this.buildAlias(table, alias) + " " + SQL_ON + " " + on);
+        existingJoins.add((type == null ? "" : type + " ") + "JOIN " + this.buildAlias(table, alias) + " " +
+                SQL_ON + " " + on);
         this.parts.put(KEY_JOIN, existingJoins);
         return this;
     }

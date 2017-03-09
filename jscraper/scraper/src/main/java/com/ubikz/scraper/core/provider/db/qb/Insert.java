@@ -7,10 +7,12 @@ import java.util.stream.Collectors;
 public class Insert extends Edit {
     protected String KEY_VALUES = "values";
     protected String KEY_RETURNING = "returning";
+    protected String KEY_ON_CONFLICT = "onconflict";
 
     private String SQL_INSERT = "INSERT INTO";
     private String SQL_VALUES = "VALUES";
     private String SQL_RETURNING = "RETURNING";
+    private String SQL_ON_CONFLICT = "ON CONFLICT";
 
     public Insert(String table) {
         super(table);
@@ -34,6 +36,11 @@ public class Insert extends Edit {
 
         this.parts.put(KEY_VALUES, namedParametersList);
 
+        return this;
+    }
+
+    public Insert onConflict(String action) {
+        this.parts.put(KEY_ON_CONFLICT, action);
         return this;
     }
 
@@ -76,6 +83,12 @@ public class Insert extends Edit {
                         .collect(Collectors.joining(","))
         );
 
+        String onConflict = (String) this.parts.get(KEY_ON_CONFLICT);
+        if (onConflict != null) {
+            this.sql.add(SQL_ON_CONFLICT);
+            this.sql.add(onConflict);
+        }
+
         String returningColumn = (String) this.parts.get(KEY_RETURNING);
         if (returningColumn != null) {
             this.sql.add(SQL_RETURNING);
@@ -89,5 +102,6 @@ public class Insert extends Edit {
         this.parts.put(KEY_COLUMNS, new HashSet<>());
         this.parts.put(KEY_VALUES, new ArrayList<>());
         this.parts.put(KEY_RETURNING, null);
+        this.parts.put(KEY_ON_CONFLICT, null);
     }
 }

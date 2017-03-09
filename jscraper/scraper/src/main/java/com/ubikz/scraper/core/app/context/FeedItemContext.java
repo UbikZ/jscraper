@@ -128,7 +128,6 @@ public class FeedItemContext extends AbstractContext {
         FeedItemServiceRequest serviceRequest = (FeedItemServiceRequest) this.parseBaseRequest(requestBody, request);
 
         serviceRequest.setFeedId(requestBody.getFeedId());
-        serviceRequest.setFeedTypeId(requestBody.getFeedTypeId());
         serviceRequest.setUrl(requestBody.getUrl());
         serviceRequest.setTagIds(requestBody.getTagIds());
         serviceRequest.setChecksum(requestBody.getChecksum());
@@ -145,7 +144,6 @@ public class FeedItemContext extends AbstractContext {
         FeedItemFilterBody filterBody = (FeedItemFilterBody) data;
         FeedItemServiceFilter serviceFilter = (FeedItemServiceFilter) this.parseBaseFilter(filterBody, filter);
 
-        serviceFilter.setFeedTypeId(filterBody.getFeedTypeId());
         serviceFilter.setUrl(filterBody.getUrl());
         serviceFilter.setTagNames(filterBody.getTagNames());
         serviceFilter.setChecksum(filterBody.getChecksum());

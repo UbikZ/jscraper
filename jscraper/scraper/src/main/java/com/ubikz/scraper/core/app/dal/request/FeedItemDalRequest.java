@@ -2,7 +2,6 @@ package com.ubikz.scraper.core.app.dal.request;
 
 public class FeedItemDalRequest extends AbstractDalRequest {
     private Integer feedId;
-    private Integer feedTypeId;
     private String url;
     private String checksum;
     private Boolean viewed;
@@ -16,14 +15,6 @@ public class FeedItemDalRequest extends AbstractDalRequest {
 
     public void setFeedId(Integer feedId) {
         this.feedId = feedId;
-    }
-
-    public Integer getFeedTypeId() {
-        return feedTypeId;
-    }
-
-    public void setFeedTypeId(Integer feedTypeId) {
-        this.feedTypeId = feedTypeId;
     }
 
     public String getUrl() {
