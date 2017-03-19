@@ -4,7 +4,7 @@ import com.ubikz.scraper.api.controller.filter.AbstractFilterBody;
 import com.ubikz.scraper.api.controller.filter.FeedItemFilterBody;
 import com.ubikz.scraper.api.controller.request.AbstractRequestBody;
 import com.ubikz.scraper.api.controller.request.FeedItemRequestBody;
-import com.ubikz.scraper.core.app.exception.MissingParameterException;
+import com.ubikz.scraper.core.app.dto.FeedDto;
 import com.ubikz.scraper.core.app.service.FeedItemService;
 import com.ubikz.scraper.core.app.service.FeedService;
 import com.ubikz.scraper.core.app.service.filter.AbstractServiceFilter;
@@ -18,22 +18,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.util.stream.Collectors;
+
 @Component
 public class FeedItemContext extends AbstractContext {
-    final private int FEED_ITEM_CREATED = 40;
-    final private int FEED_ITEM_UPDATED = 41;
-    final private int FEED_ITEM_GET_ONE = 42;
-    final private int FEED_ITEM_GET_ALL = 42;
-    final private int FEED_ITEM_DELETE = 43;
     final private int FEED_ITEM_GENERATED = 44;
 
-    private FeedItemService feedItemService;
     private FeedService feedService;
 
     @Autowired
     public FeedItemContext(FeedItemService feedItemService, FeedService feedService) {
-        this.feedItemService = feedItemService;
+        this.service = feedItemService;
+        this.serviceRequest = new FeedItemServiceRequest();
+        this.serviceFilter = new FeedItemServiceFilter();
+        this.filterBody = new FeedItemFilterBody();
         this.feedService = feedService;
+
+        this.CREATED = 40;
+        this.UPDATED = 41;
+        this.GET_ONE = 42;
+        this.GET_ALL = 42;
+        this.DELETE = 43;
     }
 
     /**
@@ -43,83 +48,18 @@ public class FeedItemContext extends AbstractContext {
     public BaseMessage generate() throws Exception {
         return this.handle(() -> {
             FeedListServiceRequest request = new FeedListServiceRequest();
-            FeedServiceFilter feedServiceFilter = new FeedServiceFilter();
+            AbstractServiceFilter feedServiceFilter = new FeedServiceFilter();
             feedServiceFilter.setEnabled(true);
             feedServiceFilter.setLazy(true);
-            request.setFeedList(this.feedService.getAllFeeds(feedServiceFilter));
-
-            return this.feedItemService.generate(request);
-        }, HttpStatus.CREATED, FEED_ITEM_GENERATED);
-    }
-
-    /**
-     * @param request
-     * @return
-     * @throws Exception
-     */
-    public BaseMessage createFeedItem(FeedItemRequestBody request) throws Exception {
-        return this.handle(() -> this.feedItemService.createFeedItem(
-                (FeedItemServiceRequest) this.parseRequest(request, new FeedItemServiceRequest())
-        ), HttpStatus.CREATED, FEED_ITEM_CREATED);
-    }
-
-    /**
-     * @param request
-     * @return
-     * @throws Exception
-     */
-    public BaseMessage updateFeedItem(Integer id, FeedItemRequestBody request) throws Exception {
-        return this.handle(() -> {
-            FeedItemServiceRequest serviceRequest = new FeedItemServiceRequest();
-            serviceRequest.setId(id);
-
-            if (id == null) {
-                throw new MissingParameterException();
-            }
-
-            return this.feedItemService.updateFeedItem(
-                    (FeedItemServiceRequest) this.parseRequest(request, serviceRequest)
+            request.setFeedList(
+                    this.feedService.getAll(feedServiceFilter)
+                            .stream()
+                            .map(FeedDto.class::cast)
+                            .collect(Collectors.toList())
             );
-        }, HttpStatus.OK, FEED_ITEM_UPDATED);
-    }
 
-    /**
-     * @param id
-     * @return
-     * @throws Exception
-     */
-    public BaseMessage getFeedItemById(int id) throws Exception {
-        FeedItemFilterBody filter = new FeedItemFilterBody();
-        filter.setId(id);
-
-        return this.handle(() -> this.feedItemService.getOneFeedItem(
-                (FeedItemServiceFilter) this.parseFilter(filter, new FeedItemServiceFilter())
-        ), HttpStatus.OK, FEED_ITEM_GET_ONE);
-    }
-
-    /**
-     * @param id
-     * @return
-     * @throws Exception
-     */
-    public BaseMessage deleteFeedItemById(int id) throws Exception {
-        FeedItemFilterBody filter = new FeedItemFilterBody();
-        filter.setId(id);
-
-        return this.handle(() -> this.feedItemService.delete(
-                (FeedItemServiceFilter) this.parseFilter(filter, new FeedItemServiceFilter())
-        ), HttpStatus.OK, FEED_ITEM_DELETE);
-    }
-
-    /**
-     * @param filter
-     * @return
-     * @throws Exception
-     */
-    public BaseMessage getAllFeedItems(FeedItemFilterBody filter) throws Exception {
-        return this.handle(() -> this.feedItemService.getAllFeedItems(
-                (FeedItemServiceFilter) this.parseFilter(filter, new FeedItemServiceFilter())
-        ), HttpStatus.OK, FEED_ITEM_GET_ALL);
+            return ((FeedItemService) this.service).generate(request);
+        }, HttpStatus.CREATED, FEED_ITEM_GENERATED);
     }
 
     @Override

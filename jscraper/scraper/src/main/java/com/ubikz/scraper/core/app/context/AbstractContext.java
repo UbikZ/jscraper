@@ -2,6 +2,8 @@ package com.ubikz.scraper.core.app.context;
 
 import com.ubikz.scraper.api.controller.filter.AbstractFilterBody;
 import com.ubikz.scraper.api.controller.request.AbstractRequestBody;
+import com.ubikz.scraper.core.app.exception.MissingParameterException;
+import com.ubikz.scraper.core.app.service.AbstractService;
 import com.ubikz.scraper.core.app.service.filter.AbstractServiceFilter;
 import com.ubikz.scraper.core.app.service.message.BaseMessage;
 import com.ubikz.scraper.core.app.service.message.ErrorMessage;
@@ -16,11 +18,90 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
-abstract class AbstractContext {
+abstract public class AbstractContext {
     protected final Logger logger = LoggerFactory.getLogger(AbstractContext.class);
 
     final private int CODE_ERROR = -1;
     final private int CODE_DATA_NOT_FOUND = -2;
+
+    protected AbstractService service;
+    protected AbstractServiceRequest serviceRequest;
+    protected AbstractServiceFilter serviceFilter;
+    protected AbstractFilterBody filterBody;
+
+    protected int CREATED;
+    protected int UPDATED;
+    protected int GET_ONE;
+    protected int GET_ALL;
+    protected int DELETE;
+
+    /**
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    public BaseMessage create(AbstractRequestBody request) throws Exception {
+        return this.handle(() -> this.service.create(
+                this.parseRequest(request, this.serviceRequest)
+        ), HttpStatus.CREATED, this.CREATED);
+    }
+
+    /**
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    public BaseMessage update(Integer id, AbstractRequestBody request) throws Exception {
+        return this.handle(() -> {
+            AbstractServiceRequest serviceRequest = this.serviceRequest;
+            serviceRequest.setId(id);
+
+            if (id == null) {
+                throw new MissingParameterException();
+            }
+
+            return this.service.update(this.parseRequest(request, serviceRequest));
+        }, HttpStatus.OK, this.UPDATED);
+    }
+
+    /**
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public BaseMessage getById(int id) throws Exception {
+        AbstractFilterBody filter = this.filterBody;
+        filter.setId(id);
+
+        return this.handle(() -> this.service.get(
+                this.parseFilter(filter, this.serviceFilter)
+        ), HttpStatus.OK, this.GET_ONE);
+    }
+
+    /**
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public BaseMessage deleteById(int id) throws Exception {
+        AbstractFilterBody filter = this.filterBody;
+        filter.setId(id);
+
+        return this.handle(() -> this.service.delete(
+                this.parseFilter(filter, this.serviceFilter)
+        ), HttpStatus.OK, this.DELETE);
+    }
+
+    /**
+     * @param filter
+     * @return
+     * @throws Exception
+     */
+    public BaseMessage getAll(AbstractFilterBody filter) throws Exception {
+        return this.handle(() -> this.service.getAll(
+                this.parseFilter(filter, this.serviceFilter)
+        ), HttpStatus.OK, this.GET_ALL);
+    }
 
     /**
      * @param callable

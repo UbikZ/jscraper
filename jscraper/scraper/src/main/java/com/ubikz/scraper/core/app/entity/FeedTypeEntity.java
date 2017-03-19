@@ -5,7 +5,7 @@ import com.ubikz.scraper.core.app.dal.filter.AbstractDalFilter;
 import com.ubikz.scraper.core.app.dal.filter.FeedTypeDalFilter;
 import com.ubikz.scraper.core.app.dal.request.AbstractDalRequest;
 import com.ubikz.scraper.core.app.dal.request.FeedTypeDalRequest;
-import com.ubikz.scraper.core.app.dto.FeedTypeDto;
+import com.ubikz.scraper.core.app.dto.AbstractDto;
 import com.ubikz.scraper.core.app.entity.filter.AbstractEntityFilter;
 import com.ubikz.scraper.core.app.entity.filter.FeedTypeEntityFilter;
 import com.ubikz.scraper.core.app.entity.helper.FeedTypeEntityHelper;
@@ -18,55 +18,15 @@ import java.util.List;
 
 @Component
 public class FeedTypeEntity extends AbstractEntity {
-    protected FeedTypeDal feedTypeDal;
-
     @Autowired
     public FeedTypeEntity(FeedTypeDal feedTypeDal) {
-        this.feedTypeDal = feedTypeDal;
+        this.dal = feedTypeDal;
+        this.helper = new FeedTypeEntityHelper();
     }
 
-    /**
-     * @param filter
-     * @return
-     */
-    public List<FeedTypeDto> getAllFeedTypes(FeedTypeEntityFilter filter) {
-        return FeedTypeEntityHelper.getDtoListFromDal(
-                this.feedTypeDal.getAll(this.parseEntityToDalFilter(filter))
-        );
-    }
+    @Override
+    protected void computeLazyLoading(List<AbstractDto> dtoList) {
 
-    /**
-     * @param filter
-     * @return
-     */
-    public FeedTypeDto getOneFeedType(FeedTypeEntityFilter filter) {
-        return FeedTypeEntityHelper.getDtoFromDal(
-                this.feedTypeDal.getOne(this.parseEntityToDalFilter(filter))
-        );
-    }
-
-    /**
-     * @param filter
-     * @return
-     */
-    public int deleteFeedType(FeedTypeEntityFilter filter) {
-        return this.feedTypeDal.delete(this.parseEntityToDalFilter(filter));
-    }
-
-    /**
-     * @param request
-     * @return
-     */
-    public int createFeedType(FeedTypeEntityRequest request) {
-        return this.feedTypeDal.create(this.parseEntityToDalRequest(request));
-    }
-
-    /**
-     * @param request
-     * @return
-     */
-    public int updateFeedType(FeedTypeEntityRequest request) {
-        return this.feedTypeDal.edit(this.parseEntityToDalRequest(request));
     }
 
     /**

@@ -7,7 +7,7 @@ import com.ubikz.scraper.core.app.dal.filter.FeedItemDalFilter;
 import com.ubikz.scraper.core.app.dal.request.AbstractDalRequest;
 import com.ubikz.scraper.core.app.dal.request.FeedItemDalRequest;
 import com.ubikz.scraper.core.app.dal.request.FeedItemTagDalRequest;
-import com.ubikz.scraper.core.app.dto.FeedItemDto;
+import com.ubikz.scraper.core.app.dto.AbstractDto;
 import com.ubikz.scraper.core.app.entity.filter.AbstractEntityFilter;
 import com.ubikz.scraper.core.app.entity.filter.FeedItemEntityFilter;
 import com.ubikz.scraper.core.app.entity.helper.FeedItemEntityHelper;
@@ -22,61 +22,10 @@ import java.util.List;
 
 @Component
 public class FeedItemEntity extends AbstractEntity {
-    protected FeedItemDal feedItemDal;
-    protected TagDal tagDal;
-
     @Autowired
-    public FeedItemEntity(FeedItemDal feedItemDal, TagDal tagDal) {
-        this.feedItemDal = feedItemDal;
-        this.tagDal = tagDal;
-    }
-
-    /**
-     * @param filter
-     * @return
-     */
-    public List<FeedItemDto> getAllFeedItems(FeedItemEntityFilter filter) {
-        List<FeedItemDto> feedItemList = FeedItemEntityHelper.getDtoListFromDal(
-                this.feedItemDal.getAll(this.parseEntityToDalFilter(filter))
-        );
-
-        if (filter.isLazy()) {
-            // todo
-        }
-
-        return feedItemList;
-    }
-
-    /**
-     * @param filter
-     * @return
-     */
-    public FeedItemDto getOneFeedItem(FeedItemEntityFilter filter) {
-        FeedItemDto feedItemDto = FeedItemEntityHelper.getDtoFromDal(
-                this.feedItemDal.getOne(this.parseEntityToDalFilter(filter))
-        );
-
-        if (filter.isLazy()) {
-            // todo
-        }
-
-        return feedItemDto;
-    }
-
-    /**
-     * @param filter
-     * @return
-     */
-    public int deleteFeedItem(FeedItemEntityFilter filter) {
-        return this.feedItemDal.delete(this.parseEntityToDalFilter(filter));
-    }
-
-    /**
-     * @param requestList
-     * @return
-     */
-    public int createFeedItems(List<FeedItemEntityRequest> requestList) {
-        return this.feedItemDal.createAll(this.parseListEntityToDalRequest(requestList));
+    public FeedItemEntity(FeedItemDal feedItemDal) {
+        this.dal = feedItemDal;
+        this.helper = new FeedItemEntityHelper();
     }
 
     /**
@@ -84,22 +33,18 @@ public class FeedItemEntity extends AbstractEntity {
      * @return
      */
     @Transactional
-    public int createFeedItem(FeedItemEntityRequest request) {
-        int createdId = this.feedItemDal.create(this.parseEntityToDalRequest(request));
+    public int createAllWithTags(FeedItemEntityRequest request) {
+        int createdId = this.dal.create(this.parseEntityToDalRequest(request));
 
         if (request.getTagIds() != null) {
-            this.feedItemDal.createTags(this.parseEntityToTagDalRequest(createdId, request));
+            ((FeedItemDal) this.dal).createTags(this.parseEntityToTagDalRequest(createdId, request));
         }
 
         return createdId;
     }
 
-    /**
-     * @param request
-     * @return
-     */
-    public int updateFeedItem(FeedItemEntityRequest request) {
-        return this.feedItemDal.edit(this.parseEntityToDalRequest(request));
+    @Override
+    protected void computeLazyLoading(List<AbstractDto> dtoList) {
     }
 
     /**
@@ -118,20 +63,6 @@ public class FeedItemEntity extends AbstractEntity {
         }
 
         return tagRequestList;
-    }
-
-    /**
-     * @param requestList
-     * @return
-     */
-    private List<FeedItemDalRequest> parseListEntityToDalRequest(List<FeedItemEntityRequest> requestList) {
-        List<FeedItemDalRequest> dalRequestList = new ArrayList<>();
-
-        for (FeedItemEntityRequest feedItemEntityRequest : requestList) {
-            dalRequestList.add((FeedItemDalRequest) this.parseEntityToDalRequest(feedItemEntityRequest));
-        }
-
-        return dalRequestList;
     }
 
     /**

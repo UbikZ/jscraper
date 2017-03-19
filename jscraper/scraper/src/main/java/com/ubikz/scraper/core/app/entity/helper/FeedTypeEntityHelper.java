@@ -2,18 +2,15 @@ package com.ubikz.scraper.core.app.entity.helper;
 
 import com.ubikz.scraper.core.app.dto.FeedTypeDto;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class FeedTypeEntityHelper extends AbstractEntityHelper {
     /**
      * @param data
      * @return
      */
-    public static FeedTypeDto getDtoFromDal(Map<String, Object> data) {
-        FeedTypeDto feedTypeDto = (FeedTypeDto) FeedTypeEntityHelper.getBaseDtoFromDal(data, new FeedTypeDto());
+    public FeedTypeDto getDtoFromDal(Map<String, Object> data) {
+        FeedTypeDto feedTypeDto = (FeedTypeDto) this.getBaseDtoFromDal(data, new FeedTypeDto());
 
         if (data.containsKey("url_regex")) {
             feedTypeDto.setUrlRegex((String) data.get("url_regex"));
@@ -24,28 +21,5 @@ public class FeedTypeEntityHelper extends AbstractEntityHelper {
         }
 
         return feedTypeDto;
-    }
-
-    /**
-     * @param dataList
-     * @return
-     */
-    public static List<FeedTypeDto> getDtoListFromDal(List<Map<String, Object>> dataList) {
-        return dataList.stream().map(FeedTypeEntityHelper::getDtoFromDal).collect(Collectors.toList());
-    }
-
-    /**
-     * @param dataList
-     * @return
-     */
-    public static Map<Integer, FeedTypeDto> getDtoMapFromDal(List<Map<String, Object>> dataList) {
-        Map<Integer, FeedTypeDto> map = new HashMap<>();
-        List<FeedTypeDto> list = FeedTypeEntityHelper.getDtoListFromDal(dataList);
-
-        for (FeedTypeDto feedType : list) {
-            map.put(feedType.getId(), feedType);
-        }
-
-        return map;
     }
 }

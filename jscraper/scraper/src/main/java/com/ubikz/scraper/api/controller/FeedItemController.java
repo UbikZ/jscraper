@@ -35,12 +35,12 @@ public class FeedItemController extends AbstractController {
      */
     @RequestMapping(value = uriPath, method = RequestMethod.POST, produces = "application/json")
     public String create(@RequestBody final FeedItemRequestBody request) throws Exception {
-        return this.sendResponse(this.feedItemContext.createFeedItem(request));
+        return this.sendResponse(this.feedItemContext.create(request));
     }
 
     @RequestMapping(value = uriPath, method = RequestMethod.GET, produces = "application/json")
     public String get(final FeedItemFilterBody filter) throws Exception {
-        return this.sendResponse(this.feedItemContext.getAllFeedItems(filter));
+        return this.sendResponse(this.feedItemContext.getAll(filter));
     }
 
     /**
@@ -50,7 +50,7 @@ public class FeedItemController extends AbstractController {
      */
     @RequestMapping(value = uriPath + "/{id}", method = RequestMethod.PUT, produces = "application/json")
     public String update(@PathVariable("id") final int id, @RequestBody final FeedItemRequestBody request) throws Exception {
-        return this.sendResponse(this.feedItemContext.updateFeedItem(id, request));
+        return this.sendResponse(this.feedItemContext.update(id, request));
     }
 
     /**
@@ -60,7 +60,7 @@ public class FeedItemController extends AbstractController {
      */
     @RequestMapping(value = uriPath + "/{id}", method = RequestMethod.GET, produces = "application/json")
     public String getById(@PathVariable("id") final int id) throws Exception {
-        return this.sendResponse(this.feedItemContext.getFeedItemById(id));
+        return this.sendResponse(this.feedItemContext.getById(id));
     }
 
     /**
@@ -70,6 +70,6 @@ public class FeedItemController extends AbstractController {
      */
     @RequestMapping(value = uriPath + "/{id}", method = RequestMethod.DELETE, produces = "application/json")
     public String deleteById(@PathVariable("id") final int id) throws Exception {
-        return this.sendResponse(this.feedItemContext.deleteFeedItemById(id));
+        return this.sendResponse(this.feedItemContext.deleteById(id));
     }
 }

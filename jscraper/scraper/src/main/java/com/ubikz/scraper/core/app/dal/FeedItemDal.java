@@ -40,20 +40,6 @@ public class FeedItemDal extends AbstractDal {
     }
 
     /**
-     * @param requestList
-     * @return
-     */
-    public int createAll(List<FeedItemDalRequest> requestList) {
-        QueryBuilder qb = new QueryBuilder();
-        AbstractQuery insert = qb
-                .insert(this.tableName)
-                .values(this.parseRequestList(requestList, true))
-                .onConflict("DO NOTHING");
-
-        return this.insertMultiple(insert);
-    }
-
-    /**
      * @param request
      * @return
      */
@@ -97,21 +83,6 @@ public class FeedItemDal extends AbstractDal {
         }
 
         return valuesList;
-    }
-
-    /**
-     * @param requestList
-     * @param created
-     * @return
-     */
-    private List<Map<String, Object>> parseRequestList(List<FeedItemDalRequest> requestList, boolean created) {
-        List<Map<String, Object>> values = new ArrayList<>();
-
-        for (FeedItemDalRequest feedItemDalRequest : requestList) {
-            values.add(this.parseRequest(feedItemDalRequest, created));
-        }
-
-        return values;
     }
 
     /**

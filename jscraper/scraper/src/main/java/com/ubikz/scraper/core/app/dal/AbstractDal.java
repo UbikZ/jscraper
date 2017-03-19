@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +83,36 @@ abstract public class AbstractDal {
         this.parseFilter(filter, select);
 
         return (Select) select;
+    }
+
+    /**
+     * @param requestList
+     * @param created
+     * @return
+     */
+    protected List<Map<String, Object>> parseRequestList(List<AbstractDalRequest> requestList, boolean created) {
+        List<Map<String, Object>> values = new ArrayList<>();
+
+        for (AbstractDalRequest dalRequest : requestList) {
+            values.add(this.parseRequest(dalRequest, created));
+        }
+
+        return values;
+    }
+
+
+    /**
+     * @param requestList
+     * @return
+     */
+    public int createAll(List<AbstractDalRequest> requestList) {
+        QueryBuilder qb = new QueryBuilder();
+        AbstractQuery insert = qb
+                .insert(this.tableName)
+                .values(this.parseRequestList(requestList, true))
+                .onConflict("DO NOTHING");
+
+        return this.insertMultiple(insert);
     }
 
     /**

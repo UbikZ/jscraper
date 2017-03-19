@@ -5,14 +5,13 @@ import com.ubikz.scraper.core.app.dto.FeedArticleDto;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-public class FeedArticleEntityHelper {
+public class FeedArticleEntityHelper extends AbstractEntityHelper {
     /**
      * @param data
      * @return
      */
-    public static FeedArticleDto getDtoFromDal(Map<String, Object> data) {
+    public FeedArticleDto getDtoFromDal(Map<String, Object> data) {
         FeedArticleDto dto = new FeedArticleDto();
 
         if (data.containsKey("url")) {
@@ -40,13 +39,5 @@ public class FeedArticleEntityHelper {
         }
 
         return dto;
-    }
-
-    /**
-     * @param dataList
-     * @return
-     */
-    public static List<FeedArticleDto> getDtoListFromDal(List<Map<String, Object>> dataList) {
-        return dataList.stream().map(FeedArticleEntityHelper::getDtoFromDal).collect(Collectors.toList());
     }
 }

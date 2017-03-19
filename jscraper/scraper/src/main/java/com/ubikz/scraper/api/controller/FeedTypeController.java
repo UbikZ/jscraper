@@ -26,12 +26,12 @@ public class FeedTypeController extends AbstractController {
      */
     @RequestMapping(value = uriPath, method = RequestMethod.POST, produces = "application/json")
     public String create(@RequestBody final FeedTypeRequestBody request) throws Exception {
-        return this.sendResponse(this.feedTypeContext.createFeedType(request));
+        return this.sendResponse(this.feedTypeContext.create(request));
     }
 
     @RequestMapping(value = uriPath, method = RequestMethod.GET, produces = "application/json")
     public String get(final FeedTypeFilterBody filter) throws Exception {
-        return this.sendResponse(this.feedTypeContext.getAllFeedTypes(filter));
+        return this.sendResponse(this.feedTypeContext.getAll(filter));
     }
 
     /**
@@ -41,7 +41,7 @@ public class FeedTypeController extends AbstractController {
      */
     @RequestMapping(value = uriPath + "/{id}", method = RequestMethod.PUT, produces = "application/json")
     public String update(@PathVariable("id") final int id, @RequestBody final FeedTypeRequestBody request) throws Exception {
-        return this.sendResponse(this.feedTypeContext.updateFeedType(id, request));
+        return this.sendResponse(this.feedTypeContext.update(id, request));
     }
 
     /**
@@ -51,7 +51,7 @@ public class FeedTypeController extends AbstractController {
      */
     @RequestMapping(value = uriPath + "/{id}", method = RequestMethod.GET, produces = "application/json")
     public String getById(@PathVariable("id") final int id) throws Exception {
-        return this.sendResponse(this.feedTypeContext.getFeedTypeById(id));
+        return this.sendResponse(this.feedTypeContext.getById(id));
     }
 
     /**
@@ -61,6 +61,6 @@ public class FeedTypeController extends AbstractController {
      */
     @RequestMapping(value = uriPath + "/{id}", method = RequestMethod.DELETE, produces = "application/json")
     public String deleteById(@PathVariable("id") final int id) throws Exception {
-        return this.sendResponse(this.feedTypeContext.deleteFeedTypeById(id));
+        return this.sendResponse(this.feedTypeContext.deleteById(id));
     }
 }

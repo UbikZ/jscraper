@@ -2,20 +2,26 @@ package com.ubikz.scraper.core.app.entity.helper;
 
 import com.ubikz.scraper.core.app.dto.FeedDto;
 import com.ubikz.scraper.core.app.dto.FeedItemDto;
+import com.ubikz.scraper.core.app.dto.TagDto;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FeedItemEntityHelper extends AbstractEntityHelper {
+    private TagEntityHelper tagEntityHelper;
+
+    public FeedItemEntityHelper() {
+        this.tagEntityHelper = new TagEntityHelper();
+    }
+
     /**
      * @param data
      * @return
      */
-    public static FeedItemDto getDtoFromDal(Map<String, Object> data) {
-        FeedItemDto feedItemDto = (FeedItemDto) FeedItemEntityHelper.getBaseDtoFromDal(data, new FeedItemDto());
+    public FeedItemDto getDtoFromDal(Map<String, Object> data) {
+        FeedItemDto feedItemDto = (FeedItemDto) this.getBaseDtoFromDal(data, new FeedItemDto());
 
         if (data.containsKey("url")) {
             feedItemDto.setUrl((String) data.get("url"));
@@ -53,7 +59,7 @@ public class FeedItemEntityHelper extends AbstractEntityHelper {
             if (strTags != null) {
                 feedItemDto.setTags(
                         Stream.of(strTags.split(",")).map(tagId ->
-                                TagEntityHelper.getDtoFromDal(new HashMap<String, Object>() {{
+                                (TagDto) this.tagEntityHelper.getDtoFromDal(new HashMap<String, Object>() {{
                                     put("id", Integer.valueOf(tagId));
                                 }})
                         ).collect(Collectors.toList())
@@ -62,13 +68,5 @@ public class FeedItemEntityHelper extends AbstractEntityHelper {
         }
 
         return feedItemDto;
-    }
-
-    /**
-     * @param dataList
-     * @return
-     */
-    public static List<FeedItemDto> getDtoListFromDal(List<Map<String, Object>> dataList) {
-        return dataList.stream().map(FeedItemEntityHelper::getDtoFromDal).collect(Collectors.toList());
     }
 }

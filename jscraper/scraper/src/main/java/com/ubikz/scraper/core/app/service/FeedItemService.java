@@ -1,6 +1,8 @@
 package com.ubikz.scraper.core.app.service;
 
-import com.ubikz.scraper.core.app.dto.*;
+import com.ubikz.scraper.core.app.dto.AbstractDto;
+import com.ubikz.scraper.core.app.dto.FeedArticleDto;
+import com.ubikz.scraper.core.app.dto.FeedDto;
 import com.ubikz.scraper.core.app.entity.FeedEntity;
 import com.ubikz.scraper.core.app.entity.FeedItemEntity;
 import com.ubikz.scraper.core.app.entity.FeedProhibitedEntity;
@@ -15,6 +17,7 @@ import com.ubikz.scraper.core.app.service.request.FeedItemServiceRequest;
 import com.ubikz.scraper.core.app.service.request.FeedListServiceRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -26,7 +29,6 @@ import java.util.stream.Collectors;
 
 @Component
 public class FeedItemService extends AbstractService {
-    private FeedItemEntity feedItemEntity;
     private FeedEntity feedEntity;
     private FeedProhibitedEntity feedProhibitedEntity;
     private TagProhibitedEntity tagProhibitedEntity;
@@ -37,7 +39,7 @@ public class FeedItemService extends AbstractService {
             FeedEntity feedEntity,
             FeedProhibitedEntity feedProhibitedEntity,
             TagProhibitedEntity tagProhibitedEntity) {
-        this.feedItemEntity = feedItemEntity;
+        this.entity = feedItemEntity;
         this.feedEntity = feedEntity;
         this.feedProhibitedEntity = feedProhibitedEntity;
         this.tagProhibitedEntity = tagProhibitedEntity;
@@ -48,21 +50,22 @@ public class FeedItemService extends AbstractService {
      * @return
      * @throws Exception
      */
+    @Transactional
     public Map<String, List<FeedArticleDto>> generate(FeedListServiceRequest request) throws Exception {
         Map<String, List<FeedArticleDto>> articleMap = new HashMap<>();
-        List<FeedItemEntityRequest> entityRequestList = new ArrayList<>();
+        List<AbstractEntityRequest> entityRequestList = new ArrayList<>();
 
         List<String> feedProhibitedList = this
                 .feedProhibitedEntity
-                .getAllFeedsProhibited(new FeedProhibitedEntityFilter())
+                .getAll(new FeedProhibitedEntityFilter())
                 .stream()
-                .map(FeedProhibitedDto::getLabel)
+                .map(AbstractDto::getLabel)
                 .collect(Collectors.toList());
         List<String> tagProhibitedList = this
                 .tagProhibitedEntity
-                .getAllTagsProhibited(new TagProhibitedEntityFilter())
+                .getAll(new TagProhibitedEntityFilter())
                 .stream()
-                .map(TagProhibitedDto::getLabel)
+                .map(AbstractDto::getLabel)
                 .collect(Collectors.toList());
 
         for (FeedDto feed : request.getFeedList()) {
@@ -73,12 +76,11 @@ public class FeedItemService extends AbstractService {
             filter.setProhibitedTagList(tagProhibitedList);
 
             List<FeedArticleDto> subList = this.feedEntity.getRssFeedArticleList(filter);
-
             articleMap.put(feed.getUrl(), subList);
             entityRequestList.addAll(this.parseServiceToEntityArticleListRequest(feed, subList));
         }
 
-        this.feedItemEntity.createFeedItems(entityRequestList);
+        this.entity.createAll(entityRequestList);
 
         return articleMap;
     }
@@ -106,56 +108,6 @@ public class FeedItemService extends AbstractService {
         return request;
     }
 
-    /**
-     * @param filter
-     * @return
-     * @throws Exception
-     */
-    public List<FeedItemDto> getAllFeedItems(FeedItemServiceFilter filter) throws Exception {
-        return this.feedItemEntity.getAllFeedItems(
-                (FeedItemEntityFilter) this.parseServiceToEntityFilter(filter)
-        );
-    }
-
-    /**
-     * @param filter
-     * @return
-     * @throws Exception
-     */
-    public FeedItemDto getOneFeedItem(FeedItemServiceFilter filter) throws Exception {
-        return this.feedItemEntity.getOneFeedItem(
-                (FeedItemEntityFilter) this.parseServiceToEntityFilter(filter)
-        );
-    }
-
-    /**
-     * @param filter
-     * @return
-     * @throws Exception
-     */
-    public int delete(FeedItemServiceFilter filter) throws Exception {
-        return this.feedItemEntity.deleteFeedItem(
-                (FeedItemEntityFilter) this.parseServiceToEntityFilter(filter)
-        );
-    }
-
-    /**
-     * @param request
-     * @return
-     * @throws Exception
-     */
-    public int createFeedItem(FeedItemServiceRequest request) throws Exception {
-        return this.feedItemEntity.createFeedItem((FeedItemEntityRequest) this.parseServiceToEntityRequest(request));
-    }
-
-    /**
-     * @param request
-     * @return
-     * @throws Exception
-     */
-    public int updateFeedItem(FeedItemServiceRequest request) throws Exception {
-        return this.feedItemEntity.updateFeedItem((FeedItemEntityRequest) this.parseServiceToEntityRequest(request));
-    }
 
     /**
      * @param request

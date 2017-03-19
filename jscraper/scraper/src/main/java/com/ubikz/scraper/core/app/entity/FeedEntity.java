@@ -7,6 +7,7 @@ import com.ubikz.scraper.core.app.dal.filter.FeedDalFilter;
 import com.ubikz.scraper.core.app.dal.filter.FeedTypeDalFilter;
 import com.ubikz.scraper.core.app.dal.request.AbstractDalRequest;
 import com.ubikz.scraper.core.app.dal.request.FeedDalRequest;
+import com.ubikz.scraper.core.app.dto.AbstractDto;
 import com.ubikz.scraper.core.app.dto.FeedArticleDto;
 import com.ubikz.scraper.core.app.dto.FeedDto;
 import com.ubikz.scraper.core.app.dto.FeedTypeDto;
@@ -20,19 +21,22 @@ import com.ubikz.scraper.core.app.entity.request.FeedEntityRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
 public class FeedEntity extends AbstractEntity {
-    protected FeedDal feedDal;
-    protected FeedTypeDal feedTypeDal;
+    private FeedTypeDal feedTypeDal;
+    private FeedTypeEntityHelper feedTypeHelper;
+    private FeedArticleEntityHelper feedArticleHelper;
 
     @Autowired
     public FeedEntity(FeedDal feedDal, FeedTypeDal feedTypeDal) {
-        this.feedDal = feedDal;
+        this.dal = feedDal;
+        this.helper = new FeedEntityHelper();
+        this.feedTypeHelper = new FeedTypeEntityHelper();
+        this.feedArticleHelper = new FeedArticleEntityHelper();
         this.feedTypeDal = feedTypeDal;
     }
 
@@ -42,82 +46,33 @@ public class FeedEntity extends AbstractEntity {
      * @throws Exception
      */
     public List<FeedArticleDto> getRssFeedArticleList(FeedEntityFilter filter) throws Exception {
-        return FeedArticleEntityHelper.getDtoListFromDal(
-                this.feedDal.getRssFeedList((FeedDalFilter) this.parseEntityToDalFilter(filter))
+        List<AbstractDto> abstractList = this.feedArticleHelper.getDtoListFromDal(
+                ((FeedDal) this.dal).getRssFeedList((FeedDalFilter) this.parseEntityToDalFilter(filter))
         );
+
+        return abstractList.stream().map(FeedArticleDto.class::cast).collect(Collectors.toList());
     }
 
     /**
-     * @param filter
-     * @return
+     * @param feeds
      */
-    public List<FeedDto> getAllFeeds(FeedEntityFilter filter) {
-        List<FeedDto> result = FeedEntityHelper.getDtoListFromDal(
-                this.feedDal.getAll(this.parseEntityToDalFilter(filter))
-        );
+    @Override
+    protected void computeLazyLoading(List<AbstractDto> feeds) {
+        List<FeedDto> feedList = feeds.stream().map(FeedDto.class::cast).collect(Collectors.toList());
 
-        if (filter.isLazy()) {
-            this.computeFeedTypeLazy(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * @param filter
-     * @return
-     */
-    public FeedDto getOneFeed(FeedEntityFilter filter) {
-        FeedDto result = FeedEntityHelper.getDtoFromDal(
-                this.feedDal.getOne(this.parseEntityToDalFilter(filter))
-        );
-
-        if (filter.isLazy()) {
-            this.computeFeedTypeLazy(Collections.singletonList(result));
-        }
-
-        return result;
-    }
-
-    /**
-     * @param feedList
-     */
-    private void computeFeedTypeLazy(List<FeedDto> feedList) {
         FeedTypeDalFilter feedTypeDalFilter = new FeedTypeDalFilter();
         feedTypeDalFilter.setIdsList(feedList.stream().map(FeedDto::getId).collect(Collectors.toList()));
 
-        Map<Integer, FeedTypeDto> feedTypeMap =
-                FeedTypeEntityHelper.getDtoMapFromDal(this.feedTypeDal.getAll(feedTypeDalFilter));
+        Map<Integer, FeedTypeDto> feedTypeMap = this.feedTypeHelper
+                .getDtoMapFromDal(this.feedTypeDal.getAll(feedTypeDalFilter))
+                .entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, p -> (FeedTypeDto) p.getValue()));
 
         for (FeedDto feed : feedList) {
             if (feedTypeMap.containsKey(feed.getFeedTypeDto().getId())) {
                 feed.setFeedTypeDto(feedTypeMap.get(feed.getFeedTypeDto().getId()));
             }
         }
-    }
-
-    /**
-     * @param filter
-     * @return
-     */
-    public int deleteFeed(FeedEntityFilter filter) {
-        return this.feedDal.delete(this.parseEntityToDalFilter(filter));
-    }
-
-    /**
-     * @param request
-     * @return
-     */
-    public int createFeed(FeedEntityRequest request) {
-        return this.feedDal.create(this.parseEntityToDalRequest(request));
-    }
-
-    /**
-     * @param request
-     * @return
-     */
-    public int updateFeed(FeedEntityRequest request) {
-        return this.feedDal.edit(this.parseEntityToDalRequest(request));
     }
 
     /**
