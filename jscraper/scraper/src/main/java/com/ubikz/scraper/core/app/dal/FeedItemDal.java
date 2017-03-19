@@ -135,6 +135,10 @@ public class FeedItemDal extends AbstractDal {
         FeedItemDalFilter feedItemDalFilter = (FeedItemDalFilter) filter;
         super.parseFilter(feedItemDalFilter, select);
 
+        if (feedItemDalFilter.getTagIds() != null && feedItemDalFilter.getTagIds().size() > 0) {
+            select.where("feed_item_id", "in", feedItemDalFilter.getTagIds());
+        }
+
         if (feedItemDalFilter.getUrl() != null) {
             select.where("url", feedItemDalFilter.getUrl());
         }

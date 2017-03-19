@@ -105,12 +105,13 @@ abstract public class AbstractDal {
      * @param requestList
      * @return
      */
-    public int createAll(List<AbstractDalRequest> requestList) {
+    public List<Object> createAll(List<AbstractDalRequest> requestList) {
         QueryBuilder qb = new QueryBuilder();
         AbstractQuery insert = qb
                 .insert(this.tableName)
                 .values(this.parseRequestList(requestList, true))
-                .onConflict("DO NOTHING");
+                .onConflict("DO NOTHING")
+                .returning("id");
 
         return this.insertMultiple(insert);
     }
@@ -171,6 +172,10 @@ abstract public class AbstractDal {
             select.where("id", filter.getId());
         }
 
+        if (filter.getIdList() != null) {
+            select.where("id", "in", filter.getIdList());
+        }
+
         if (filter.getLabel() != null) {
             select.where("label", filter.getLabel());
         }
@@ -197,13 +202,13 @@ abstract public class AbstractDal {
      * @param request
      * @return
      */
-    protected int insertMultiple(AbstractQuery request) {
+    protected List<Object> insertMultiple(AbstractQuery request) {
         request.build();
 
         this.logger.debug("# Insert Multiple SQL > " + request.getSQL());
         this.logger.debug("# Insert Multiple Params > " + request.getParameters());
 
-        return this.dbWrapper.jdbcTemplate.update(request.getSQL(), request.getParameters());
+        return this.dbWrapper.jdbcTemplate.queryForList(request.getSQL(), request.getParameters(), Object.class);
     }
 
     /**

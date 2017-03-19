@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @Component
@@ -50,7 +51,6 @@ public class FeedItemContext extends AbstractContext {
             FeedListServiceRequest request = new FeedListServiceRequest();
             AbstractServiceFilter feedServiceFilter = new FeedServiceFilter();
             feedServiceFilter.setEnabled(true);
-            feedServiceFilter.setLazy(true);
             request.setFeedList(
                     this.feedService.getAll(feedServiceFilter)
                             .stream()
@@ -85,7 +85,9 @@ public class FeedItemContext extends AbstractContext {
         FeedItemServiceFilter serviceFilter = (FeedItemServiceFilter) this.parseBaseFilter(filterBody, filter);
 
         serviceFilter.setUrl(filterBody.getUrl());
-        serviceFilter.setTagNames(filterBody.getTagNames());
+        if (filterBody.getTagNames() != null) {
+            serviceFilter.setTagNames(Arrays.asList(filterBody.getTagNames()));
+        }
         serviceFilter.setChecksum(filterBody.getChecksum());
         serviceFilter.setApproved(filterBody.getApproved());
         serviceFilter.setReposted(filterBody.getReposted());

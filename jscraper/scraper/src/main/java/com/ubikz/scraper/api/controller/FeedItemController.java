@@ -40,6 +40,8 @@ public class FeedItemController extends AbstractController {
 
     @RequestMapping(value = uriPath, method = RequestMethod.GET, produces = "application/json")
     public String get(final FeedItemFilterBody filter) throws Exception {
+        System.out.println(">>>> Filter " + filter.getTagNames());
+
         return this.sendResponse(this.feedItemContext.getAll(filter));
     }
 

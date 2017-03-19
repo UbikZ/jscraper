@@ -57,22 +57,26 @@ public class FeedEntity extends AbstractEntity {
      * @param feeds
      */
     @Override
-    protected void computeLazyLoading(List<AbstractDto> feeds) {
+    protected void computeLoading(List<AbstractDto> feeds) throws Exception {
         List<FeedDto> feedList = feeds.stream().map(FeedDto.class::cast).collect(Collectors.toList());
 
         FeedTypeDalFilter feedTypeDalFilter = new FeedTypeDalFilter();
-        feedTypeDalFilter.setIdsList(feedList.stream().map(FeedDto::getId).collect(Collectors.toList()));
+        feedTypeDalFilter.setIdList(feedList.stream().map(FeedDto::getId).collect(Collectors.toList()));
 
         Map<Integer, FeedTypeDto> feedTypeMap = this.feedTypeHelper
-                .getDtoMapFromDal(this.feedTypeDal.getAll(feedTypeDalFilter))
+                .getDtoMapFromDal(this.feedTypeDal.getAll(feedTypeDalFilter), "id")
                 .entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, p -> (FeedTypeDto) p.getValue()));
+                .collect(Collectors.toMap(p -> (int) p.getKey(), p -> (FeedTypeDto) p.getValue()));
 
         for (FeedDto feed : feedList) {
             if (feedTypeMap.containsKey(feed.getFeedTypeDto().getId())) {
                 feed.setFeedTypeDto(feedTypeMap.get(feed.getFeedTypeDto().getId()));
             }
         }
+    }
+
+    @Override
+    protected void computeLoading(Map<Object, AbstractDto> dtoList) throws Exception {
     }
 
     /**

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class TagEntity extends AbstractEntity {
@@ -25,8 +26,12 @@ public class TagEntity extends AbstractEntity {
     }
 
     @Override
-    protected void computeLazyLoading(List<AbstractDto> dtoList) {
+    protected void computeLoading(List<AbstractDto> dtoList) {
 
+    }
+
+    @Override
+    protected void computeLoading(Map<Object, AbstractDto> dtoList) throws Exception {
     }
 
     /**

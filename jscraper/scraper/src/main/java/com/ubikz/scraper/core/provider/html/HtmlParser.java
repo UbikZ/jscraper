@@ -34,7 +34,10 @@ public class HtmlParser {
         return this.document
                 .select("a")
                 .stream()
-                .filter(element -> !element.attr("href").matches(regex))
+                .filter(element -> {
+                    String attr = element.attr("href");
+                    return attr != null && !attr.matches(regex);
+                })
                 .map(element -> element.attr("href"))
                 .collect(Collectors.toList());
     }

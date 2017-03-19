@@ -7,10 +7,19 @@ public class FeedItemEntityRequest extends AbstractEntityRequest {
     private String url;
     private String checksum;
     private List<Integer> tagIds;
+    private List<String> tagNames;
     private Boolean viewed;
     private Boolean approved;
     private Boolean reposted;
     private Boolean sent;
+
+    public List<String> getTagNames() {
+        return tagNames;
+    }
+
+    public void setTagNames(List<String> tagNames) {
+        this.tagNames = tagNames;
+    }
 
     public Integer getFeedId() {
         return feedId;

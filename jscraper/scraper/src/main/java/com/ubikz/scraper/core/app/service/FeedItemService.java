@@ -3,13 +3,11 @@ package com.ubikz.scraper.core.app.service;
 import com.ubikz.scraper.core.app.dto.AbstractDto;
 import com.ubikz.scraper.core.app.dto.FeedArticleDto;
 import com.ubikz.scraper.core.app.dto.FeedDto;
-import com.ubikz.scraper.core.app.entity.FeedEntity;
-import com.ubikz.scraper.core.app.entity.FeedItemEntity;
-import com.ubikz.scraper.core.app.entity.FeedProhibitedEntity;
-import com.ubikz.scraper.core.app.entity.TagProhibitedEntity;
+import com.ubikz.scraper.core.app.entity.*;
 import com.ubikz.scraper.core.app.entity.filter.*;
 import com.ubikz.scraper.core.app.entity.request.AbstractEntityRequest;
 import com.ubikz.scraper.core.app.entity.request.FeedItemEntityRequest;
+import com.ubikz.scraper.core.app.entity.request.TagEntityRequest;
 import com.ubikz.scraper.core.app.service.filter.AbstractServiceFilter;
 import com.ubikz.scraper.core.app.service.filter.FeedItemServiceFilter;
 import com.ubikz.scraper.core.app.service.request.AbstractServiceRequest;
@@ -30,6 +28,7 @@ import java.util.stream.Collectors;
 @Component
 public class FeedItemService extends AbstractService {
     private FeedEntity feedEntity;
+    private TagEntity tagEntity;
     private FeedProhibitedEntity feedProhibitedEntity;
     private TagProhibitedEntity tagProhibitedEntity;
 
@@ -37,12 +36,38 @@ public class FeedItemService extends AbstractService {
     public FeedItemService(
             FeedItemEntity feedItemEntity,
             FeedEntity feedEntity,
+            TagEntity tagEntity,
             FeedProhibitedEntity feedProhibitedEntity,
             TagProhibitedEntity tagProhibitedEntity) {
         this.entity = feedItemEntity;
         this.feedEntity = feedEntity;
+        this.tagEntity = tagEntity;
         this.feedProhibitedEntity = feedProhibitedEntity;
         this.tagProhibitedEntity = tagProhibitedEntity;
+    }
+
+    /**
+     * @param filter
+     * @return
+     * @throws Exception
+     */
+    public List<AbstractDto> getAll(AbstractServiceFilter filter) throws Exception {
+        FeedItemServiceFilter serviceFilter = (FeedItemServiceFilter) filter;
+        FeedItemEntityFilter entityFilter = (FeedItemEntityFilter) this.parseServiceToEntityFilter(serviceFilter);
+
+        if (serviceFilter.getTagNames() != null) {
+            TagEntityFilter tagEntityFilter = new TagEntityFilter();
+            tagEntityFilter.setNameList(serviceFilter.getTagNames());
+
+            entityFilter.setTagIds(
+                    this.tagEntity.getAll(tagEntityFilter)
+                            .stream()
+                            .map(AbstractDto::getId)
+                            .collect(Collectors.toList())
+            );
+        }
+
+        return this.entity.getAll(entityFilter);
     }
 
     /**
@@ -54,6 +79,7 @@ public class FeedItemService extends AbstractService {
     public Map<String, List<FeedArticleDto>> generate(FeedListServiceRequest request) throws Exception {
         Map<String, List<FeedArticleDto>> articleMap = new HashMap<>();
         List<AbstractEntityRequest> entityRequestList = new ArrayList<>();
+        List<AbstractEntityRequest> tagRequestList = new ArrayList<>();
 
         List<String> feedProhibitedList = this
                 .feedProhibitedEntity
@@ -78,11 +104,49 @@ public class FeedItemService extends AbstractService {
             List<FeedArticleDto> subList = this.feedEntity.getRssFeedArticleList(filter);
             articleMap.put(feed.getUrl(), subList);
             entityRequestList.addAll(this.parseServiceToEntityArticleListRequest(feed, subList));
+
+            for (FeedArticleDto articleDto : subList) {
+                tagRequestList.addAll(articleDto.getTagList()
+                        .stream()
+                        .map(tag -> {
+                            TagEntityRequest tagRequest = new TagEntityRequest();
+                            tagRequest.setLabel(tag);
+                            return tagRequest;
+                        })
+                        .collect(Collectors.toList())
+                );
+            }
         }
+
+        this.tagEntity.createAll(tagRequestList);
+        this.populateEntityArticleListRequestWithTags(
+                entityRequestList,
+                this.tagEntity.getAllMappedBy(new TagEntityFilter(), "label")
+        );
 
         this.entity.createAll(entityRequestList);
 
         return articleMap;
+    }
+
+    /**
+     * @param requestList
+     * @param tagList
+     */
+    private void populateEntityArticleListRequestWithTags(
+            List<AbstractEntityRequest> requestList,
+            Map<Object, AbstractDto> tagList
+    ) {
+        for (AbstractEntityRequest request : requestList) {
+            FeedItemEntityRequest fiRequest = (FeedItemEntityRequest) request;
+
+            fiRequest.setTagIds(
+                    fiRequest.getTagNames()
+                            .stream()
+                            .map(name -> tagList.get(name).getId())
+                            .collect(Collectors.toList())
+            );
+        }
     }
 
     /**
@@ -101,6 +165,7 @@ public class FeedItemService extends AbstractService {
             entityRequest.setFeedId(feed.getId());
             entityRequest.setLabel(articleDto.getLabel());
             entityRequest.setUrl(articleDto.getPictureList().get(0));
+            entityRequest.setTagNames(articleDto.getTagList());
             entityRequest.setChecksum(DigestUtils.md5DigestAsHex(entityRequest.getUrl().getBytes("UTF-8")));
             request.add(entityRequest);
         }

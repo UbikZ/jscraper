@@ -1,13 +1,11 @@
 package com.ubikz.scraper.core.app.entity.helper;
 
 import com.ubikz.scraper.core.app.dto.AbstractDto;
-import com.ubikz.scraper.core.app.dto.FeedTypeDto;
+import io.spring.gradle.dependencymanagement.org.codehaus.plexus.interpolation.util.StringUtils;
 
+import java.lang.reflect.Method;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 abstract public class AbstractEntityHelper {
@@ -43,6 +41,23 @@ abstract public class AbstractEntityHelper {
 
     /**
      * @param dataList
+     * @param attr
+     * @return
+     */
+    final public List<AbstractDto> getDtoListFromReturnDal(List<Object> dataList, String attr) {
+        List<AbstractDto> abstractDtoList = new ArrayList<>();
+
+        for (Object element : dataList) {
+            abstractDtoList.add(this.getDtoFromDal(new HashMap<String, Object>() {{
+                put(attr, element);
+            }}));
+        }
+
+        return abstractDtoList;
+    }
+
+    /**
+     * @param dataList
      * @return
      */
     final public List<AbstractDto> getDtoListFromDal(List<Map<String, Object>> dataList) {
@@ -53,12 +68,15 @@ abstract public class AbstractEntityHelper {
      * @param dataList
      * @return
      */
-    public Map<Integer, AbstractDto> getDtoMapFromDal(List<Map<String, Object>> dataList) {
-        Map<Integer, AbstractDto> map = new HashMap<>();
+    public Map<Object, AbstractDto> getDtoMapFromDal(List<Map<String, Object>> dataList, String attr) throws Exception {
+        Map<Object, AbstractDto> map = new HashMap<>();
         List<AbstractDto> list = this.getDtoListFromDal(dataList);
 
         for (AbstractDto abstractDto : list) {
-            map.put(abstractDto.getId(), abstractDto);
+            Method method = abstractDto
+                    .getClass()
+                    .getMethod("get" + StringUtils.capitalizeFirstLetter(attr));
+            map.put(method.invoke(abstractDto), abstractDto);
         }
 
         return map;

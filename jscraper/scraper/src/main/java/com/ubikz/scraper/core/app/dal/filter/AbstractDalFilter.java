@@ -1,13 +1,23 @@
 package com.ubikz.scraper.core.app.dal.filter;
 
 import java.util.Date;
+import java.util.List;
 
 abstract public class AbstractDalFilter {
     private Integer id;
+    private List<Integer> idList;
     private String label;
     private Date startDate;
     private Date endDate;
     private Boolean isEnabled;
+
+    public List<Integer> getIdList() {
+        return idList;
+    }
+
+    public void setIdList(List<Integer> idList) {
+        this.idList = idList;
+    }
 
     public Integer getId() {
         return id;

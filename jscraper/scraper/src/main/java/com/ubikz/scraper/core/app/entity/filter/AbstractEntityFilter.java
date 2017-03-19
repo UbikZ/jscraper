@@ -1,14 +1,24 @@
 package com.ubikz.scraper.core.app.entity.filter;
 
 import java.util.Date;
+import java.util.List;
 
 abstract public class AbstractEntityFilter {
     private Integer id;
+    private List<Integer> idList;
     private String label;
     private Date startDate;
     private Date endDate;
     private Boolean isEnabled;
     private boolean isLazy = false;
+
+    public List<Integer> getIdList() {
+        return idList;
+    }
+
+    public void setIdList(List<Integer> idList) {
+        this.idList = idList;
+    }
 
     public Integer getId() {
         return id;

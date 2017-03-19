@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 abstract public class AbstractEntity {
     protected final Logger logger = LoggerFactory.getLogger(AbstractEntity.class);
@@ -23,11 +24,11 @@ abstract public class AbstractEntity {
      * @param filter
      * @return
      */
-    public List<AbstractDto> getAll(AbstractEntityFilter filter) {
+    public List<AbstractDto> getAll(AbstractEntityFilter filter) throws Exception {
         List<AbstractDto> result = this.helper.getDtoListFromDal(this.dal.getAll(this.parseEntityToDalFilter(filter)));
 
-        if (filter.isLazy()) {
-            this.computeLazyLoading(result);
+        if (!filter.isLazy()) {
+            this.computeLoading(result);
         }
 
         return result;
@@ -37,13 +38,30 @@ abstract public class AbstractEntity {
      * @param filter
      * @return
      */
-    public AbstractDto get(AbstractEntityFilter filter) {
+    public Map<Object, AbstractDto> getAllMappedBy(AbstractEntityFilter filter, String attr) throws Exception {
+        Map<Object, AbstractDto> result = this.helper.getDtoMapFromDal(
+                this.dal.getAll(this.parseEntityToDalFilter(filter)),
+                attr
+        );
+
+        if (!filter.isLazy()) {
+            this.computeLoading(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * @param filter
+     * @return
+     */
+    public AbstractDto get(AbstractEntityFilter filter) throws Exception {
         AbstractDto result = this.helper.getDtoFromDal(
                 this.dal.getOne(this.parseEntityToDalFilter(filter))
         );
 
-        if (filter.isLazy()) {
-            this.computeLazyLoading(Collections.singletonList(result));
+        if (!filter.isLazy()) {
+            this.computeLoading(Collections.singletonList(result));
         }
 
         return result;
@@ -61,8 +79,11 @@ abstract public class AbstractEntity {
      * @param requestList
      * @return
      */
-    public int createAll(List<AbstractEntityRequest> requestList) {
-        return this.dal.createAll(this.parseListEntityToDalRequest(requestList));
+    public List<AbstractDto> createAll(List<AbstractEntityRequest> requestList) throws Exception {
+        return this.helper.getDtoListFromReturnDal(
+                this.dal.createAll(this.parseListEntityToDalRequest(requestList)),
+                "id"
+        );
     }
 
     /**
@@ -84,7 +105,12 @@ abstract public class AbstractEntity {
     /**
      * @param dtoList
      */
-    abstract protected void computeLazyLoading(List<AbstractDto> dtoList);
+    abstract protected void computeLoading(List<AbstractDto> dtoList) throws Exception;
+
+    /**
+     * @param dtoList
+     */
+    abstract protected void computeLoading(Map<Object, AbstractDto> dtoList) throws Exception;
 
     /**
      * @param request
@@ -119,6 +145,7 @@ abstract public class AbstractEntity {
      */
     final protected AbstractDalRequest parseBaseEntityToDalRequest(AbstractEntityRequest eRequest, AbstractDalRequest dRequest) {
         dRequest.setId(eRequest.getId());
+        dRequest.setId(eRequest.getId());
         dRequest.setLabel(eRequest.getLabel());
         dRequest.setEnabled(eRequest.getEnabled());
 
@@ -132,6 +159,7 @@ abstract public class AbstractEntity {
      */
     final protected AbstractDalFilter parseBaseEntityToDalFilter(AbstractEntityFilter eFilter, AbstractDalFilter dFilter) {
         dFilter.setId(eFilter.getId());
+        dFilter.setIdList(eFilter.getIdList());
         dFilter.setLabel(eFilter.getLabel());
         dFilter.setEnabled(eFilter.getEnabled());
 
