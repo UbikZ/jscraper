@@ -172,7 +172,7 @@ abstract public class AbstractDal {
             select.where("id", filter.getId());
         }
 
-        if (filter.getIdList() != null) {
+        if (filter.getIdList() != null && filter.getIdList().size() > 0) {
             select.where("id", "in", filter.getIdList());
         }
 
@@ -193,7 +193,7 @@ abstract public class AbstractDal {
         request.build();
 
         this.logger.debug("# Insert SQL > " + request.getSQL());
-        this.logger.debug("# Insert Params > " + request.getParameters());
+//        this.logger.debug("# Insert Params > " + request.getParameters());
 
         return this.dbWrapper.jdbcTemplate.queryForObject(request.getSQL(), request.getParameters(), Integer.class);
     }
@@ -206,7 +206,7 @@ abstract public class AbstractDal {
         request.build();
 
         this.logger.debug("# Insert Multiple SQL > " + request.getSQL());
-        this.logger.debug("# Insert Multiple Params > " + request.getParameters());
+//        this.logger.debug("# Insert Multiple Params > " + request.getParameters());
 
         return this.dbWrapper.jdbcTemplate.queryForList(request.getSQL(), request.getParameters(), Object.class);
     }
@@ -219,7 +219,7 @@ abstract public class AbstractDal {
         request.build();
 
         this.logger.debug("# Update SQL > " + request.getSQL());
-        this.logger.debug("# Update Params > " + request.getParameters());
+//        this.logger.debug("# Update Params > " + request.getParameters());
 
         return this.dbWrapper.jdbcTemplate.update(request.getSQL(), request.getParameters());
     }
@@ -232,7 +232,7 @@ abstract public class AbstractDal {
         request.build();
 
         this.logger.debug("# Delete SQL > " + request.getSQL());
-        this.logger.debug("# Delete Params > " + request.getParameters());
+//        this.logger.debug("# Delete Params > " + request.getParameters());
 
         return this.dbWrapper.jdbcTemplate.update(request.getSQL(), request.getParameters());
     }
@@ -245,7 +245,7 @@ abstract public class AbstractDal {
         query.build();
 
         this.logger.debug("# Select All SQL > " + query.getSQL());
-        this.logger.debug("# Select All Params > " + query.getParameters());
+//        this.logger.debug("# Select All Params > " + query.getParameters());
 
         return this.dbWrapper.jdbcTemplate.queryForList(query.getSQL(), query.getParameters());
     }
@@ -258,7 +258,7 @@ abstract public class AbstractDal {
         query.build();
 
         this.logger.debug("# Select SQL > " + query.getSQL());
-        this.logger.debug("# Select Params > " + query.getParameters());
+//        this.logger.debug("# Select Params > " + query.getParameters());
 
         return this.dbWrapper.jdbcTemplate.queryForMap(query.getSQL(), query.getParameters());
     }

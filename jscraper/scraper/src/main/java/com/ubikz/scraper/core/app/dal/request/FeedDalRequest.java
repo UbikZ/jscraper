@@ -19,4 +19,12 @@ public class FeedDalRequest extends AbstractDalRequest {
     public void setFeedTypeId(Integer feedTypeId) {
         this.feedTypeId = feedTypeId;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "/ FeedDalRequest{" +
+                "url='" + url + '\'' +
+                ", feedTypeId=" + feedTypeId +
+                '}';
+    }
 }

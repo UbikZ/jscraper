@@ -39,4 +39,14 @@ public class FeedDalFilter extends AbstractDalFilter {
     public void setUrlRegex(String urlRegex) {
         this.urlRegex = urlRegex;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "/ FeedDalFilter{" +
+                "url='" + url + '\'' +
+                ", prohibitedTagList=" + prohibitedTagList +
+                ", prohibitedFeedList=" + prohibitedFeedList +
+                ", urlRegex='" + urlRegex + '\'' +
+                '}';
+    }
 }

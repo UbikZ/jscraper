@@ -19,4 +19,12 @@ public class FeedTypeDalRequest extends AbstractDalRequest {
     public void setContentRegex(String contentRegex) {
         this.contentRegex = contentRegex;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "/ FeedTypeDalRequest{" +
+                "urlRegex='" + urlRegex + '\'' +
+                ", contentRegex='" + contentRegex + '\'' +
+                '}';
+    }
 }

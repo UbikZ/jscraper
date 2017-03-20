@@ -19,4 +19,12 @@ public class FeedItemTagDalRequest extends AbstractDalRequest {
     public void setTagId(Integer tagId) {
         this.tagId = tagId;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "/ FeedItemTagDalRequest{" +
+                "feedItemId=" + feedItemId +
+                ", tagId=" + tagId +
+                '}';
+    }
 }

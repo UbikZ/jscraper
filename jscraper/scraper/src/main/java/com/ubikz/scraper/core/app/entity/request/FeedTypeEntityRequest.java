@@ -19,4 +19,12 @@ public class FeedTypeEntityRequest extends AbstractEntityRequest {
     public void setContentRegex(String contentRegex) {
         this.contentRegex = contentRegex;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "/ FeedTypeEntityRequest{" +
+                "urlRegex='" + urlRegex + '\'' +
+                ", contentRegex='" + contentRegex + '\'' +
+                '}';
+    }
 }

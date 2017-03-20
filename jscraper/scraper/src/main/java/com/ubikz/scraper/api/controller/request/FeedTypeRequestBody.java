@@ -19,4 +19,12 @@ public class FeedTypeRequestBody extends AbstractRequestBody {
     public void setContentRegex(String contentRegex) {
         this.contentRegex = contentRegex;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "/ FeedTypeRequestBody{" +
+                "urlRegex='" + urlRegex + '\'' +
+                ", contentRegex='" + contentRegex + '\'' +
+                '}';
+    }
 }

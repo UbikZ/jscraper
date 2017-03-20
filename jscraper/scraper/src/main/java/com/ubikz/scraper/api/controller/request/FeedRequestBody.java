@@ -19,4 +19,12 @@ public class FeedRequestBody extends AbstractRequestBody {
     public void setFeedTypeId(Integer feedTypeId) {
         this.feedTypeId = feedTypeId;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "/ FeedRequestBody{" +
+                "url='" + url + '\'' +
+                ", feedTypeId=" + feedTypeId +
+                '}';
+    }
 }

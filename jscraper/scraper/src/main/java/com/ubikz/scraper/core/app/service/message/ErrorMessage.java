@@ -1,5 +1,7 @@
 package com.ubikz.scraper.core.app.service.message;
 
+import java.util.Arrays;
+
 public class ErrorMessage {
     private String title;
     private String detail;
@@ -30,5 +32,14 @@ public class ErrorMessage {
 
     public void setStackTraceElements(StackTraceElement[] stackTraceElements) {
         this.stackTraceElements = stackTraceElements;
+    }
+
+    @Override
+    public String toString() {
+        return "ErrorMessage{" +
+                "title='" + title + '\'' +
+                ", detail='" + detail + '\'' +
+                ", stackTraceElements=" + Arrays.toString(stackTraceElements) +
+                '}';
     }
 }

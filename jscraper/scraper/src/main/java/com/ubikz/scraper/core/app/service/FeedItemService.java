@@ -47,30 +47,6 @@ public class FeedItemService extends AbstractService {
     }
 
     /**
-     * @param filter
-     * @return
-     * @throws Exception
-     */
-    public List<AbstractDto> getAll(AbstractServiceFilter filter) throws Exception {
-        FeedItemServiceFilter serviceFilter = (FeedItemServiceFilter) filter;
-        FeedItemEntityFilter entityFilter = (FeedItemEntityFilter) this.parseServiceToEntityFilter(serviceFilter);
-
-        if (serviceFilter.getTagNames() != null) {
-            TagEntityFilter tagEntityFilter = new TagEntityFilter();
-            tagEntityFilter.setNameList(serviceFilter.getTagNames());
-
-            entityFilter.setTagIds(
-                    this.tagEntity.getAll(tagEntityFilter)
-                            .stream()
-                            .map(AbstractDto::getId)
-                            .collect(Collectors.toList())
-            );
-        }
-
-        return this.entity.getAll(entityFilter);
-    }
-
-    /**
      * @param request
      * @return
      * @throws Exception
@@ -213,6 +189,7 @@ public class FeedItemService extends AbstractService {
         feedItemEntityFilter.setApproved(feedItemServiceFilter.getApproved());
         feedItemEntityFilter.setReposted(feedItemServiceFilter.getReposted());
         feedItemEntityFilter.setSent(feedItemServiceFilter.getSent());
+        feedItemEntityFilter.setTagNames(feedItemServiceFilter.getTagNames());
 
         return feedItemEntityFilter;
     }

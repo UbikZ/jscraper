@@ -103,7 +103,7 @@ public class FeedItemEntity extends AbstractEntity {
                 feedItem.setFeed(feedMap.get(feedItem.getFeed().getId()));
             }
 
-            if (tagMap != null) {
+            if (tagMap != null && feedItem.getTags() != null) {
                 List<TagDto> tags = new ArrayList<>();
                 for (TagDto tag : feedItem.getTags()) {
                     if (tagMap.containsKey(tag.getId())) {
@@ -192,7 +192,9 @@ public class FeedItemEntity extends AbstractEntity {
             FeedItemEntityRequest fiRequest = (FeedItemEntityRequest) request;
             AbstractDto current = abstractMap.get(fiRequest.getUrl());
 
-            tagRequestList.addAll(this.parseEntityToTagDalRequest(current.getId(), fiRequest));
+            if (current != null) {
+                tagRequestList.addAll(this.parseEntityToTagDalRequest(current.getId(), fiRequest));
+            }
         }
 
         return tagRequestList;
@@ -237,7 +239,7 @@ public class FeedItemEntity extends AbstractEntity {
         feedItemDalFilter.setReposted(feedItemEntityFilter.getReposted());
         feedItemDalFilter.setViewed(feedItemEntityFilter.getViewed());
         feedItemDalFilter.setSent(feedItemEntityFilter.getReposted());
-        feedItemDalFilter.setTagIds(feedItemEntityFilter.getTagIds());
+        feedItemDalFilter.setTagNames(feedItemEntityFilter.getTagNames());
 
         return feedItemDalFilter;
     }

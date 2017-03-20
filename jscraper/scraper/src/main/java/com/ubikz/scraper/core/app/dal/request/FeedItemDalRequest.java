@@ -64,4 +64,17 @@ public class FeedItemDalRequest extends AbstractDalRequest {
     public void setSent(Boolean sent) {
         this.sent = sent;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "/ FeedItemDalRequest{" +
+                "feedId=" + feedId +
+                ", url='" + url + '\'' +
+                ", checksum='" + checksum + '\'' +
+                ", viewed=" + viewed +
+                ", approved=" + approved +
+                ", reposted=" + reposted +
+                ", sent=" + sent +
+                '}';
+    }
 }

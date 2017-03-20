@@ -1,9 +1,5 @@
 package com.ubikz.scraper.core.app.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class FeedTypeDto extends AbstractDto {
     private String urlRegex;
     private String contentRegex;
@@ -26,10 +22,9 @@ public class FeedTypeDto extends AbstractDto {
 
     @Override
     public String toString() {
-        List<String> str = new ArrayList<>();
-        str.add("urlRegex = " + this.urlRegex);
-        str.add("contentRegex = " + this.contentRegex);
-
-        return super.toString().concat(", " + str.stream().collect(Collectors.joining(", ")));
+        return super.toString() + " / FeedTypeDto{" +
+                "urlRegex='" + urlRegex + '\'' +
+                ", contentRegex='" + contentRegex + '\'' +
+                '}';
     }
 }

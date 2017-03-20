@@ -3,29 +3,21 @@ package com.ubikz.scraper.api.controller.filter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FeedItemFilterBody extends AbstractFilterBody {
-    @JsonProperty("feed")
     private Integer feedId;
-    @JsonProperty("feedType")
     private Integer feedTypeId;
-    @JsonProperty("url")
     private String url;
-    @JsonProperty("checksum")
     private String checksum;
-    @JsonProperty("tag")
-    private String[] tagNames;
-    @JsonProperty("viewed")
+    private String[] tagNames = {};
     private Boolean isViewed;
-    @JsonProperty("approved")
     private Boolean isApproved;
-    @JsonProperty("reposted")
     private Boolean isReposted;
-    @JsonProperty("sent")
     private Boolean isSent;
 
     public Integer getFeedId() {
         return feedId;
     }
 
+    @JsonProperty("feedId")
     public void setFeedId(Integer feedId) {
         this.feedId = feedId;
     }
@@ -34,6 +26,7 @@ public class FeedItemFilterBody extends AbstractFilterBody {
         return feedTypeId;
     }
 
+    @JsonProperty("feedTypeId")
     public void setFeedTypeId(Integer feedTypeId) {
         this.feedTypeId = feedTypeId;
     }
@@ -42,6 +35,7 @@ public class FeedItemFilterBody extends AbstractFilterBody {
         return url;
     }
 
+    @JsonProperty("url")
     public void setUrl(String url) {
         this.url = url;
     }
@@ -50,6 +44,7 @@ public class FeedItemFilterBody extends AbstractFilterBody {
         return checksum;
     }
 
+    @JsonProperty("checksum")
     public void setChecksum(String checksum) {
         this.checksum = checksum;
     }
@@ -58,6 +53,7 @@ public class FeedItemFilterBody extends AbstractFilterBody {
         return tagNames;
     }
 
+    @JsonProperty("tagNames")
     public void setTagNames(String[] tagNames) {
         this.tagNames = tagNames;
     }
@@ -66,6 +62,7 @@ public class FeedItemFilterBody extends AbstractFilterBody {
         return isViewed;
     }
 
+    @JsonProperty("viewed")
     public void setViewed(Boolean viewed) {
         isViewed = viewed;
     }
@@ -74,6 +71,7 @@ public class FeedItemFilterBody extends AbstractFilterBody {
         return isApproved;
     }
 
+    @JsonProperty("approved")
     public void setApproved(Boolean approved) {
         isApproved = approved;
     }
@@ -82,6 +80,7 @@ public class FeedItemFilterBody extends AbstractFilterBody {
         return isReposted;
     }
 
+    @JsonProperty("reposted")
     public void setReposted(Boolean reposted) {
         isReposted = reposted;
     }
@@ -90,7 +89,23 @@ public class FeedItemFilterBody extends AbstractFilterBody {
         return isSent;
     }
 
+    @JsonProperty("sent")
     public void setSent(Boolean sent) {
         isSent = sent;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " / FeedItemFilterBody{" +
+                "feedId=" + feedId +
+                ", feedTypeId=" + feedTypeId +
+                ", url='" + url + '\'' +
+                ", checksum='" + checksum + '\'' +
+                ", tagNames='" + tagNames + '\'' +
+                ", isViewed=" + isViewed +
+                ", isApproved=" + isApproved +
+                ", isReposted=" + isReposted +
+                ", isSent=" + isSent +
+                '}';
     }
 }

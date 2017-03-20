@@ -19,4 +19,12 @@ public class FeedTypeServiceRequest extends AbstractServiceRequest {
     public void setContentRegex(String contentRegex) {
         this.contentRegex = contentRegex;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "/ FeedTypeServiceRequest{" +
+                "urlRegex='" + urlRegex + '\'' +
+                ", contentRegex='" + contentRegex + '\'' +
+                '}';
+    }
 }

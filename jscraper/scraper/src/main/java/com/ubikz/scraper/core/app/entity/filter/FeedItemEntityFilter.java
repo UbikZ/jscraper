@@ -6,7 +6,7 @@ public class FeedItemEntityFilter extends AbstractEntityFilter {
     private Integer feedId;
     private String url;
     private String checksum;
-    private List<Integer> tagIds;
+    private List<String> tagNames;
     private Boolean viewed;
     private Boolean approved;
     private Boolean reposted;
@@ -36,12 +36,12 @@ public class FeedItemEntityFilter extends AbstractEntityFilter {
         this.checksum = checksum;
     }
 
-    public List<Integer> getTagIds() {
-        return tagIds;
+    public List<String> getTagNames() {
+        return tagNames;
     }
 
-    public void setTagIds(List<Integer> tagIds) {
-        this.tagIds = tagIds;
+    public void setTagNames(List<String> tagNames) {
+        this.tagNames = tagNames;
     }
 
     public Boolean getViewed() {
@@ -74,5 +74,19 @@ public class FeedItemEntityFilter extends AbstractEntityFilter {
 
     public void setSent(Boolean sent) {
         this.sent = sent;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "/ FeedItemEntityFilter{" +
+                "feedId=" + feedId +
+                ", url='" + url + '\'' +
+                ", checksum='" + checksum + '\'' +
+                ", tagNames=" + tagNames +
+                ", viewed=" + viewed +
+                ", approved=" + approved +
+                ", reposted=" + reposted +
+                ", sent=" + sent +
+                '}';
     }
 }

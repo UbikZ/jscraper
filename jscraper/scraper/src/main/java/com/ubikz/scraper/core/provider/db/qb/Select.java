@@ -118,7 +118,17 @@ public class Select extends AbstractQuery {
      * @param columns
      */
     private void parseColumns(String... columns) {
-        this.parts.put(KEY_COLUMNS, Arrays.asList(columns));
+        this.parts.put(KEY_COLUMNS, new ArrayList<>(Arrays.asList(columns)));
+    }
+
+    /**
+     * @param column
+     * @return
+     */
+    public Select addColumn(String column) {
+        List<String> columnList = (List<String>) this.parts.getOrDefault(KEY_COLUMNS, new ArrayList<>());
+        columnList.add(column);
+        return this;
     }
 
     /**

@@ -58,5 +58,17 @@ abstract public class AbstractDalFilter {
     public void setEnabled(Boolean enabled) {
         isEnabled = enabled;
     }
+
+    @Override
+    public String toString() {
+        return "AbstractDalFilter{" +
+                "id=" + id +
+                ", idList=" + idList +
+                ", label='" + label + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", isEnabled=" + isEnabled +
+                '}';
+    }
 }
 

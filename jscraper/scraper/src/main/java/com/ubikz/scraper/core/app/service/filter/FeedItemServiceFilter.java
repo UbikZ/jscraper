@@ -75,4 +75,18 @@ public class FeedItemServiceFilter extends AbstractServiceFilter {
     public void setSent(Boolean sent) {
         this.sent = sent;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "/ FeedItemServiceFilter{" +
+                "feedId=" + feedId +
+                ", url='" + url + '\'' +
+                ", checksum='" + checksum + '\'' +
+                ", tagNames=" + tagNames +
+                ", viewed=" + viewed +
+                ", approved=" + approved +
+                ", reposted=" + reposted +
+                ", sent=" + sent +
+                '}';
+    }
 }

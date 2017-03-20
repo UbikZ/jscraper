@@ -28,4 +28,13 @@ public class AbstractEntityRequest {
     public void setEnabled(Boolean enabled) {
         isEnabled = enabled;
     }
+
+    @Override
+    public String toString() {
+        return "AbstractEntityRequest{" +
+                "id=" + id +
+                ", label='" + label + '\'' +
+                ", isEnabled=" + isEnabled +
+                '}';
+    }
 }

@@ -145,7 +145,6 @@ abstract public class AbstractEntity {
      */
     final protected AbstractDalRequest parseBaseEntityToDalRequest(AbstractEntityRequest eRequest, AbstractDalRequest dRequest) {
         dRequest.setId(eRequest.getId());
-        dRequest.setId(eRequest.getId());
         dRequest.setLabel(eRequest.getLabel());
         dRequest.setEnabled(eRequest.getEnabled());
 

@@ -67,5 +67,19 @@ abstract public class AbstractEntityFilter {
     public void setLazy(boolean lazy) {
         isLazy = lazy;
     }
+
+
+    @Override
+    public String toString() {
+        return "AbstractEntityFilter{" +
+                "id=" + id +
+                ", idList=" + idList +
+                ", label='" + label + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", isEnabled=" + isEnabled +
+                ", isLazy=" + isLazy +
+                '}';
+    }
 }
 

@@ -75,4 +75,18 @@ public class FeedItemRequestBody extends AbstractRequestBody {
     public void setSent(Boolean sent) {
         isSent = sent;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "/ FeedItemRequestBody{" +
+                "feedId=" + feedId +
+                ", url='" + url + '\'' +
+                ", checksum='" + checksum + '\'' +
+                ", tagIds=" + tagIds +
+                ", isViewed=" + isViewed +
+                ", isApproved=" + isApproved +
+                ", isReposted=" + isReposted +
+                ", isSent=" + isSent +
+                '}';
+    }
 }

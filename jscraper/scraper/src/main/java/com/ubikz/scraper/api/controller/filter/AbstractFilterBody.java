@@ -8,16 +8,11 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 abstract public class AbstractFilterBody {
     private Integer id;
-    @JsonProperty("enabled")
     private Boolean isEnabled;
-    @JsonProperty("label")
     private String label;
-    @JsonProperty("startDate")
     private Date startDate;
-    @JsonProperty("endDate")
     private Date endDate;
-    @JsonProperty("lazy")
-    private boolean isLazy = false;
+    private boolean isLazy = true;
 
     public Integer getId() {
         return id;
@@ -31,6 +26,7 @@ abstract public class AbstractFilterBody {
         return label;
     }
 
+    @JsonProperty("label")
     public void setLabel(String label) {
         this.label = label;
     }
@@ -39,6 +35,7 @@ abstract public class AbstractFilterBody {
         return isEnabled;
     }
 
+    @JsonProperty("enabled")
     public void setEnabled(Boolean enabled) {
         isEnabled = enabled;
     }
@@ -47,6 +44,7 @@ abstract public class AbstractFilterBody {
         return startDate;
     }
 
+    @JsonProperty("startDate")
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
@@ -55,6 +53,7 @@ abstract public class AbstractFilterBody {
         return endDate;
     }
 
+    @JsonProperty("endDate")
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
@@ -63,7 +62,20 @@ abstract public class AbstractFilterBody {
         return isLazy;
     }
 
+    @JsonProperty("lazy")
     public void setLazy(boolean lazy) {
         isLazy = lazy;
+    }
+
+    @Override
+    public String toString() {
+        return "AbstractFilterBody{" +
+                "id=" + id +
+                ", isEnabled=" + isEnabled +
+                ", label='" + label + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", isLazy=" + isLazy +
+                '}';
     }
 }

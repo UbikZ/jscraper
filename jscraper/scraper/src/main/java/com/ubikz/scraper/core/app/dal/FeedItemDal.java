@@ -27,9 +27,8 @@ public class FeedItemDal extends AbstractDal {
     protected Select getBaseSelect(AbstractDalFilter filter) {
         QueryBuilder qb = new QueryBuilder();
         AbstractQuery select = qb
-                .select("fi.*", "string_agg(DISTINCT fit.tag_id::character varying, ',') AS tags")
+                .select("fi.*")
                 .from(this.tableName, "fi")
-                .joinLeft("feed_item_tag", "fit", "fi.id = fit.feed_item_id")
                 .groupBy("fi.id")
                 .aliases(new HashMap<String, String>() {{
                     put("id", "fi.id");
@@ -56,7 +55,8 @@ public class FeedItemDal extends AbstractDal {
 
         AbstractQuery insert = qb
                 .insert("feed_item_tag")
-                .values(this.parseFeedItemTagRequest(requestList));
+                .values(this.parseFeedItemTagRequest(requestList))
+                .onConflict("DO NOTHING");
 
         return this.update(insert);
     }
@@ -131,12 +131,19 @@ public class FeedItemDal extends AbstractDal {
      * @return
      */
     @Override
-    protected void parseFilter(AbstractDalFilter filter, AbstractQuery select) {
+    protected void parseFilter(AbstractDalFilter filter, AbstractQuery aSelect) {
+        Select select = (Select) aSelect;
         FeedItemDalFilter feedItemDalFilter = (FeedItemDalFilter) filter;
         super.parseFilter(feedItemDalFilter, select);
 
-        if (feedItemDalFilter.getTagIds() != null && feedItemDalFilter.getTagIds().size() > 0) {
-            select.where("feed_item_id", "in", feedItemDalFilter.getTagIds());
+        if (feedItemDalFilter.getTagNames() != null && feedItemDalFilter.getTagNames().size() > 0) {
+            select.addColumn("string_agg(DISTINCT fit.tag_id::character varying, ',') AS tags")
+                    .join("feed_item_tag", "fit", "fi.id = fit.feed_item_id")
+                    .join("tag", "t", "fit.tag_id = t.id")
+                    .where("t.label", "in", feedItemDalFilter.getTagNames());
+        } else {
+            select.addColumn("string_agg(DISTINCT fit.tag_id::character varying, ',') AS tags")
+                    .joinLeft("feed_item_tag", "fit", "fi.id = fit.feed_item_id");
         }
 
         if (feedItemDalFilter.getUrl() != null) {

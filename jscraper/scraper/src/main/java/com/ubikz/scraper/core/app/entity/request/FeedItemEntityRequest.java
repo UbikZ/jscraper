@@ -84,4 +84,20 @@ public class FeedItemEntityRequest extends AbstractEntityRequest {
     public void setSent(Boolean sent) {
         this.sent = sent;
     }
+
+
+    @Override
+    public String toString() {
+        return super.toString() + "/ FeedItemEntityRequest{" +
+                "feedId=" + feedId +
+                ", url='" + url + '\'' +
+                ", checksum='" + checksum + '\'' +
+                ", tagIds=" + tagIds +
+                ", tagNames=" + tagNames +
+                ", viewed=" + viewed +
+                ", approved=" + approved +
+                ", reposted=" + reposted +
+                ", sent=" + sent +
+                '}';
+    }
 }

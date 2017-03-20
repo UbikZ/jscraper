@@ -58,6 +58,7 @@ public class TagEntity extends AbstractEntity {
         TagEntityFilter tagEntityFilter = (TagEntityFilter) filter;
 
         tagDalFilter = (TagDalFilter) this.parseBaseEntityToDalFilter(tagEntityFilter, tagDalFilter);
+        tagDalFilter.setNameList(tagEntityFilter.getNameList());
 
         return tagDalFilter;
     }

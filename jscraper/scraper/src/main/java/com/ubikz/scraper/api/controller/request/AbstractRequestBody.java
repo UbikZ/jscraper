@@ -30,4 +30,13 @@ abstract public class AbstractRequestBody {
     public void setLabel(String label) {
         this.label = label;
     }
+
+    @Override
+    public String toString() {
+        return "AbstractRequestBody{" +
+                "isEnabled=" + isEnabled +
+                ", label='" + label + '\'' +
+                ", date=" + date +
+                '}';
+    }
 }

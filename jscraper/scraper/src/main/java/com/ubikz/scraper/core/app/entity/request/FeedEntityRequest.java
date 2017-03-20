@@ -19,4 +19,12 @@ public class FeedEntityRequest extends AbstractEntityRequest {
     public void setFeedTypeId(Integer feedTypeId) {
         this.feedTypeId = feedTypeId;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "/ FeedEntityRequest{" +
+                "url='" + url + '\'' +
+                ", feedTypeId=" + feedTypeId +
+                '}';
+    }
 }

@@ -12,4 +12,11 @@ public class TagEntityFilter extends AbstractEntityFilter {
     public void setNameList(List<String> nameList) {
         this.nameList = nameList;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "/ TagEntityFilter{" +
+                "nameList=" + nameList +
+                '}';
+    }
 }

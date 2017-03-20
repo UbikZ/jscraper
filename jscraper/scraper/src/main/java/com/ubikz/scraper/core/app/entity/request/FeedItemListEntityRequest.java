@@ -22,4 +22,12 @@ public class FeedItemListEntityRequest {
     public void setTags(Set<String> tags) {
         this.tags = tags;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "/ FeedItemListEntityRequest{" +
+                "feedRequestList=" + feedRequestList +
+                ", tags=" + tags +
+                '}';
+    }
 }

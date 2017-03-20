@@ -15,4 +15,11 @@ public class FeedListServiceRequest {
     public void setFeedList(List<FeedDto> feedList) {
         this.feedList = feedList;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "/ FeedListServiceRequest{" +
+                "feedList=" + feedList +
+                '}';
+    }
 }

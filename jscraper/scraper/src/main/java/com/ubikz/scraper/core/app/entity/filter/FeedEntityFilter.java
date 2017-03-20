@@ -39,4 +39,14 @@ public class FeedEntityFilter extends AbstractEntityFilter {
     public void setUrlRegex(String urlRegex) {
         this.urlRegex = urlRegex;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "/ FeedEntityFilter{" +
+                "url='" + url + '\'' +
+                ", prohibitedTagList=" + prohibitedTagList +
+                ", prohibitedFeedList=" + prohibitedFeedList +
+                ", urlRegex='" + urlRegex + '\'' +
+                '}';
+    }
 }

@@ -1,9 +1,5 @@
 package com.ubikz.scraper.core.app.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class FeedDto extends AbstractDto {
     private String url;
     private FeedTypeDto feedTypeDto;
@@ -30,10 +26,9 @@ public class FeedDto extends AbstractDto {
 
     @Override
     public String toString() {
-        List<String> str = new ArrayList<>();
-        str.add("url = " + this.url);
-        str.add("typeDto = " + this.feedTypeDto);
-
-        return super.toString().concat(", " + str.stream().collect(Collectors.joining(", ")));
+        return super.toString() + " / FeedDto{" +
+                "url='" + url + '\'' +
+                ", feedTypeDto=" + feedTypeDto +
+                '}';
     }
 }

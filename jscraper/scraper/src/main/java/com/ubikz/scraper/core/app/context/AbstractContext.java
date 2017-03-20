@@ -126,11 +126,15 @@ abstract public class AbstractContext {
 
         Object data = null;
         boolean isSuccess = false;
+        int size = 1;
         int code = defaultCode;
         int status = defaultStatus.value();
 
         try {
             data = callable.call();
+            if (data instanceof List) {
+                size = ((List) data).size();
+            }
             isSuccess = true;
         } catch (EmptyResultDataAccessException e) {
             exception = e;
@@ -151,6 +155,7 @@ abstract public class AbstractContext {
             errorMessage.setDetail(detail);
             data = errorMessage;
         } finally {
+            result.setSize(size);
             result.setData(data);
             result.setCode(code);
             result.setStatus(status);

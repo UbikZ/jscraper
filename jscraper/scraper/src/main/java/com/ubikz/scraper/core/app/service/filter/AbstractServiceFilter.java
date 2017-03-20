@@ -57,5 +57,17 @@ abstract public class AbstractServiceFilter {
     public void setLazy(boolean lazy) {
         isLazy = lazy;
     }
+
+    @Override
+    public String toString() {
+        return "AbstractServiceFilter{" +
+                "id=" + id +
+                ", label='" + label + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", isEnabled=" + isEnabled +
+                ", isLazy=" + isLazy +
+                '}';
+    }
 }
 

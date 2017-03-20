@@ -28,4 +28,13 @@ abstract public class AbstractServiceRequest {
     public void setEnabled(Boolean enabled) {
         isEnabled = enabled;
     }
+
+    @Override
+    public String toString() {
+        return "AbstractServiceRequest{" +
+                "id=" + id +
+                ", label='" + label + '\'' +
+                ", isEnabled=" + isEnabled +
+                '}';
+    }
 }
