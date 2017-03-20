@@ -25,7 +25,7 @@ CREATE TABLE public.feed
   url          TEXT                    NOT NULL,
   enabled      BOOLEAN DEFAULT TRUE    NOT NULL,
   feed_type_id INT                     NOT NULL,
-  CONSTRAINT feedItem_feedTypeId_fk FOREIGN KEY (feed_type_id) REFERENCES feed_type (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT feed_feedTypeId_fk FOREIGN KEY (feed_type_id) REFERENCES feed_type (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT feed_url_cc CHECK (url ~*
                                 '^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&''\(\)\*\+,;=.]+$'),
   CONSTRAINT feed_url_ucc UNIQUE (url),
