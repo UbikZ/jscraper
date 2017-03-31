@@ -8,11 +8,15 @@ public class Insert extends Edit {
     protected String KEY_VALUES = "values";
     protected String KEY_RETURNING = "returning";
     protected String KEY_ON_CONFLICT = "onconflict";
+    protected String KEY_ON_CONSTRAINT = "onconstraint";
+    protected String KEY_DO = "do";
 
     private String SQL_INSERT = "INSERT INTO";
     private String SQL_VALUES = "VALUES";
     private String SQL_RETURNING = "RETURNING";
     private String SQL_ON_CONFLICT = "ON CONFLICT";
+    private String SQL_ON_CONSTRAINT = "ON CONSTRAINT";
+    private String SQL_DO = "DO";
 
     public Insert(String table) {
         super(table);
@@ -39,8 +43,25 @@ public class Insert extends Edit {
         return this;
     }
 
-    public Insert onConflict(String action) {
-        this.parts.put(KEY_ON_CONFLICT, action);
+    private Insert on(String key, String... checks) {
+        List<String> checkList = new ArrayList<>();
+        if (checks != null) {
+            checkList = new ArrayList<>(Arrays.asList(checks));
+        }
+        this.parts.put(key, checkList);
+        return this;
+    }
+
+    public Insert onConflict(String... conflicts) {
+        return this.on(KEY_ON_CONFLICT, conflicts);
+    }
+
+    public Insert onConstraint(String... constraints) {
+        return this.on(KEY_ON_CONSTRAINT, constraints);
+    }
+
+    public Insert onDo(String action) {
+        this.parts.put(KEY_DO, action);
         return this;
     }
 
@@ -79,14 +100,26 @@ public class Insert extends Edit {
         this.sql.add(
                 ((List<List<String>>) this.parts.get(KEY_VALUES))
                         .stream()
-                        .map(row -> "(" + row.stream().collect(Collectors.joining(",")) + ")")
+                        .map(this::buildListToString)
                         .collect(Collectors.joining(","))
         );
 
-        String onConflict = (String) this.parts.get(KEY_ON_CONFLICT);
-        if (onConflict != null) {
+        List<String> conflictList = (List<String>) this.parts.get(KEY_ON_CONFLICT);
+        if (conflictList != null) {
             this.sql.add(SQL_ON_CONFLICT);
-            this.sql.add(onConflict);
+            this.sql.add(this.buildListToString(conflictList));
+
+            List<String> constraintList = (List<String>) this.parts.get(KEY_ON_CONSTRAINT);
+            if (constraintList != null && constraintList.size() > 0) {
+                this.sql.add(SQL_ON_CONSTRAINT);
+                this.sql.add(this.buildListToString(conflictList));
+            }
+
+            String onDo = (String) this.parts.get(KEY_DO);
+            if (onDo != null) {
+                this.sql.add(SQL_DO);
+                this.sql.add(onDo);
+            }
         }
 
         String returningColumn = (String) this.parts.get(KEY_RETURNING);
@@ -96,6 +129,16 @@ public class Insert extends Edit {
         }
     }
 
+    private String buildListToString(List<String> elementList) {
+        String result = "";
+
+        if (elementList != null && elementList.size() > 0) {
+            result = "(" + elementList.stream().collect(Collectors.joining(",")) + ")";
+        }
+
+        return result;
+    }
+
     @Override
     protected void initParts() {
         super.initParts();
@@ -103,5 +146,6 @@ public class Insert extends Edit {
         this.parts.put(KEY_VALUES, new ArrayList<>());
         this.parts.put(KEY_RETURNING, null);
         this.parts.put(KEY_ON_CONFLICT, null);
+        this.parts.put(KEY_ON_CONSTRAINT, null);
     }
 }

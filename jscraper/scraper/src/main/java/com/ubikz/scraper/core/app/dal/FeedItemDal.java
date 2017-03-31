@@ -56,7 +56,9 @@ public class FeedItemDal extends AbstractDal {
         AbstractQuery insert = qb
                 .insert("feed_item_tag")
                 .values(this.parseFeedItemTagRequest(requestList))
-                .onConflict("DO NOTHING");
+                .onConflict()
+                .onConstraint("feeditem_url_cc")
+                .onDo("NOTHING");
 
         return this.update(insert);
     }

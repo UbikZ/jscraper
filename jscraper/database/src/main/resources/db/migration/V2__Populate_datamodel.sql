@@ -8,7 +8,7 @@ INSERT INTO public.tag_prohibited (label) VALUES
   ('over'), ('more'), ('what'), ('off'), ('on'), ('well');
 
 INSERT INTO public.feed_prohibited (label) VALUES
-  ('(m)'), ('[m]'), ('*m*');
+  ('(m)'), ('[m]'), ('*m*'), ('[Request]');
 
 INSERT INTO public.feed_type (id, label, url_regex) VALUES
   (1, 'reddit', '^https?://(www\.)?reddit\.com(.*)');
