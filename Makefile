@@ -1,6 +1,8 @@
 .PHONY: usage
 
-topdir = $(dir $(shell pwd))
+imageId = ubikz/jscraper
+containerIds = $(shell docker ps | grep jscraper | awk '{print $1}')
+delImageIds = $(shell docker images -aq -f "dangling=true")
 
 usage:
 	@echo "JScraper Control :"
@@ -11,15 +13,13 @@ nginx-restart:
 	/etc/init.d/nginx restart
 
 pull:
-	docker pull ubikz/jscraper
+	docker pull $(imageId)
 
 clean:
 	@echo "Remove 'jscraper' containers"
-	containers = $(docker ps | grep jscraper | awk '{print $1}')
-	$(foreach container,$(containers),docker rm -f $(container);)
+	$(foreach id,$(containerIds),$(shell docker rm -f $(container));)
 	@echo "Remove 'failed' images"
-	images = $(docker images -aq -f "dangling=true")
-	$(foreach image,$(images),docker rmi $(image);)
+	$(foreach id,$(delImageIds),$(shell docker rmi $(image));)
 
 up:
 	@echo "Up container"
