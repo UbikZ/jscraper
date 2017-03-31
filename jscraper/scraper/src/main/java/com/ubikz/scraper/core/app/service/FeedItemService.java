@@ -137,13 +137,17 @@ public class FeedItemService extends AbstractService {
         List<FeedItemEntityRequest> request = new ArrayList<>();
 
         for (FeedArticleDto articleDto : articleList) {
-            FeedItemEntityRequest entityRequest = new FeedItemEntityRequest();
-            entityRequest.setFeedId(feed.getId());
-            entityRequest.setLabel(articleDto.getLabel());
-            entityRequest.setUrl(articleDto.getPictureList().get(0));
-            entityRequest.setTagNames(articleDto.getTagList());
-            entityRequest.setChecksum(DigestUtils.md5DigestAsHex(entityRequest.getUrl().getBytes("UTF-8")));
-            request.add(entityRequest);
+            List<String> pictureList = articleDto.getPictureList();
+
+            if (pictureList != null && pictureList.size() > 0) {
+                FeedItemEntityRequest entityRequest = new FeedItemEntityRequest();
+                entityRequest.setFeedId(feed.getId());
+                entityRequest.setLabel(articleDto.getLabel());
+                entityRequest.setUrl(articleDto.getPictureList().get(0));
+                entityRequest.setTagNames(articleDto.getTagList());
+                entityRequest.setChecksum(DigestUtils.md5DigestAsHex(entityRequest.getUrl().getBytes("UTF-8")));
+                request.add(entityRequest);
+            }
         }
 
         return request;
