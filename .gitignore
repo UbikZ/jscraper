@@ -6,6 +6,7 @@ build
 .gradle
 docker/*
 !docker/.gitkeep
+V*__Data.sql
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
