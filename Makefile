@@ -17,7 +17,7 @@ pull:
 
 clean:
 	@echo "Remove 'jscraper' containers"
-	$(foreach id,$(containerIds),$(shell docker rm -f $(container));)
+	for id in $(containerIds); do $(shell docker rm -f $(container)); done
 	@echo "Remove 'failed' images"
 	$(foreach id,$(delImageIds),$(shell docker rmi $(image));)
 
