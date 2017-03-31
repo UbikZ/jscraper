@@ -17,7 +17,7 @@ clean:
 	@echo "Remove 'jscraper' containers"
 	docker ps | grep jscraper | awk '{print $1}' | xargs docker rm -f
 	@echo "Remove 'failed' images"
-	docker images -aq -f "dangling=true" | xargs docker rmi
+	docker images -aq -f "dangling=true" | xargs docker rmi 2>/dev/null
 
 up:
 	@echo "Up container"
