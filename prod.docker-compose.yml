@@ -7,7 +7,7 @@ jscraper:
   volumes:
       - ./docker/scraper/log:/var/log
       - ./docker/scraper/gradle:/jscraper/cache
-      - /etc/nginx/sites-dockered/jscraper:/jscraper/nginx/sites-enabled:ro
+      - ./docker/scraper/nginx/scraper.conf:/nginx/jscraper.conf
   env_file: .env
 pgsql:
   image: postgres:9.6.1-alpine
