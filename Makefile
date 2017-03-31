@@ -15,9 +15,11 @@ pull:
 
 clean:
 	@echo "Remove 'jscraper' containers"
-	docker ps | grep jscraper | awk '{print $1}' | xargs docker rm -f
+	containers = $(docker ps | grep jscraper | awk '{print $1}')
+	$(foreach container,$(containers),docker rm -f $(container);)
 	@echo "Remove 'failed' images"
-	docker images -aq -f "dangling=true" | xargs docker rmi 2>/dev/null
+	images = $(docker images -aq -f "dangling=true")
+	$(foreach image,$(images),docker rmi $(image);)
 
 up:
 	@echo "Up container"
