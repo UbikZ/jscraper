@@ -161,6 +161,8 @@ abstract public class AbstractEntity {
         dFilter.setIdList(eFilter.getIdList());
         dFilter.setLabel(eFilter.getLabel());
         dFilter.setEnabled(eFilter.getEnabled());
+        dFilter.setStartDate(eFilter.getStartDate());
+        dFilter.setEndDate(eFilter.getEndDate());
 
         return dFilter;
     }

@@ -33,7 +33,7 @@ public class FeedProhibitedContext extends AbstractContext {
     }
 
     @Override
-    protected AbstractServiceFilter parseFilter(AbstractFilterBody data, AbstractServiceFilter filter) {
+    protected AbstractServiceFilter parseFilter(AbstractFilterBody data, AbstractServiceFilter filter) throws Exception {
         return this.parseBaseFilter(data, filter);
     }
 }

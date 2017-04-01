@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -183,7 +184,7 @@ abstract public class AbstractContext {
      * @param filter
      * @return
      */
-    abstract protected AbstractServiceFilter parseFilter(AbstractFilterBody data, AbstractServiceFilter filter);
+    abstract protected AbstractServiceFilter parseFilter(AbstractFilterBody data, AbstractServiceFilter filter) throws Exception;
 
     /**
      * @param data
@@ -202,11 +203,21 @@ abstract public class AbstractContext {
      * @param filter
      * @return
      */
-    final protected AbstractServiceFilter parseBaseFilter(AbstractFilterBody data, AbstractServiceFilter filter) {
+    final protected AbstractServiceFilter parseBaseFilter(AbstractFilterBody data, AbstractServiceFilter filter) throws Exception {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
         filter.setId(data.getId());
         filter.setLabel(data.getLabel());
         filter.setEnabled(data.getEnabled());
         filter.setLazy(data.isLazy());
+
+        if (data.getStartDate() != null) {
+            filter.setStartDate(formatter.parse(data.getStartDate()));
+        }
+
+        if (data.getEndDate() != null) {
+            filter.setEndDate(formatter.parse(data.getEndDate()));
+        }
 
         return filter;
     }

@@ -30,7 +30,12 @@ public class Delete extends AbstractQuery {
 
     @Override
     public Delete where(String column, String op, Object value) {
-        return (Delete) super.where(column, op, value);
+        return (Delete) super.where(column, op, value, null);
+    }
+
+    @Override
+    public Delete where(String column, String op, Object value, String cast) {
+        return (Delete) super.where(column, op, value, cast);
     }
 
     @Override

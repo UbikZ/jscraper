@@ -171,7 +171,12 @@ public class Select extends AbstractQuery {
 
     @Override
     public Select where(String column, String op, Object value) {
-        return (Select) super.where(column, op, value);
+        return (Select) super.where(column, op, value, null);
+    }
+
+    @Override
+    public Select where(String column, String op, Object value, String cast) {
+        return (Select) super.where(column, op, value, cast);
     }
 
     @Override

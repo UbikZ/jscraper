@@ -30,14 +30,19 @@ abstract public class AbstractQuery implements IQuery {
     }
 
     public AbstractQuery where(String where) {
-        return this.where(where, null, null);
+        return this.where(where, null, null, null);
     }
 
     public AbstractQuery where(String column, Object value) {
-        return this.where(column, "=", value);
+        return this.where(column, "=", value, null);
     }
 
     public AbstractQuery where(String column, String op, Object value) {
+        return this.where(column, "=", value, null);
+    }
+
+    public AbstractQuery where(String column, String op, Object value, String cast) {
+        String casting = cast == null ? "" : "::" + cast;
         String aliasedColumn = this.aliases.getOrDefault(column, column);
         String whereColumn = "w_" + column;
         String whereColumnPlaceholder = ":" + whereColumn;
@@ -59,7 +64,7 @@ abstract public class AbstractQuery implements IQuery {
             this.parameters.put(whereColumn, value);
         }
 
-        existingWhere.add(aliasedColumn + " " + op + " " + whereColumnPlaceholder);
+        existingWhere.add(aliasedColumn + " " + op + " " + whereColumnPlaceholder + casting);
         this.parts.put(KEY_WHERE, existingWhere);
         return this;
     }

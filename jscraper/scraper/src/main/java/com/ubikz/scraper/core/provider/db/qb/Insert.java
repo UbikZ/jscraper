@@ -90,6 +90,11 @@ public class Insert extends Edit {
     }
 
     @Override
+    public Insert where(String column, String op, Object value, String cast) {
+        return this;
+    }
+
+    @Override
     public void build() {
         super.build();
 

@@ -80,7 +80,7 @@ public class FeedItemContext extends AbstractContext {
     }
 
     @Override
-    protected AbstractServiceFilter parseFilter(AbstractFilterBody data, AbstractServiceFilter filter) {
+    protected AbstractServiceFilter parseFilter(AbstractFilterBody data, AbstractServiceFilter filter) throws Exception {
         FeedItemFilterBody filterBody = (FeedItemFilterBody) data;
         FeedItemServiceFilter serviceFilter = (FeedItemServiceFilter) this.parseBaseFilter(filterBody, filter);
 
@@ -93,8 +93,6 @@ public class FeedItemContext extends AbstractContext {
         serviceFilter.setReposted(filterBody.getReposted());
         serviceFilter.setViewed(filterBody.getViewed());
         serviceFilter.setSent(filterBody.getReposted());
-        serviceFilter.setStartDate(filterBody.getStartDate());
-        serviceFilter.setEndDate(filterBody.getEndDate());
 
         return serviceFilter;
     }
