@@ -5,7 +5,8 @@ INSERT INTO public.tag_prohibited (label) VALUES
   ('would'), ('should'), ('is'), ('has'), ('had'), ('been'), ('be'), ('are'), ('them'), ('have'), ('uh'), ('oh'),
   ('go'), ('going'), ('find'), ('get'), ('getting'), ('than'), ('with'), ('my'), ('think'), ('give'), ('giving'),
   ('meet'), ('build'), ('built'), ('can'), ('never'), ('enough'), ('will'), ('take'), ('taking'), ('every'), ('by'),
-  ('over'), ('more'), ('what'), ('off'), ('on'), ('well');
+  ('over'), ('more'), ('what'), ('off'), ('on'), ('well'), ('not'), ('or'), ('there'), ('if'), ('anything'), ('anyway'),
+  ('we');
 
 INSERT INTO public.feed_prohibited (label) VALUES
   ('(m)'), ('[m]'), ('*m*'), ('[Request]');

@@ -57,7 +57,6 @@ public class FeedItemDal extends AbstractDal {
                 .insert("feed_item_tag")
                 .values(this.parseFeedItemTagRequest(requestList))
                 .onConflict()
-                .onConstraint("feeditem_url_cc")
                 .onDo("NOTHING");
 
         return this.update(insert);

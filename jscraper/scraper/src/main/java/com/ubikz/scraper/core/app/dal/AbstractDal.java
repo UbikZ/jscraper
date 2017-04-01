@@ -110,7 +110,8 @@ abstract public class AbstractDal {
         AbstractQuery insert = qb
                 .insert(this.tableName)
                 .values(this.parseRequestList(requestList, true))
-                .onConflict("DO NOTHING")
+                .onConflict()
+                .onDo("NOTHING")
                 .returning("id");
 
         return this.insertMultiple(insert);

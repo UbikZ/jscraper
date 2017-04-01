@@ -108,18 +108,18 @@ public class Insert extends Edit {
         if (conflictList != null) {
             this.sql.add(SQL_ON_CONFLICT);
             this.sql.add(this.buildListToString(conflictList));
+        }
 
-            List<String> constraintList = (List<String>) this.parts.get(KEY_ON_CONSTRAINT);
-            if (constraintList != null && constraintList.size() > 0) {
-                this.sql.add(SQL_ON_CONSTRAINT);
-                this.sql.add(this.buildListToString(conflictList));
-            }
+        List<String> constraintList = (List<String>) this.parts.get(KEY_ON_CONSTRAINT);
+        if (constraintList != null && constraintList.size() > 0) {
+            this.sql.add(SQL_ON_CONSTRAINT);
+            this.sql.add(this.buildListToString(constraintList));
+        }
 
-            String onDo = (String) this.parts.get(KEY_DO);
-            if (onDo != null) {
-                this.sql.add(SQL_DO);
-                this.sql.add(onDo);
-            }
+        String onDo = (String) this.parts.get(KEY_DO);
+        if (onDo != null) {
+            this.sql.add(SQL_DO);
+            this.sql.add(onDo);
         }
 
         String returningColumn = (String) this.parts.get(KEY_RETURNING);
