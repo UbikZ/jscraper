@@ -94,13 +94,18 @@ public class FeedItemService extends AbstractService {
             }
         }
 
-        this.tagEntity.createAll(tagRequestList);
-        this.populateEntityArticleListRequestWithTags(
-                entityRequestList,
-                this.tagEntity.getAllMappedBy(new TagEntityFilter(), "label")
-        );
+        if (tagRequestList.size() > 0) {
+            this.tagEntity.createAll(tagRequestList);
+        }
 
-        this.entity.createAll(entityRequestList);
+        if (entityRequestList.size() > 0) {
+            this.populateEntityArticleListRequestWithTags(
+                    entityRequestList,
+                    this.tagEntity.getAllMappedBy(new TagEntityFilter(), "label")
+            );
+
+            this.entity.createAll(entityRequestList);
+        }
 
         return articleMap;
     }
