@@ -11,8 +11,11 @@ usage:
 	@echo "  * make dev"
 	@echo "  * make prod"
 
-nginx-restart:
-	@/etc/init.d/nginx restart
+nginx-start:
+	@/etc/init.d/nginx stop
+
+nginx-start:
+	@/etc/init.d/nginx start
 
 pull:
 	@docker pull $(imageId)
@@ -36,7 +39,7 @@ up-prod:
 up-dev:
 	@docker-compose -f docker-compose.yml up --build
 
-prod: clean-docker pull up-prod nginx-restart
+prod: nginx-stop clean-docker pull up-prod nginx-start
 
 dev: clean-docker up-dev
 
