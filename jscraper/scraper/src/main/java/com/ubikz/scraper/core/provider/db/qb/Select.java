@@ -225,7 +225,7 @@ public class Select extends AbstractQuery {
             this.sql.add(joins.stream().collect(Collectors.joining(" ")));
         }
 
-       this.handleWhereClauses();
+        this.handleWhereClauses();
 
         String orderBy = (String) this.parts.get(KEY_ORDER);
         if (orderBy != null) {

@@ -1,8 +1,6 @@
 package com.ubikz.scraper.core.provider.db.qb;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("unchecked")
 public class Delete extends AbstractQuery {

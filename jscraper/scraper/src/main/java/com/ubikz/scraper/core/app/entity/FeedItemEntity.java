@@ -48,21 +48,6 @@ public class FeedItemEntity extends AbstractEntity {
     }
 
     /**
-     * @param request
-     * @return
-     */
-    @Transactional
-    public int createAllWithTags(FeedItemEntityRequest request) {
-        int createdId = this.dal.create(this.parseEntityToDalRequest(request));
-
-        if (request.getTagIds() != null) {
-            ((FeedItemDal) this.dal).createTags(this.parseEntityToTagDalRequest(createdId, request));
-        }
-
-        return createdId;
-    }
-
-    /**
      * @param feedItems
      */
     @Override
@@ -212,7 +197,7 @@ public class FeedItemEntity extends AbstractEntity {
         feedItemDalRequest = (FeedItemDalRequest) this.parseBaseEntityToDalRequest(feedItemEntityRequest, feedItemDalRequest);
         feedItemDalRequest.setFeedId(feedItemEntityRequest.getFeedId());
         feedItemDalRequest.setUrl(feedItemEntityRequest.getUrl());
-        feedItemDalRequest.setComment(feedItemDalRequest.getComment());
+        feedItemDalRequest.setComment(feedItemEntityRequest.getComment());
         feedItemDalRequest.setChecksum(feedItemEntityRequest.getChecksum());
         feedItemDalRequest.setApproved(feedItemEntityRequest.getApproved());
         feedItemDalRequest.setReposted(feedItemEntityRequest.getReposted());

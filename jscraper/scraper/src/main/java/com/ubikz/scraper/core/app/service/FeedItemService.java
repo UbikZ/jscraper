@@ -165,7 +165,7 @@ public class FeedItemService extends AbstractService {
 
         this.parseBaseServiceToEntityRequest(feedItemServiceRequest, feedItemEntityRequest);
         feedItemEntityRequest.setUrl(feedItemServiceRequest.getUrl());
-        feedItemEntityRequest.setComment(feedItemEntityRequest.getComment());
+        feedItemEntityRequest.setComment(feedItemServiceRequest.getComment());
         feedItemEntityRequest.setFeedId(feedItemServiceRequest.getFeedId());
         feedItemEntityRequest.setChecksum(feedItemServiceRequest.getChecksum());
         feedItemEntityRequest.setTagIds(feedItemServiceRequest.getTagIds());

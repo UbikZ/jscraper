@@ -4,6 +4,7 @@ jscraper:
     - pgsql
   ports:
       - "3000:3000"
+      - "5005:5005"
   volumes:
       - ./docker/scraper/log:/var/log
       - ./docker/scraper/gradle:/jscraper/cache

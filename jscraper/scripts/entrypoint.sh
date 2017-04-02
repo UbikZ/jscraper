@@ -51,4 +51,10 @@ echo "[DEBUG] > Database is migrated."
 
 # Launch server
 echo "[DEBUG] > Launch server."
-java -jar /jscraper/scraper/build/libs/jscraper-0.0.1.jar
+
+if [[ "${DEBUG}" -eq 1 ]]; then
+    echo "[DEBUG] > DEBUG MODE ENABLED"
+    ARG="-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
+fi
+
+java ${ARG} -jar /jscraper/scraper/build/libs/jscraper-0.0.1.jar

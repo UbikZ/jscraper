@@ -2,7 +2,6 @@ package com.ubikz.scraper.core.app.entity.helper;
 
 import com.ubikz.scraper.core.app.dto.FeedDto;
 import com.ubikz.scraper.core.app.dto.FeedItemDto;
-import com.ubikz.scraper.core.app.dto.TagDto;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +27,7 @@ public class FeedItemEntityHelper extends AbstractEntityHelper {
         }
 
         if (data.containsKey("comment")) {
-            feedItemDto.setUrl((String) data.get("comment"));
+            feedItemDto.setComment((String) data.get("comment"));
         }
 
         if (data.containsKey("checksum")) {
@@ -63,7 +62,7 @@ public class FeedItemEntityHelper extends AbstractEntityHelper {
             if (strTags != null) {
                 feedItemDto.setTags(
                         Stream.of(strTags.split(",")).map(tagId ->
-                                (TagDto) this.tagEntityHelper.getDtoFromDal(new HashMap<String, Object>() {{
+                                this.tagEntityHelper.getDtoFromDal(new HashMap<String, Object>() {{
                                     put("id", Integer.valueOf(tagId));
                                 }})
                         ).collect(Collectors.toList())
