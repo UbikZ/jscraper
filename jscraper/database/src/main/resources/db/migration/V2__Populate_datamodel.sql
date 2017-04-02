@@ -9,7 +9,7 @@ INSERT INTO public.tag_prohibited (label) VALUES
   ('we');
 
 INSERT INTO public.feed_prohibited (label) VALUES
-  ('(m)'), ('[m]'), ('*m*'), ('[Request]');
+  ('(m)'), ('[m]'), ('(M)'), ('[M]'), ('*m*'), ('[Request]');
 
 INSERT INTO public.feed_type (id, label, url_regex) VALUES
   (1, 'reddit', '^https?://(www\.)?reddit\.com(.*)');

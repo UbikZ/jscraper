@@ -32,6 +32,7 @@ public class FeedItemDal extends AbstractDal {
                 .groupBy("fi.id")
                 .aliases(new HashMap<String, String>() {{
                     put("id", "fi.id");
+                    put("date", "fi.date");
                 }});
 
         this.parseFilter(filter, select);
