@@ -49,7 +49,7 @@ public class FeedTypeDal extends AbstractDal {
         FeedTypeDalFilter feedTypeDalFilter = (FeedTypeDalFilter) filter;
         super.parseFilter(feedTypeDalFilter, select);
 
-        if (feedTypeDalFilter.getIdList() != null) {
+        if (feedTypeDalFilter.getIdList() != null && feedTypeDalFilter.getIdList().size() > 0) {
             select.where("id", "in", feedTypeDalFilter.getIdList());
         }
     }
