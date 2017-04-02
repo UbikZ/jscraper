@@ -5,12 +5,21 @@ import java.util.List;
 public class FeedItemRequestBody extends AbstractRequestBody {
     private Integer feedId;
     private String url;
+    private String comment;
     private String checksum;
     private List<Integer> tagIds;
     private Boolean isViewed;
     private Boolean isApproved;
     private Boolean isReposted;
     private Boolean isSent;
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
     public Integer getFeedId() {
         return feedId;
@@ -81,6 +90,7 @@ public class FeedItemRequestBody extends AbstractRequestBody {
         return super.toString() + "/ FeedItemRequestBody{" +
                 "feedId=" + feedId +
                 ", url='" + url + '\'' +
+                ", comment='" + comment + '\'' +
                 ", checksum='" + checksum + '\'' +
                 ", tagIds=" + tagIds +
                 ", isViewed=" + isViewed +

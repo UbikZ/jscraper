@@ -5,12 +5,21 @@ import java.util.List;
 public class FeedItemServiceRequest extends AbstractServiceRequest {
     private Integer feedId;
     private String url;
+    private String comment;
     private String checksum;
     private List<Integer> tagIds;
     private Boolean viewed;
     private Boolean approved;
     private Boolean reposted;
     private Boolean sent;
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
     public Integer getFeedId() {
         return feedId;

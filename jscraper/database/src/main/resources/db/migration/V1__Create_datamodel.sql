@@ -2,7 +2,7 @@
 -- * ucc  : unique constraint check
 -- * fk   : foreign key
 
-CREATE TABLE public.feed_type
+CREATE TABLE IF NOT EXISTS public.feed_type
 (
   id            SERIAL PRIMARY KEY      NOT NULL,
   label         VARCHAR(255),
@@ -11,12 +11,12 @@ CREATE TABLE public.feed_type
   content_regex TEXT DEFAULT ''         NOT NULL,
   enabled       BOOLEAN DEFAULT TRUE    NOT NULL
 );
-CREATE INDEX feedType_date_idx
+CREATE INDEX IF NOT EXISTS feedType_date_idx
   ON public.feed_type (date);
-CREATE UNIQUE INDEX feedType_label_uidx
+CREATE UNIQUE INDEX IF NOT EXISTS feedType_label_uidx
   ON public.feed_type (label);
 
-CREATE TABLE public.feed
+CREATE TABLE IF NOT EXISTS public.feed
 (
   id           SERIAL PRIMARY KEY      NOT NULL,
   label        VARCHAR(255),
@@ -28,19 +28,20 @@ CREATE TABLE public.feed
   CONSTRAINT feed_url_cc CHECK (url ~*
                                 '^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&''\(\)\*\+,;=.]+$')
 );
-CREATE INDEX feed_date_idx
+CREATE INDEX IF NOT EXISTS feed_date_idx
   ON public.feed (date);
-CREATE UNIQUE INDEX feed_label_uidx
+CREATE UNIQUE INDEX IF NOT EXISTS feed_label_uidx
   ON public.feed (label);
-CREATE UNIQUE INDEX feed_url_uidx
+CREATE UNIQUE INDEX IF NOT EXISTS feed_url_uidx
   ON public.feed (url);
 
 
-CREATE TABLE public.feed_item
+CREATE TABLE IF NOT EXISTS public.feed_item
 (
   id       SERIAL PRIMARY KEY      NOT NULL,
   label    VARCHAR(255)            NOT NULL,
   url      TEXT                    NOT NULL,
+  comment  TEXT                    NULL,
   date     TIMESTAMP DEFAULT NOW() NOT NULL,
   checksum VARCHAR(255)            NOT NULL,
   viewed   BOOLEAN DEFAULT FALSE   NOT NULL,
@@ -53,28 +54,28 @@ CREATE TABLE public.feed_item
                                     '^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&''\(\)\*\+,;=.]+$'),
   CONSTRAINT feedItem_feedId_fk FOREIGN KEY (feed_id) REFERENCES feed (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-CREATE INDEX feedItem_date_idx
+CREATE INDEX IF NOT EXISTS feedItem_date_idx
   ON public.feed_item (date);
-CREATE UNIQUE INDEX feedItem_url_uidx
+CREATE UNIQUE INDEX IF NOT EXISTS feedItem_url_uidx
   ON public.feed_item (url);
-CREATE UNIQUE INDEX feedItem_label_uidx
+CREATE UNIQUE INDEX IF NOT EXISTS feedItem_label_uidx
   ON public.feed_item (label);
-CREATE UNIQUE INDEX feedItem_checksum_uidx
+CREATE UNIQUE INDEX IF NOT EXISTS feedItem_checksum_uidx
   ON public.feed_item (checksum);
 
-CREATE TABLE public.tag
+CREATE TABLE IF NOT EXISTS public.tag
 (
   id      SERIAL PRIMARY KEY      NOT NULL,
   label   VARCHAR(255)            NOT NULL,
   date    TIMESTAMP DEFAULT NOW() NOT NULL,
   enabled BOOLEAN DEFAULT TRUE    NOT NULL
 );
-CREATE UNIQUE INDEX tag_label_uidx
+CREATE UNIQUE INDEX IF NOT EXISTS tag_label_uidx
   ON public.tag (label);
-CREATE INDEX tag_date_idx
+CREATE INDEX IF NOT EXISTS tag_date_idx
   ON public.tag (date);
 
-CREATE TABLE public.feed_item_tag
+CREATE TABLE IF NOT EXISTS public.feed_item_tag
 (
   id           SERIAL PRIMARY KEY      NOT NULL,
   feed_item_id INT                     NOT NULL,
@@ -84,20 +85,20 @@ CREATE TABLE public.feed_item_tag
   CONSTRAINT feedItemTag_feedItemId_tagId_ucc UNIQUE (feed_item_id, tag_id)
 );
 
-CREATE TABLE public.tag_prohibited
+CREATE TABLE IF NOT EXISTS public.tag_prohibited
 (
   id      SERIAL PRIMARY KEY      NOT NULL,
   label   VARCHAR(255)            NOT NULL,
   enabled BOOLEAN DEFAULT TRUE    NOT NULL
 );
-CREATE UNIQUE INDEX tagProhibited_label_uidx
+CREATE UNIQUE INDEX IF NOT EXISTS tagProhibited_label_uidx
   ON public.tag_prohibited (label);
 
-CREATE TABLE public.feed_prohibited
+CREATE TABLE IF NOT EXISTS public.feed_prohibited
 (
   id      SERIAL PRIMARY KEY      NOT NULL,
   label   VARCHAR(255)            NOT NULL,
   enabled BOOLEAN DEFAULT TRUE    NOT NULL
 );
-CREATE UNIQUE INDEX feedProhibited_label_uidx
+CREATE UNIQUE INDEX IF NOT EXISTS feedProhibited_label_uidx
   ON public.feed_prohibited (label);

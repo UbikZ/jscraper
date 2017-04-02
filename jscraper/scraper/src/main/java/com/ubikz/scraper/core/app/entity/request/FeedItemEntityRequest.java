@@ -5,6 +5,7 @@ import java.util.List;
 public class FeedItemEntityRequest extends AbstractEntityRequest {
     private Integer feedId;
     private String url;
+    private String comment;
     private String checksum;
     private List<Integer> tagIds;
     private List<String> tagNames;
@@ -12,6 +13,14 @@ public class FeedItemEntityRequest extends AbstractEntityRequest {
     private Boolean approved;
     private Boolean reposted;
     private Boolean sent;
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
     public List<String> getTagNames() {
         return tagNames;

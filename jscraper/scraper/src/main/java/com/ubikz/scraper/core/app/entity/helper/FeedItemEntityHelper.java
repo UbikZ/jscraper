@@ -27,6 +27,10 @@ public class FeedItemEntityHelper extends AbstractEntityHelper {
             feedItemDto.setUrl((String) data.get("url"));
         }
 
+        if (data.containsKey("comment")) {
+            feedItemDto.setUrl((String) data.get("comment"));
+        }
+
         if (data.containsKey("checksum")) {
             feedItemDto.setChecksum((String) data.get("checksum"));
         }

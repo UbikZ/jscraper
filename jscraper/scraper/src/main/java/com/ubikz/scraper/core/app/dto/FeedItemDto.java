@@ -5,12 +5,21 @@ import java.util.List;
 public class FeedItemDto extends AbstractDto {
     private FeedDto feed;
     private String url;
+    private String comment;
     private String checksum;
     private List<TagDto> tags;
     private Boolean isViewed;
     private Boolean isApproved;
     private Boolean isReposted;
     private Boolean isSent;
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
     public FeedDto getFeed() {
         return feed;

@@ -105,6 +105,10 @@ public class FeedItemDal extends AbstractDal {
             values.put("url", feedItemDalRequest.getUrl());
         }
 
+        if (feedItemDalRequest.getComment() != null) {
+            values.put("comment", feedItemDalRequest.getComment());
+        }
+
         if (feedItemDalRequest.getChecksum() != null) {
             values.put("checksum", feedItemDalRequest.getChecksum());
         }

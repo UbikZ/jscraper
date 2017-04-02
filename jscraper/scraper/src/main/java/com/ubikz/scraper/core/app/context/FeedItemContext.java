@@ -69,6 +69,7 @@ public class FeedItemContext extends AbstractContext {
 
         serviceRequest.setFeedId(requestBody.getFeedId());
         serviceRequest.setUrl(requestBody.getUrl());
+        serviceRequest.setComment(requestBody.getComment());
         serviceRequest.setTagIds(requestBody.getTagIds());
         serviceRequest.setChecksum(requestBody.getChecksum());
         serviceRequest.setApproved(requestBody.getApproved());

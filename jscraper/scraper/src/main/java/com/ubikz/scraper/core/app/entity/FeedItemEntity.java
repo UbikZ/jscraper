@@ -212,6 +212,7 @@ public class FeedItemEntity extends AbstractEntity {
         feedItemDalRequest = (FeedItemDalRequest) this.parseBaseEntityToDalRequest(feedItemEntityRequest, feedItemDalRequest);
         feedItemDalRequest.setFeedId(feedItemEntityRequest.getFeedId());
         feedItemDalRequest.setUrl(feedItemEntityRequest.getUrl());
+        feedItemDalRequest.setComment(feedItemDalRequest.getComment());
         feedItemDalRequest.setChecksum(feedItemEntityRequest.getChecksum());
         feedItemDalRequest.setApproved(feedItemEntityRequest.getApproved());
         feedItemDalRequest.setReposted(feedItemEntityRequest.getReposted());
