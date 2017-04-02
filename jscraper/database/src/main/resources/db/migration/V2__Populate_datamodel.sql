@@ -6,10 +6,13 @@ INSERT INTO public.tag_prohibited (label) VALUES
   ('go'), ('going'), ('find'), ('get'), ('getting'), ('than'), ('with'), ('my'), ('think'), ('give'), ('giving'),
   ('meet'), ('build'), ('built'), ('can'), ('never'), ('enough'), ('will'), ('take'), ('taking'), ('every'), ('by'),
   ('over'), ('more'), ('what'), ('off'), ('on'), ('well'), ('not'), ('or'), ('there'), ('if'), ('anything'), ('anyway'),
-  ('we');
+  ('we')
+ON CONFLICT DO NOTHING;
 
 INSERT INTO public.feed_prohibited (label) VALUES
-  ('(m)'), ('[m]'), ('(M)'), ('[M]'), ('*m*'), ('[Request]');
+  ('(m)'), ('[m]'), ('(M)'), ('[M]'), ('*m*'), ('[Request]')
+ON CONFLICT DO NOTHING;
 
 INSERT INTO public.feed_type (id, label, url_regex) VALUES
-  (1, 'reddit', '^https?://(www\.)?reddit\.com(.*)');
+  (1, 'reddit', '^https?://(www\.)?reddit\.com(.*)')
+ON CONFLICT DO NOTHING;
