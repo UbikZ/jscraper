@@ -11,7 +11,7 @@ usage:
 	@echo "  * make dev"
 	@echo "  * make prod"
 
-nginx-start:
+nginx-stop:
 	@/etc/init.d/nginx stop
 
 nginx-start:
