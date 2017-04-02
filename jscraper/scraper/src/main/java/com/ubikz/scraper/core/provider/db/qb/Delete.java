@@ -39,6 +39,26 @@ public class Delete extends AbstractQuery {
     }
 
     @Override
+    public Delete orWhere(String where) {
+        return (Delete) super.orWhere(where);
+    }
+
+    @Override
+    public Delete orWhere(String column, Object value) {
+        return (Delete) super.orWhere(column, value);
+    }
+
+    @Override
+    public Delete orWhere(String column, String op, Object value) {
+        return (Delete) super.orWhere(column, op, value, null);
+    }
+
+    @Override
+    public Delete orWhere(String column, String op, Object value, String cast) {
+        return (Delete) super.orWhere(column, op, value, cast);
+    }
+
+    @Override
     public void build() {
         super.build();
 
@@ -46,17 +66,14 @@ public class Delete extends AbstractQuery {
         this.sql.add(SQL_FROM);
         this.sql.add((String) this.parts.get(KEY_FROM));
 
-        List<String> wheres = (List<String>) this.parts.get(KEY_WHERE);
-        if (wheres.size() > 0) {
-            this.sql.add(SQL_WHERE);
-            this.sql.add(wheres.stream().collect(Collectors.joining(" " + SQL_AND + " ")));
-        }
+        this.handleWhereClauses();
     }
 
     @Override
     protected void initParts() {
         this.parts.put(KEY_FROM, null);
         this.parts.put(KEY_WHERE, new ArrayList<>());
+        this.parts.put(KEY_ORWHERE, new ArrayList<>());
     }
 
     @Override

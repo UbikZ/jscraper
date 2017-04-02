@@ -38,11 +38,7 @@ public class Update extends Edit {
         this.sql.add(SQL_SET);
         this.sql.add(((List<String>) this.parts.get(KEY_SET)).stream().collect(Collectors.joining(",")));
 
-        List<String> wheres = (List<String>) this.parts.get(KEY_WHERE);
-        if (wheres.size() > 0) {
-            this.sql.add(SQL_WHERE);
-            this.sql.add(wheres.stream().collect(Collectors.joining(" " + SQL_AND + " ")));
-        }
+        this.handleWhereClauses();
     }
 
     @Override

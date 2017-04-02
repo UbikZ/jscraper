@@ -210,14 +210,8 @@ abstract public class AbstractContext {
         filter.setLabel(data.getLabel());
         filter.setEnabled(data.getEnabled());
         filter.setLazy(data.isLazy());
-
-        if (data.getStartDate() != null) {
-            filter.setStartDate(formatter.parse(data.getStartDate()));
-        }
-
-        if (data.getEndDate() != null) {
-            filter.setEndDate(formatter.parse(data.getEndDate()));
-        }
+        filter.setStartDate(data.getStartDate() == null ? null : formatter.parse(data.getStartDate()));
+        filter.setEndDate(data.getEndDate() == null ? null : formatter.parse(data.getEndDate()));
 
         return filter;
     }

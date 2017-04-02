@@ -5,11 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 abstract public class AbstractFilterBody {
-    private Integer id;
-    private Boolean isEnabled;
-    private String label;
-    private String startDate;
-    private String endDate;
+    private Integer id = null;
+    private Boolean isEnabled = null;
+    private String label = null;
+    private String startDate = null;
+    private String endDate = null;
     private boolean isLazy = true;
 
     public Integer getId() {

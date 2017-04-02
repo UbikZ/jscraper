@@ -141,8 +141,11 @@ public class FeedItemDal extends AbstractDal {
         if (feedItemDalFilter.getTagNames() != null && feedItemDalFilter.getTagNames().size() > 0) {
             select.addColumn("string_agg(DISTINCT fit.tag_id::character varying, ',') AS tags")
                     .join("feed_item_tag", "fit", "fi.id = fit.feed_item_id")
-                    .join("tag", "t", "fit.tag_id = t.id")
-                    .where("t.label", "in", feedItemDalFilter.getTagNames());
+                    .join("tag", "t", "fit.tag_id = t.id");
+
+            for (String tag : feedItemDalFilter.getTagNames()) {
+                select.orWhere("t.label", "LIKE", "%" + tag + "%");
+            }
         } else {
             select.addColumn("string_agg(DISTINCT fit.tag_id::character varying, ',') AS tags")
                     .joinLeft("feed_item_tag", "fit", "fi.id = fit.feed_item_id");

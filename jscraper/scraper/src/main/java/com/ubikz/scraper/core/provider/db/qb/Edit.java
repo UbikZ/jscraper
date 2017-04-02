@@ -12,5 +12,6 @@ abstract class Edit extends AbstractQuery {
     @Override
     protected void initParts() {
         this.parts.put(KEY_WHERE, new ArrayList<>());
+        this.parts.put(KEY_ORWHERE, new ArrayList<>());
     }
 }

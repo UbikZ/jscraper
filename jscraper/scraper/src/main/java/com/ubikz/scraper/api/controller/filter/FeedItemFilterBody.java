@@ -3,15 +3,15 @@ package com.ubikz.scraper.api.controller.filter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FeedItemFilterBody extends AbstractFilterBody {
-    private Integer feedId;
-    private Integer feedTypeId;
-    private String url;
-    private String checksum;
-    private String[] tagNames = {};
-    private Boolean isViewed;
-    private Boolean isApproved;
-    private Boolean isReposted;
-    private Boolean isSent;
+    private Integer feedId = null;
+    private Integer feedTypeId = null;
+    private String url = null;
+    private String checksum = null;
+    private String[] tags = {};
+    private Boolean isViewed = null;
+    private Boolean isApproved = null;
+    private Boolean isReposted = null;
+    private Boolean isSent = null;
 
     public Integer getFeedId() {
         return feedId;
@@ -49,13 +49,13 @@ public class FeedItemFilterBody extends AbstractFilterBody {
         this.checksum = checksum;
     }
 
-    public String[] getTagNames() {
-        return tagNames;
+    public String[] getTags() {
+        return tags;
     }
 
-    @JsonProperty("tagNames")
-    public void setTagNames(String[] tagNames) {
-        this.tagNames = tagNames;
+    @JsonProperty("tags")
+    public void setTags(String[] tags) {
+        this.tags = tags;
     }
 
     public Boolean getViewed() {
@@ -101,7 +101,7 @@ public class FeedItemFilterBody extends AbstractFilterBody {
                 ", feedTypeId=" + feedTypeId +
                 ", url='" + url + '\'' +
                 ", checksum='" + checksum + '\'' +
-                ", tagNames='" + tagNames + '\'' +
+                ", tagNames='" + tags + '\'' +
                 ", isViewed=" + isViewed +
                 ", isApproved=" + isApproved +
                 ", isReposted=" + isReposted +

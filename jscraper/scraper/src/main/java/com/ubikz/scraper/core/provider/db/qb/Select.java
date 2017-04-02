@@ -180,6 +180,26 @@ public class Select extends AbstractQuery {
     }
 
     @Override
+    public Select orWhere(String where) {
+        return (Select) super.orWhere(where);
+    }
+
+    @Override
+    public Select orWhere(String column, Object value) {
+        return (Select) super.orWhere(column, value);
+    }
+
+    @Override
+    public Select orWhere(String column, String op, Object value) {
+        return (Select) super.orWhere(column, op, value, null);
+    }
+
+    @Override
+    public Select orWhere(String column, String op, Object value, String cast) {
+        return (Select) super.orWhere(column, op, value, cast);
+    }
+
+    @Override
     public void build() {
         super.build();
 
@@ -205,11 +225,7 @@ public class Select extends AbstractQuery {
             this.sql.add(joins.stream().collect(Collectors.joining(" ")));
         }
 
-        List<String> wheres = (List<String>) this.parts.get(KEY_WHERE);
-        if (wheres.size() > 0) {
-            this.sql.add(SQL_WHERE);
-            this.sql.add(wheres.stream().collect(Collectors.joining(" " + SQL_AND + " ")));
-        }
+       this.handleWhereClauses();
 
         String orderBy = (String) this.parts.get(KEY_ORDER);
         if (orderBy != null) {
@@ -232,6 +248,7 @@ public class Select extends AbstractQuery {
         this.parts.put(KEY_FROM, null);
         this.parts.put(KEY_JOIN, new ArrayList<>());
         this.parts.put(KEY_WHERE, new ArrayList<>());
+        this.parts.put(KEY_ORWHERE, new ArrayList<>());
         this.parts.put(KEY_ORDER, null);
         this.parts.put(KEY_DIRECTION, null);
         this.parts.put(KEY_GROUP, new ArrayList<>());

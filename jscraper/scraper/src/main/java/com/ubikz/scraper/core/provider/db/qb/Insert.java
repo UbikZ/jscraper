@@ -95,6 +95,26 @@ public class Insert extends Edit {
     }
 
     @Override
+    public Insert orWhere(String where) {
+        return this;
+    }
+
+    @Override
+    public Insert orWhere(String column, Object value) {
+        return this;
+    }
+
+    @Override
+    public Insert orWhere(String column, String op, Object value) {
+        return this;
+    }
+
+    @Override
+    public Insert orWhere(String column, String op, Object value, String cast) {
+        return this;
+    }
+
+    @Override
     public void build() {
         super.build();
 

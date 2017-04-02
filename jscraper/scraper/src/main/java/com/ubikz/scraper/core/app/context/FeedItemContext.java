@@ -85,8 +85,8 @@ public class FeedItemContext extends AbstractContext {
         FeedItemServiceFilter serviceFilter = (FeedItemServiceFilter) this.parseBaseFilter(filterBody, filter);
 
         serviceFilter.setUrl(filterBody.getUrl());
-        if (filterBody.getTagNames() != null) {
-            serviceFilter.setTagNames(Arrays.asList(filterBody.getTagNames()));
+        if (filterBody.getTags() != null) {
+            serviceFilter.setTagNames(Arrays.asList(filterBody.getTags()));
         }
         serviceFilter.setChecksum(filterBody.getChecksum());
         serviceFilter.setApproved(filterBody.getApproved());
