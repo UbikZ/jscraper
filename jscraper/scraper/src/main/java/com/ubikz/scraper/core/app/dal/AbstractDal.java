@@ -101,7 +101,6 @@ abstract public class AbstractDal {
         return values;
     }
 
-
     /**
      * @param requestList
      * @return

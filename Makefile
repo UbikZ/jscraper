@@ -22,7 +22,7 @@ pull:
 
 clean-docker:
 	@for id in $(containerIds); do docker rm -f $$id; done
-	@for id in $(delImageIds); do docker rmi $$id; done
+	@for id in $(delImageIds); do docker rmi -f $$id; done
 
 clean-db:
 	@rm -rf $(volDir)/pgsql
