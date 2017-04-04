@@ -132,13 +132,13 @@ public class Insert extends Edit {
         List<String> conflictList = (List<String>) this.parts.get(KEY_ON_CONFLICT);
         if (conflictList != null) {
             this.sql.add(SQL_ON_CONFLICT);
-            this.sql.add(this.buildListToString(conflictList));
+            this.sql.add(this.buildErrorToString(conflictList));
         }
 
         List<String> constraintList = (List<String>) this.parts.get(KEY_ON_CONSTRAINT);
         if (constraintList != null && constraintList.size() > 0) {
             this.sql.add(SQL_ON_CONSTRAINT);
-            this.sql.add(this.buildListToString(constraintList));
+            this.sql.add(this.buildErrorToString(constraintList));
         }
 
         String onDo = (String) this.parts.get(KEY_DO);
@@ -155,6 +155,16 @@ public class Insert extends Edit {
     }
 
     private String buildListToString(List<String> elementList) {
+        String result = "";
+
+        if (elementList != null && elementList.size() > 0) {
+            result = "(" + elementList.stream().map(el -> "'" + el + "'").collect(Collectors.joining(",")) + ")";
+        }
+
+        return result;
+    }
+
+    private String buildErrorToString(List<String> elementList) {
         String result = "";
 
         if (elementList != null && elementList.size() > 0) {
