@@ -163,7 +163,6 @@ public class FeedItemService extends AbstractService {
                             entityRequest.getUrl().getBytes("UTF-8")
                     ));
                     request.add(entityRequest);
-                    this.logger.info(" > element " + imageUrl);
                 }
             }
         }
