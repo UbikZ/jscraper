@@ -124,6 +124,7 @@ public class FeedItemService extends AbstractService {
             fiRequest.setTagIds(
                     fiRequest.getTagNames()
                             .stream()
+                            .filter(name -> tagList.get(name) != null)
                             .map(name -> tagList.get(name).getId())
                             .collect(Collectors.toList())
             );
