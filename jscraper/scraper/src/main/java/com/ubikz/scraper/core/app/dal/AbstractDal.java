@@ -217,7 +217,7 @@ abstract public class AbstractDal {
         request.build();
 
         this.logger.debug("# Insert Multiple SQL > " + request.getSQL());
-//        this.logger.debug("# Insert Multiple Params > " + request.getParameters());
+        this.logger.debug("# Insert Multiple Params > " + request.getParameters());
 
         return this.dbWrapper.jdbcTemplate.queryForList(request.getSQL(), request.getParameters(), Object.class);
     }
