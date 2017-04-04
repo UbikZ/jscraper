@@ -158,7 +158,7 @@ public class Insert extends Edit {
         String result = "";
 
         if (elementList != null && elementList.size() > 0) {
-            result = "(" + elementList.stream().map(el -> "'" + el + "'").collect(Collectors.joining(",")) + ")";
+            result = elementList.stream().collect(Collectors.joining(","));
         }
 
         return result;
