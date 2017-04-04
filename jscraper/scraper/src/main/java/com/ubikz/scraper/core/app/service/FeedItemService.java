@@ -13,6 +13,8 @@ import com.ubikz.scraper.core.app.service.filter.FeedItemServiceFilter;
 import com.ubikz.scraper.core.app.service.request.AbstractServiceRequest;
 import com.ubikz.scraper.core.app.service.request.FeedItemServiceRequest;
 import com.ubikz.scraper.core.app.service.request.FeedListServiceRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,10 +29,13 @@ import java.util.stream.Collectors;
 
 @Component
 public class FeedItemService extends AbstractService {
+    private final String urlRegex =
+            "^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\\\]@!\\$&''\\(\\)\\*\\+,;=.]+$";
     private FeedEntity feedEntity;
     private TagEntity tagEntity;
     private FeedProhibitedEntity feedProhibitedEntity;
     private TagProhibitedEntity tagProhibitedEntity;
+    private Logger logger = LoggerFactory.getLogger(FeedItemService.class);
 
     @Autowired
     public FeedItemService(
@@ -142,17 +147,24 @@ public class FeedItemService extends AbstractService {
     ) throws UnsupportedEncodingException {
         List<FeedItemEntityRequest> request = new ArrayList<>();
 
-        for (FeedArticleDto articleDto : articleList) {
-            List<String> pictureList = articleDto.getPictureList();
+        for (FeedArticleDto article : articleList) {
+            List<String> pictureList = article.getPictureList();
 
             if (pictureList != null && pictureList.size() > 0) {
-                FeedItemEntityRequest entityRequest = new FeedItemEntityRequest();
-                entityRequest.setFeedId(feed.getId());
-                entityRequest.setLabel(articleDto.getLabel());
-                entityRequest.setUrl(articleDto.getPictureList().get(0));
-                entityRequest.setTagNames(articleDto.getTagList());
-                entityRequest.setChecksum(DigestUtils.md5DigestAsHex(entityRequest.getUrl().getBytes("UTF-8")));
-                request.add(entityRequest);
+                String imageUrl = article.getPictureList().get(0);
+
+                if (imageUrl != null && imageUrl.matches(urlRegex)) {
+                    FeedItemEntityRequest entityRequest = new FeedItemEntityRequest();
+                    entityRequest.setFeedId(feed.getId());
+                    entityRequest.setLabel(article.getLabel());
+                    entityRequest.setUrl(imageUrl);
+                    entityRequest.setTagNames(article.getTagList());
+                    entityRequest.setChecksum(DigestUtils.md5DigestAsHex(
+                            entityRequest.getUrl().getBytes("UTF-8")
+                    ));
+                    request.add(entityRequest);
+                    this.logger.info(" > element " + imageUrl);
+                }
             }
         }
 

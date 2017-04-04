@@ -34,7 +34,6 @@ public class FeedItemDal extends AbstractDal {
                 .insert(this.tableName)
                 .values(this.parseRequestList(requestList, true))
                 .onConflict()
-                .onConstraint("feedItem_url_cc")
                 .onDo("NOTHING")
                 .returning("id");
 
