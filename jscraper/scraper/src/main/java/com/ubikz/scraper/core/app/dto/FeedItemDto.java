@@ -1,5 +1,7 @@
 package com.ubikz.scraper.core.app.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 public class FeedItemDto extends AbstractDto {
@@ -13,6 +15,12 @@ public class FeedItemDto extends AbstractDto {
     private Boolean isReposted;
     private Boolean isSent;
 
+    @JsonIgnore
+    @Override
+    public String getLabel() {
+        return super.getLabel();
+    }
+
     public String getComment() {
         return comment;
     }
@@ -21,6 +29,7 @@ public class FeedItemDto extends AbstractDto {
         this.comment = comment;
     }
 
+    @JsonIgnore
     public FeedDto getFeed() {
         return feed;
     }
@@ -45,6 +54,7 @@ public class FeedItemDto extends AbstractDto {
         this.checksum = checksum;
     }
 
+    @JsonIgnore
     public List<TagDto> getTags() {
         return tags;
     }
