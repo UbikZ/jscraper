@@ -5,6 +5,8 @@ jscraper:
   ports:
       - "3000:3000"
       - "5005:5005"
+  volumes_from:
+      - jscraper-ui
   volumes:
       - ./docker/scraper/log:/var/log
       - ./docker/scraper/gradle:/jscraper/cache
@@ -17,3 +19,7 @@ pgsql:
   volumes:
     - ./docker/pgsql/data:/var/lib/postgresql/data
   env_file: .env
+jscraper-ui:
+  build: jscraper-ui
+  volumes:
+    - /jscraper/scraper/src/main/resources/static
