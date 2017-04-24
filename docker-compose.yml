@@ -13,11 +13,12 @@ jscraper:
       - ./docker/scraper/nginx:/nginx
   env_file: .env
 pgsql:
-  image: postgres:9.6.1-alpine
+  image: postgres:9.6.2-alpine
   ports:
     - "5432:5432"
   volumes:
     - ./docker/pgsql/data:/var/lib/postgresql/data
+    - ./pgsql/initdb.d:/docker-entrypoint-initdb.d:ro
   env_file: .env
 jscraper-ui:
   build: jscraper-ui

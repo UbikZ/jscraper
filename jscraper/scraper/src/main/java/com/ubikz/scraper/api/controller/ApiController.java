@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api")
-public class AbstractController {
+abstract public class ApiController {
     /**
      * @param message
      * @return

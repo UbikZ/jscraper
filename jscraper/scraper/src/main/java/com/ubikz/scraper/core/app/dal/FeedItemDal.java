@@ -12,6 +12,7 @@ import com.ubikz.scraper.core.provider.db.qb.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class FeedItemDal extends AbstractDal {

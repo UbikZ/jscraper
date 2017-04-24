@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class FeedTypeController extends AbstractController {
+public class FeedTypeController extends ApiController {
     private final String uriPath = "/feed-type";
     private FeedTypeContext feedTypeContext;
 

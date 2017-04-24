@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class TagController extends AbstractController {
+public class TagController extends ApiController {
     private final String uriPath = "/tag";
     private final String uriProhibited = "/prohibited";
     private TagContext tagContext;
