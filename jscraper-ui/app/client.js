@@ -1,15 +1,14 @@
 /*global require, process*/
 import React from 'react';
 import {render} from 'react-dom';
-import {BrowserRouter as Router} from 'react-router-dom';
+import {BrowserRouter} from 'react-router-dom';
 import App from './containers/App';
-
 import './styles';
 
 const markup = (
-  <Router>
+  <BrowserRouter>
     <App/>
-  </Router>
+  </BrowserRouter>
 );
 
 render(markup, document.getElementById('app'));

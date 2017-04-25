@@ -1,19 +1,20 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
-import NavBar from './NavBar';
 
-export default class App extends Component {
+import NavBar from './NavBar';
+import NavLink from './NavLink';
+
+export default class Header extends Component {
+  shouldComponentUpdate() {
+    return false;
+  }
+
   render() {
     return (
-      <section className="header">
-          <NavBar>
-            <div className="container">
-              <ul>
-                <li><Link to="/">Home</Link></li>
-                <li><Link to="/test">Test</Link></li>
-              </ul>
-            </div>
-          </NavBar>
+      <section className='header'>
+        <NavBar>
+          <NavLink to='/' text='Home'/>
+          <NavLink to='/feed-items' text='Feed Items'/>
+        </NavBar>
       </section>
     );
   }

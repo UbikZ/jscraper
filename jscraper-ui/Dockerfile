@@ -12,7 +12,6 @@ RUN mkdir -p /src && cp -a /tmp/node_modules /src/
 
 WORKDIR /src
 ADD . /src
-RUN npm run prebuild && npm run dev
 
 COPY scripts/entrypoint.sh /entrypoint.sh
 

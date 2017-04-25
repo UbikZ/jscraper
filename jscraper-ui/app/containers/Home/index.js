@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Main from '../../components/Main';
 
 export default class Home extends Component {
   constructor(props) {
@@ -7,9 +8,9 @@ export default class Home extends Component {
 
   render() {
     return (
-      <div className="container">
-        This is home
-      </div>
+      <Main title={'Home Stuff'}>
+        Test Home text
+      </Main>
     );
   }
 }

@@ -22,8 +22,10 @@
     "react-dom": "15.5.0",
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",
-    "proptypes": "^0.14.4",
+    "whatwg-fetch": "^2.0.3",
+    "prop-types": "^15.5.8",
     "promise-polyfill": "^6.0.2",
+    "json-loader": "^0.5.4",
     "styled-components": "^2.0.0-15"
   },
   "devDependencies": {

@@ -23,4 +23,4 @@ pgsql:
 jscraper-ui:
   build: jscraper-ui
   volumes:
-    - /jscraper/scraper/src/main/resources/static
+    - ./docker/scraper-ui:/jscraper/scraper/src/main/resources/static

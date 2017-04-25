@@ -20,12 +20,15 @@ nginx-start:
 pull:
 	@docker pull $(imageId)
 
-clean-docker:
+clean-docker: clean-ui
 	@for id in $(containerIds); do docker rm -f $$id; done
 	@for id in $(delImageIds); do docker rmi -f $$id; done
 
 clean-db:
 	@rm -rf $(volDir)/pgsql
+
+clean-ui:
+	@rm -rf $(volDir)/scraper-ui
 
 clean-cache:
 	@rm -rf $(volDir)/gradle
