@@ -2,7 +2,6 @@ import React from 'react';
 import {StaticRouter} from 'react-router';
 import {renderToString} from 'react-dom/server';
 import App from './containers/App';
-import './styles';
 
 window.render = (template, model) => {
   const context = {};

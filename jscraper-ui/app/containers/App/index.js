@@ -5,6 +5,7 @@ import {Route} from 'react-router-dom';
 import Header from '../../components/Header';
 import Home from '../../containers/Home';
 import FeedItems from '../../containers/FeedItems';
+import '../../styles';
 
 const Container = styled.div`
   padding: 6rem 0;

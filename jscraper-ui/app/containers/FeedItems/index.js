@@ -12,7 +12,7 @@ export default class FeedItems extends Component {
 
   static propTypes = {
     feedItems: PropTypes.array,
-    error: PropTypes.string
+    error: PropTypes.object
   }
 
   constructor(props) {
