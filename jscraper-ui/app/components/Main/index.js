@@ -20,7 +20,7 @@ export default class Main extends Component {
     return (
       <div>
         <H6>{title}</H6>
-        <P>{children}</P>
+        <div>{children}</div>
       </div>
     );
   }
