@@ -69,6 +69,16 @@ export default {
       }
     ]
   },
+  externals: [
+    {
+      'isomorphic-fetch': {
+        root: 'isomorphic-fetch',
+        commonjs2: 'isomorphic-fetch',
+        commonjs: 'isomorphic-fetch',
+        amd: 'isomorphic-fetch'
+      }
+    }
+  ],
   postcss: [autoprefixer({browsers: ['last 5 versions']})],
   plugins: ([
     new webpack.NoErrorsPlugin(),

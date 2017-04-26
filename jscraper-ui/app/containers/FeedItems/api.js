@@ -1,4 +1,4 @@
-import 'whatwg-fetch';
+import 'isomorphic-fetch';
 
 export function getFeedItems() {
   return fetch('/api/feed-item?start-date=2017-04-15')
