@@ -4,7 +4,7 @@ const totalColumns = 12;
 const columnWidth = 100 / totalColumns;
 const columnMargin = 4;
 
-const gridColumnWidthValue = (n) => columnWidth * n - (columnWidth / 100 * (totalColumns - n)/totalColumns);
+const gridColumnWidthValue = (n) => columnWidth * n - (columnWidth / 100 * (totalColumns - n) / totalColumns);
 const gridOffsetLengthValue = (n) => gridColumnWidthValue(n) + columnMargin;
 
 export const variables = {

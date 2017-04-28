@@ -5,29 +5,24 @@ import {bindActionCreators} from 'redux';
 
 import {fetchFeedItems} from './action';
 import Main from '../../components/Main';
+import FeedItemList from '../../components/FeedItemList';
 
 class FeedItems extends Component {
   static propTypes = {
     feedItems: PropTypes.array,
     error: PropTypes.object
-  }
+  };
 
   componentDidMount() {
     this.props.fetchFeedItems();
   }
 
   render() {
-    const {feedItems, error} = this.props;
+    const {feedItems, error, fetchFeedItems} = this.props;
 
     return (
       <Main title={'Feed Items Stuff'}>
-        <ul>
-          {
-            feedItems.map((item) => {
-              return (<li key={item.checksum}>{item.url}</li>);
-            })
-          }
-        </ul>
+        <FeedItemList items={feedItems} load={fetchFeedItems}/>
       </Main>
     );
   }
@@ -38,7 +33,9 @@ function mapStateToProps({feedItems, error}) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({fetchFeedItems}, dispatch);
+  return bindActionCreators({
+    fetchFeedItems
+  }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FeedItems);

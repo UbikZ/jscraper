@@ -16,89 +16,13 @@ export const base = `
       float: left;
       box-sizing: border-box;
     }
-    
-    /* For devices larger than 400px */
-    @media (min-width: ${variables.breakpoints.largerThanMobile}) {
-      .container {
-        width: ${variables.grid.container.largerThanMobile};
-        padding: 0;
-      }
-    }
-    
-    /* For devices larger than 550px */
-    @media (min-width: ${variables.breakpoints.largerThanPhablet}) {
-      .container {
-        width: ${variables.grid.container.largerThanPhablet};
-      }
-      .column,
-      .columns {
-        margin-left: ${variables.grid.container.margin};
-      }
-      .column:first-child,
-      .columns:first-child {
-        margin-left: 0;
-      }
-    
-      .one.column,
-      .one.columns          { ${variables.func.gridColumnWidth(1)}  }
-      .two.columns          { ${variables.func.gridColumnWidth(2)}  }
-      .three.columns        { ${variables.func.gridColumnWidth(3)}  }
-      .four.columns         { ${variables.func.gridColumnWidth(4)}  }
-      .five.columns         { ${variables.func.gridColumnWidth(5)}  }
-      .six.columns          { ${variables.func.gridColumnWidth(6)}  }
-      .seven.columns        { ${variables.func.gridColumnWidth(7)}  }
-      .eight.columns        { ${variables.func.gridColumnWidth(8)}  }
-      .nine.columns         { ${variables.func.gridColumnWidth(9)}  }
-      .ten.columns          { ${variables.func.gridColumnWidth(10)} }
-      .eleven.columns       { ${variables.func.gridColumnWidth(11)} }
-      .twelve.columns       { width: 100%; margin-left: 0;  }
-    
-      .one-third.column     { ${variables.func.gridColumnWidth(4)}  }
-      .two-thirds.column    { ${variables.func.gridColumnWidth(8)}  }
-    
-      .one-half.column      { ${variables.func.gridColumnWidth(6)}  }
-    
-    
-      /* Offsets */
-      .offset-by-one.column,
-      .offset-by-one.columns       { ${variables.func.gridOffsetLength(1)}  }
-      .offset-by-two.column,
-      .offset-by-two.columns       { ${variables.func.gridOffsetLength(2)}  }
-      .offset-by-three.column,
-      .offset-by-three.columns     { ${variables.func.gridOffsetLength(3)}  }
-      .offset-by-four.column,
-      .offset-by-four.columns      { ${variables.func.gridOffsetLength(4)}  }
-      .offset-by-five.column,
-      .offset-by-five.columns      { ${variables.func.gridOffsetLength(5)}  }
-      .offset-by-six.column,
-      .offset-by-six.columns       { ${variables.func.gridOffsetLength(6)}  }
-      .offset-by-seven.column,
-      .offset-by-seven.columns     { ${variables.func.gridOffsetLength(7)}  }
-      .offset-by-eight.column,
-      .offset-by-eight.columns     { ${variables.func.gridOffsetLength(8)}  }
-      .offset-by-nine.column,
-      .offset-by-nine.columns      { ${variables.func.gridOffsetLength(9)}  }
-      .offset-by-ten.column,
-      .offset-by-ten.columns       { ${variables.func.gridOffsetLength(10)} }
-      .offset-by-eleven.column,
-      .offset-by-eleven.columns    { ${variables.func.gridOffsetLength(11)} }
-    
-    
-      .offset-by-one-third.column, 
-      .offset-by-one-third.columns  { ${variables.func.gridOffsetLength(4)}  }
-      .offset-by-two-thirds.column, 
-      .offset-by-two-thirds.columns { ${variables.func.gridOffsetLength(8)}  }
-    
-      .offset-by-one-half.column,   
-      .offset-by-one-half.column   { ${variables.func.gridOffsetLength(6)}  }     
-    }
        
     html {
       font-size: 62.5%;
     }
     
     body {
-      font-size: 1.5em; /* currently ems cause chrome bug misinterpreting rems on body element */
+      font-size: 1.5em;
       line-height: 1.6;
       font-weight: 400;
       font-family: ${variables.typo.font};
@@ -117,22 +41,10 @@ export const base = `
     h4 { font-size: 2.4rem; line-height: 1.35; letter-spacing: -.08rem; }
     h5 { font-size: 1.8rem; line-height: 1.5;  letter-spacing: -.05rem; }
     h6 { font-size: 1.5rem; line-height: 1.6;  letter-spacing: 0;       }
-
-    @media (min-width: ${variables.breakpoints.largerThanPhablet}) {
-      h1 { font-size: 5.0rem; }
-      h2 { font-size: 4.2rem; }
-      h3 { font-size: 3.6rem; }
-      h4 { font-size: 3.0rem; }
-      h5 { font-size: 2.4rem; }
-      h6 { font-size: 1.5rem; }
-    }
     
     p {
       margin-top: 0;
     }
-    
-    /* Links
-    –––––––––––––––––––––––––––––––––––––––––––––––––– */
     
     a {
       color: ${variables.colors.link};
@@ -140,9 +52,6 @@ export const base = `
         color: darken(${variables.colors.link}, 5%);
       }
     }
-    
-    /* Buttons
-    –––––––––––––––––––––––––––––––––––––––––––––––––– */
     
     .button,
     button {
@@ -289,9 +198,6 @@ export const base = `
       }
     }
     
-    /* Forms
-    –––––––––––––––––––––––––––––––––––––––––––––––––– */
-    
     textarea,
     select {
       height: 38px;
@@ -371,9 +277,6 @@ export const base = `
       font-weight: normal;
     }
     
-    /* Lists
-    –––––––––––––––––––––––––––––––––––––––––––––––––– */
-    
     ul {
       list-style: circle inside;
     }
@@ -404,9 +307,6 @@ export const base = `
       margin-bottom: 1rem;
     }
     
-    /* Code
-    –––––––––––––––––––––––––––––––––––––––––––––––––– */
-    
     code {
       padding: .2rem .5rem;
       margin: 0 .2rem;
@@ -422,9 +322,6 @@ export const base = `
       padding: 1rem 1.5rem;
       white-space: pre;
     }
-    
-    /* Tables
-    –––––––––––––––––––––––––––––––––––––––––––––––––– */
     
     th,
     td {
@@ -442,9 +339,6 @@ export const base = `
     td:last-child {
       padding-right: 0;
     }
-    
-    /* Spacing
-    –––––––––––––––––––––––––––––––––––––––––––––––––– */
     
     button,
     .button {
@@ -470,9 +364,6 @@ export const base = `
       margin-bottom: 2.5rem;
     }
     
-    /* Utilities
-    –––––––––––––––––––––––––––––––––––––––––––––––––– */
-    
     .u-full-width {
       width: 100%;
       box-sizing: border-box;
@@ -491,9 +382,6 @@ export const base = `
       float: left;
     }
     
-    /* Misc
-    –––––––––––––––––––––––––––––––––––––––––––––––––– */
-    
     hr {
       margin-top: 3rem;
       margin-bottom: 3.5rem;
@@ -501,41 +389,11 @@ export const base = `
       border-top: 1px solid ${variables.colors.lightGrey};
     }
     
-    /* Clearing
-    –––––––––––––––––––––––––––––––––––––––––––––––––– */
-    
-    /* Self Clearing Goodness */
-    
     .container:after,
     .row:after,
     .u-cf {
       content: "";
       display: table;
       clear: both;
-    }
-    
-    /* Media Queries
-    –––––––––––––––––––––––––––––––––––––––––––––––––– */
-    /*
-    Note: The best way to structure the use of media queries is to create the queries
-    near the relevant code. For example, if you wanted to change the styles for buttons
-    on small devices, paste the mobile query code up in the buttons section and style it
-    there.
-    */
-    
-    
-    /* Larger than mobile */
-    @media (min-width: ${variables.breakpoints.largerThanMobile}) {}
-    
-    /* Larger than phablet (also point when grid becomes active) */
-    @media (min-width: ${variables.breakpoints.largerThanPhablet}) {}
-    
-    /* Larger than tablet */
-    @media (min-width: ${variables.breakpoints.largerThanTablet}) {}
-    
-    /* Larger than desktop */
-    @media (min-width: ${variables.breakpoints.largerThanDesktop}) {}
-    
-    /* Larger than Desktop HD */
-    @media (min-width: ${variables.breakpoints.largerThanDesktophd}) {}
+    }   
 `;

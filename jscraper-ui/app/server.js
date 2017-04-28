@@ -1,11 +1,11 @@
 import React from 'react';
 import {StaticRouter} from 'react-router';
 import {renderToString} from 'react-dom/server';
-import {createStore, applyMiddleware} from 'redux';
+import {applyMiddleware, createStore} from 'redux';
 import {Provider} from 'react-redux';
 import serialize from 'serialize-javascript';
 import thunkMiddleware from 'redux-thunk';
-import { createLogger } from 'redux-logger';
+import {createLogger} from 'redux-logger';
 
 import App from './containers/App';
 import reducer from './reducers';

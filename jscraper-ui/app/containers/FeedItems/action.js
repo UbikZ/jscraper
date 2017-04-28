@@ -1,4 +1,5 @@
 import 'isomorphic-fetch';
+import queryString from 'query-string';
 
 export const RECEIVE_ITEMS = 'RECEIVE_ITEMS';
 export const RECEIVE_ITEMS_ERROR = 'RECEIVE_ITEMS_ERROR';
@@ -11,9 +12,9 @@ export function receiveFeedItemsError(error) {
   return {type: RECEIVE_ITEMS_ERROR, error};
 }
 
-export function fetchFeedItems() {
+export function fetchFeedItems(qs = {}) {
   return (dispatch) => {
-    return fetch('/api/feed-item?start-date=2017-04-26')
+    return fetch(`/api/feed-item?${queryString.stringify(qs)}`)
       .then(response => response.json())
       .then(json => {
         if (!json.success) {

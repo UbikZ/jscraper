@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 import H6 from './H6';
-import P from './P';
 
 export default class Main extends Component {
   static propTypes = {

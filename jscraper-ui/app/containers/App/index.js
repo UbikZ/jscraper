@@ -18,11 +18,11 @@ const Container = styled.div`
 export default class App extends Component {
   render() {
     return (
-      <section className="container">
+      <section className='container'>
         <Header/>
         <Container>
-          <Route path="/" exact component={Home} />
-          <Route path="/feed-items" exact component={FeedItems} />
+          <Route path='/' exact component={Home}/>
+          <Route path='/feed-items' exact component={FeedItems}/>
         </Container>
       </section>
     );

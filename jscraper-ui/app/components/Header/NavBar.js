@@ -35,7 +35,7 @@ export default class NavBar extends Component {
   render() {
     return (
       <Nav>
-        <div className="container">
+        <div className='container'>
           <NavUl>
             {this.props.children}
           </NavUl>

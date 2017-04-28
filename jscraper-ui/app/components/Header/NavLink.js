@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -19,7 +19,6 @@ const NavA = styled(Link)`
     line-height: 6.5rem;
     color: #222;
 `;
-
 
 export default class NavLink extends Component {
   static propTypes = {
