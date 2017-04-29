@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-import H6 from './H6';
-
 export default class Main extends Component {
   static propTypes = {
     title: PropTypes.string,
@@ -17,10 +15,16 @@ export default class Main extends Component {
     const {title, children} = this.props;
 
     return (
-      <div>
-        <H6>{title}</H6>
-        <div>{children}</div>
-      </div>
+      <section className="container grid-960">
+        <section className="columns">
+          <div className="docs-content column col-12">
+            <section className="container">
+              <header className="text-center"><h3>{title}</h3></header>
+              <section className="notes">{children}</section>
+            </section>
+          </div>
+        </section>
+      </section>
     );
   }
 }

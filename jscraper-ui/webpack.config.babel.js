@@ -20,16 +20,12 @@ export default {
     filename: '[name].js'
   },
   resolve: {
-    extensions: ['', '.js', '.json', '.less'],
+    extensions: ['', '.js', '.json', '.less', '.css'],
     modulesDirectories: [
       path.resolve(__dirname, 'app'),
       path.resolve(__dirname, 'node_modules'),
       'node_modules'
-    ],
-    alias: {
-      components: path.resolve(__dirname, 'app/components'),
-      style: path.resolve(__dirname, 'app/style')
-    }
+    ]
   },
   module: {
     preLoaders: [
@@ -47,10 +43,8 @@ export default {
       },
       {
         test: /\.(less|css)$/,
-        include: path.resolve(__dirname, 'app'),
-        loader: ExtractTextPlugin.extract('style?singleton', [
-          'isomorphic-style-loader',
-          `css-loader?modules&importLoaders=1&sourceMap=${CSS_MAPS}`,
+        loader: ExtractTextPlugin.extract('style-loader', [
+          `css-loader?sourceMap=${CSS_MAPS}`,
           'postcss-loader',
           `less-loader?sourceMap=${CSS_MAPS}`
         ].join('!'))
@@ -82,10 +76,7 @@ export default {
   postcss: [autoprefixer({browsers: ['last 5 versions']})],
   plugins: ([
     new webpack.NoErrorsPlugin(),
-    new ExtractTextPlugin('[name].css', {
-      allChunks: true,
-      disable: ENV !== 'production'
-    }),
+    new ExtractTextPlugin('/[name].css'),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(ENV)
     }),

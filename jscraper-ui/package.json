@@ -5,7 +5,7 @@
   "author": "Gabriel MALET <gabriel.malet@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "analyse": "webpack --display-error-details",
+    "analyze": "webpack --display-error-details",
     "clean": "rm -rf ./public && mkdir public",
     "lint": "eslint ./app",
     "predev": "npm run clean && npm run lint",
@@ -23,6 +23,7 @@
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",
     "react-redux": "^5.0.4",
+    "react-datepicker": "^0.46.0",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
     "redux-logger": "^3.0.1",
@@ -30,8 +31,10 @@
     "isomorphic-fetch": "^2.2.1",
     "prop-types": "^15.5.8",
     "promise-polyfill": "^6.0.2",
-    "json-loader": "^0.5.4",
-    "styled-components": "^2.0.0-15"
+    "moment": "^2.18.1",
+    "normalize.css": "^6.0.0",
+    "spectre.css": "^0.2.14",
+    "json-loader": "^0.5.4"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.7",

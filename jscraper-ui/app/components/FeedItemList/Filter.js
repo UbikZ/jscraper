@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import DatePicker from 'react-datepicker';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default class Filter extends Component {
   static propTypes = {
@@ -8,16 +11,21 @@ export default class Filter extends Component {
 
   constructor(props) {
     super(props);
-    this.inputs = {};
+    this.state = {};
   }
 
-  static shouldComponentUpdate() {
+  shouldComponentUpdate() {
     return false;
   }
 
-  handleSubmit = (event) => {
-    event.preventDefault();
-    this.props.load(this.inputs);
+  mutateState = (name, value) => {
+    this.setState({[name]: value}, () => {
+      if (!value) {
+        delete this.state[name];
+      }
+
+      this.props.load(this.state);
+    });
   };
 
   handleInputChange = (event) => {
@@ -25,19 +33,37 @@ export default class Filter extends Component {
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
 
-    if (value) {
-      this.inputs = {[name]: value};
-    } else {
-      delete this.inputs[name];
-    }
+    this.mutateState(name, value);
   };
+
+  handleDateChange = (date, type) => {
+    const formatedValue = date.format('YYYY-MM-DD');
+    this.mutateState(type, formatedValue);
+  };
+
+  handleStartDateChange = (date) => this.handleDateChange(date, 'startDate');
+  handleEndDateChange = (date) => this.handleDateChange(date, 'endDate');
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <input name="startDate" type="text" onChange={this.handleInputChange} />
-        <input type="submit" value="Submit" />
-      </form>
+      <div>
+        <DatePicker
+          selectsStart
+          selected={this.state.startDate}
+          startDate={this.state.startDate}
+          endDate={this.state.endDate}
+          onChange={this.handleStartDateChange}
+          isClearable={true}
+        />
+        <DatePicker
+          selectsEnd
+          selected={this.state.startDate}
+          startDate={this.state.startDate}
+          endDate={this.state.endDate}
+          onChange={this.handleEndDateChange}
+          isClearable={true}
+        />
+      </div>
     );
   }
 }

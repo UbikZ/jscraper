@@ -14,11 +14,26 @@ export default class List extends Component {
     const {items} = this.props;
     return (
       <div>
-        <p>Size : {items.length}</p>
         <ul>
-          {items.map((item) => {
-            return <li key={item.checksum}><a href={item.url}>{item.url}</a></li>;
-          })}
+          <table className="table table-striped table-hover">
+            <thead>
+            <tr>
+              <th>Id</th>
+              <th>Url</th>
+              <th>Size : {items.length}</th>
+            </tr>
+            </thead>
+            <tbody>
+              {items.map((item) => {
+                return (
+                  <tr key={item.checksum}>
+                    <td>{item.id}</td>
+                    <td colSpan="2"><a href={item.url} target="_blank">{item.url}</a></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </ul>
       </div>
     );
