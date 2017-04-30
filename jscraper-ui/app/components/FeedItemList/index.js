@@ -10,10 +10,6 @@ export default class FeedItemList extends Component {
     load: PropTypes.func
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {items, load} = this.props;
 

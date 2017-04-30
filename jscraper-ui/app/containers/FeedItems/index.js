@@ -13,16 +13,26 @@ class FeedItems extends Component {
     error: PropTypes.object
   };
 
-  componentDidMount() {
-    this.props.fetchFeedItems();
+  constructor(props) {
+    super(props);
+    this.filter = {};
   }
 
+  componentDidMount() {
+    this.loadList();
+  }
+
+  loadList = (filter = {}) => {
+    this.filter = filter;
+    this.props.fetchFeedItems(this.filter);
+  };
+
   render() {
-    const {feedItems, error, fetchFeedItems} = this.props;
+    const {feedItems} = this.props;
 
     return (
       <Main title={'Feed Items Stuff'}>
-        <FeedItemList items={feedItems} load={fetchFeedItems}/>
+        <FeedItemList items={feedItems} load={this.loadList}/>
       </Main>
     );
   }

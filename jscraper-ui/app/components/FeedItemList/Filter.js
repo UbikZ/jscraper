@@ -14,10 +14,6 @@ export default class Filter extends Component {
     this.state = {};
   }
 
-  shouldComponentUpdate() {
-    return false;
-  }
-
   mutateState = (name, value) => {
     this.setState({[name]: value}, () => {
       if (!value) {
@@ -37,8 +33,7 @@ export default class Filter extends Component {
   };
 
   handleDateChange = (date, type) => {
-    const formatedValue = date.format('YYYY-MM-DD');
-    this.mutateState(type, formatedValue);
+    this.mutateState(type, date);
   };
 
   handleStartDateChange = (date) => this.handleDateChange(date, 'startDate');
@@ -47,22 +42,29 @@ export default class Filter extends Component {
   render() {
     return (
       <div>
-        <DatePicker
-          selectsStart
-          selected={this.state.startDate}
-          startDate={this.state.startDate}
-          endDate={this.state.endDate}
-          onChange={this.handleStartDateChange}
-          isClearable={true}
-        />
-        <DatePicker
-          selectsEnd
-          selected={this.state.startDate}
-          startDate={this.state.startDate}
-          endDate={this.state.endDate}
-          onChange={this.handleEndDateChange}
-          isClearable={true}
-        />
+        <div className="form-group">
+          <label className="form-label">Start Date</label>
+          <DatePicker
+            selectsStart
+            selected={this.state.startDate}
+            startDate={this.state.startDate}
+            endDate={this.state.endDate}
+            onChange={this.handleStartDateChange}
+            isClearable={true}
+          />
+        </div>
+        <div className="form-group">
+          <label className="form-label">End Date</label>
+          <DatePicker
+            selectsEnd
+            selected={this.state.endDate}
+            startDate={this.state.startDate}
+            endDate={this.state.endDate}
+            onChange={this.handleEndDateChange}
+            isClearable={true}
+          />
+        </div>
+        <div className="divider-vert"></div>
       </div>
     );
   }

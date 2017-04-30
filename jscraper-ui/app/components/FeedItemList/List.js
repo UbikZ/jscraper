@@ -6,10 +6,6 @@ export default class List extends Component {
     items: PropTypes.array
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {items} = this.props;
     return (
