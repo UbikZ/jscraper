@@ -163,6 +163,8 @@ abstract public class AbstractEntity {
         dFilter.setEnabled(eFilter.getEnabled());
         dFilter.setStartDate(eFilter.getStartDate());
         dFilter.setEndDate(eFilter.getEndDate());
+        dFilter.setLimit(eFilter.getLimit());
+        dFilter.setOffset(eFilter.getOffset());
 
         return dFilter;
     }

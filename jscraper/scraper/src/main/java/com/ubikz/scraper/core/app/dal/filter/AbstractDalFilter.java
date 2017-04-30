@@ -9,6 +9,8 @@ abstract public class AbstractDalFilter {
     private String label;
     private Date startDate;
     private Date endDate;
+    private Integer limit;
+    private Integer offset;
     private Boolean isEnabled;
 
     public List<Integer> getIdList() {
@@ -59,6 +61,22 @@ abstract public class AbstractDalFilter {
         isEnabled = enabled;
     }
 
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
+
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+
     @Override
     public String toString() {
         return "AbstractDalFilter{" +
@@ -67,6 +85,8 @@ abstract public class AbstractDalFilter {
                 ", label='" + label + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
+                ", limit=" + limit +
+                ", offset=" + offset +
                 ", isEnabled=" + isEnabled +
                 '}';
     }

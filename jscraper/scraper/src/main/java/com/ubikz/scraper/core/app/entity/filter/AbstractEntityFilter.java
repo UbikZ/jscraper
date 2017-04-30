@@ -9,6 +9,8 @@ abstract public class AbstractEntityFilter {
     private String label;
     private Date startDate;
     private Date endDate;
+    private Integer offset;
+    private Integer limit;
     private Boolean isEnabled;
     private boolean isLazy = false;
 
@@ -68,6 +70,21 @@ abstract public class AbstractEntityFilter {
         isLazy = lazy;
     }
 
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
 
     @Override
     public String toString() {
@@ -77,6 +94,8 @@ abstract public class AbstractEntityFilter {
                 ", label='" + label + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
+                ", offset=" + offset +
+                ", limit=" + limit +
                 ", isEnabled=" + isEnabled +
                 ", isLazy=" + isLazy +
                 '}';

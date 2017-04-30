@@ -10,6 +10,8 @@ abstract public class AbstractFilterBody {
     private String label = null;
     private String startDate = null;
     private String endDate = null;
+    private Integer limit = null;
+    private Integer offset = null;
     private boolean isLazy = true;
 
     public Integer getId() {
@@ -65,14 +67,32 @@ abstract public class AbstractFilterBody {
         isLazy = lazy;
     }
 
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
+
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+
     @Override
     public String toString() {
         return "AbstractFilterBody{" +
                 "id=" + id +
                 ", isEnabled=" + isEnabled +
                 ", label='" + label + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", limit=" + limit +
+                ", offset=" + offset +
                 ", isLazy=" + isLazy +
                 '}';
     }

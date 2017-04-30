@@ -91,6 +91,7 @@ abstract public class AbstractService {
         eFilter.setEnabled(sFilter.getEnabled());
         eFilter.setLazy(sFilter.isLazy());
         eFilter.setStartDate(sFilter.getStartDate());
-        eFilter.setEndDate(sFilter.getEndDate());
+        eFilter.setOffset(sFilter.getOffset());
+        eFilter.setLimit(sFilter.getLimit());
     }
 }

@@ -7,6 +7,8 @@ abstract public class AbstractServiceFilter {
     private String label;
     private Date startDate;
     private Date endDate;
+    private Integer limit = null;
+    private Integer offset = null;
     private Boolean isEnabled;
     private boolean isLazy = false;
 
@@ -58,6 +60,22 @@ abstract public class AbstractServiceFilter {
         isLazy = lazy;
     }
 
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
+
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+
     @Override
     public String toString() {
         return "AbstractServiceFilter{" +
@@ -65,6 +83,8 @@ abstract public class AbstractServiceFilter {
                 ", label='" + label + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
+                ", limit=" + limit +
+                ", offset=" + offset +
                 ", isEnabled=" + isEnabled +
                 ", isLazy=" + isLazy +
                 '}';

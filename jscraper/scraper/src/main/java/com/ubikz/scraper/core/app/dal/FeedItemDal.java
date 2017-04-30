@@ -12,7 +12,6 @@ import com.ubikz.scraper.core.provider.db.qb.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 public class FeedItemDal extends AbstractDal {
@@ -171,6 +170,14 @@ public class FeedItemDal extends AbstractDal {
         } else {
             select.addColumn("string_agg(DISTINCT fit.tag_id::character varying, ',') AS tags")
                     .joinLeft("feed_item_tag", "fit", "fi.id = fit.feed_item_id");
+        }
+
+        if (feedItemDalFilter.getLimit() != null) {
+            select.limit(feedItemDalFilter.getLimit());
+        }
+
+        if (feedItemDalFilter.getOffset() != null) {
+            select.offset(feedItemDalFilter.getOffset());
         }
 
         if (feedItemDalFilter.getUrl() != null) {

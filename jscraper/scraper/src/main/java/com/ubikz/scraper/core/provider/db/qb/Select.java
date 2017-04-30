@@ -3,18 +3,21 @@ package com.ubikz.scraper.core.provider.db.qb;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("unchecked")
 public class Select extends AbstractQuery {
     protected final String SQL_AS = "AS";
+
     // Key use within maps
     private final String KEY_DISTINCT = "distinct";
     private final String KEY_ORDER = "order";
     private final String KEY_DIRECTION = "direction";
     private final String KEY_GROUP = "group";
     private final String KEY_JOIN = "inner_join";
+    private final String KEY_LIMIT = "limit";
+    private final String KEY_OFFSET = "offset";
+
     // SQL elements
     private final String SQL_WILDCARD = "*";
     private final String SQL_SELECT = "SELECT";
@@ -25,8 +28,8 @@ public class Select extends AbstractQuery {
     private final String SQL_ON = "ON";
     private final String SQL_ASC = "ASC";
     private final String SQL_DESC = "DESC";
-
-    private List<Map<String, String>> joins;
+    private final String SQL_LIMIT = "LIMIT";
+    private final String SQL_OFFSET = "OFFSET";
 
     public Select(String... columns) {
         super();
@@ -199,6 +202,24 @@ public class Select extends AbstractQuery {
         return (Select) super.orWhere(column, op, value, cast);
     }
 
+    /**
+     * @param number
+     * @return
+     */
+    public Select limit(int number) {
+        this.parts.put(KEY_LIMIT, number);
+        return this;
+    }
+
+    /**
+     * @param number
+     * @return
+     */
+    public Select offset(int number) {
+        this.parts.put(KEY_OFFSET, number);
+        return this;
+    }
+
     @Override
     public void build() {
         super.build();
@@ -239,6 +260,18 @@ public class Select extends AbstractQuery {
             this.sql.add(SQL_GROUP_BY);
             this.sql.add("(" + groupBy.stream().collect(Collectors.joining(",")) + ")");
         }
+
+        Integer limit = (Integer) this.parts.get(KEY_LIMIT);
+        if (limit != null) {
+            this.sql.add(SQL_LIMIT);
+            this.sql.add(limit.toString());
+        }
+
+        Integer offset = (Integer) this.parts.get(KEY_OFFSET);
+        if (offset != null) {
+            this.sql.add(SQL_OFFSET);
+            this.sql.add(offset.toString());
+        }
     }
 
     @Override
@@ -252,6 +285,8 @@ public class Select extends AbstractQuery {
         this.parts.put(KEY_ORDER, null);
         this.parts.put(KEY_DIRECTION, null);
         this.parts.put(KEY_GROUP, new ArrayList<>());
+        this.parts.put(KEY_LIMIT, null);
+        this.parts.put(KEY_OFFSET, null);
     }
 
     @Override
