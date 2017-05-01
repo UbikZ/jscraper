@@ -37,6 +37,15 @@ abstract public class AbstractEntity {
     /**
      * @param filter
      * @return
+     * @throws Exception
+     */
+    public int count(AbstractEntityFilter filter) throws Exception {
+        return this.dal.count(this.parseEntityToDalFilter(filter));
+    }
+
+    /**
+     * @param filter
+     * @return
      */
     public Map<Object, AbstractDto> getAllMappedBy(AbstractEntityFilter filter, String attr) throws Exception {
         Map<Object, AbstractDto> result = this.helper.getDtoMapFromDal(

@@ -11,7 +11,10 @@ import com.ubikz.scraper.core.provider.db.qb.QueryBuilder;
 import com.ubikz.scraper.core.provider.db.qb.Select;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class FeedItemDal extends AbstractDal {
@@ -41,27 +44,18 @@ public class FeedItemDal extends AbstractDal {
     }
 
     @Override
-    protected Select getBaseSelect(AbstractDalFilter filter) {
+    protected Select getBaseSelect(AbstractDalFilter filter, boolean isCount) {
         QueryBuilder qb = new QueryBuilder();
         AbstractQuery select = qb
                 .select("fi.*")
                 .from(this.tableName, "fi")
-                .groupBy("fi.id")
                 .aliases(new HashMap<String, String>() {{
                     put("id", "fi.id");
                     put("date", "fi.date");
                 }});
 
-        this.parseFilter(filter, select);
+        this.parseFilter(filter, select, isCount);
         return (Select) select;
-    }
-
-    /**
-     * @param request
-     * @return
-     */
-    public int createTag(FeedItemTagDalRequest request) {
-        return this.createTags(Collections.singletonList(request));
     }
 
     /**
@@ -154,30 +148,34 @@ public class FeedItemDal extends AbstractDal {
      * @return
      */
     @Override
-    protected void parseFilter(AbstractDalFilter filter, AbstractQuery aSelect) {
+    protected void parseFilter(AbstractDalFilter filter, AbstractQuery aSelect, boolean isCount) {
         Select select = (Select) aSelect;
         FeedItemDalFilter feedItemDalFilter = (FeedItemDalFilter) filter;
-        super.parseFilter(feedItemDalFilter, select);
+        super.parseFilter(feedItemDalFilter, select, isCount);
 
-        if (feedItemDalFilter.getTagNames() != null && feedItemDalFilter.getTagNames().size() > 0) {
+        if (!isCount) {
             select.addColumn("string_agg(DISTINCT fit.tag_id::character varying, ',') AS tags")
-                    .join("feed_item_tag", "fit", "fi.id = fit.feed_item_id")
-                    .join("tag", "t", "fit.tag_id = t.id");
+                    .orderBy("fi.id")
+                    .groupBy("fi.id");
 
-            for (String tag : feedItemDalFilter.getTagNames()) {
-                select.orWhere("t.label", "LIKE", "%" + tag + "%");
+            if (feedItemDalFilter.getTagNames() != null && feedItemDalFilter.getTagNames().size() > 0) {
+                select.join("feed_item_tag", "fit", "fi.id = fit.feed_item_id")
+                        .join("tag", "t", "fit.tag_id = t.id");
+
+                for (String tag : feedItemDalFilter.getTagNames()) {
+                    select.orWhere("t.label", "LIKE", "%" + tag + "%");
+                }
+            } else {
+                select.joinLeft("feed_item_tag", "fit", "fi.id = fit.feed_item_id");
             }
-        } else {
-            select.addColumn("string_agg(DISTINCT fit.tag_id::character varying, ',') AS tags")
-                    .joinLeft("feed_item_tag", "fit", "fi.id = fit.feed_item_id");
-        }
 
-        if (feedItemDalFilter.getLimit() != null) {
-            select.limit(feedItemDalFilter.getLimit());
-        }
+            if (feedItemDalFilter.getLimit() != null) {
+                select.limit(feedItemDalFilter.getLimit());
+            }
 
-        if (feedItemDalFilter.getOffset() != null) {
-            select.offset(feedItemDalFilter.getOffset());
+            if (feedItemDalFilter.getOffset() != null) {
+                select.offset(feedItemDalFilter.getOffset());
+            }
         }
 
         if (feedItemDalFilter.getUrl() != null) {

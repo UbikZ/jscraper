@@ -3,6 +3,7 @@ package com.ubikz.scraper.api.controller;
 import com.ubikz.scraper.api.controller.filter.FeedItemFilterBody;
 import com.ubikz.scraper.api.controller.request.FeedItemRequestBody;
 import com.ubikz.scraper.core.app.context.FeedItemContext;
+import com.ubikz.scraper.core.app.service.message.BaseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,9 +39,17 @@ public class FeedItemController extends ApiController {
         return this.sendResponse(this.feedItemContext.create(request));
     }
 
+    /**
+     * @param filter
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = uriPath, method = RequestMethod.GET, produces = "application/json")
     public String get(final FeedItemFilterBody filter) throws Exception {
-        return this.sendResponse(this.feedItemContext.getAll(filter));
+        BaseMessage msg = this.feedItemContext.getAll(filter);
+        msg.setTotal(this.feedItemContext.count(filter));
+
+        return this.sendResponse(msg);
     }
 
     /**

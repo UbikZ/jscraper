@@ -37,6 +37,15 @@ public class Select extends AbstractQuery {
     }
 
     /**
+     * @param columns
+     * @return
+     */
+    public Select columns(String... columns) {
+        this.parseColumns(columns);
+        return this;
+    }
+
+    /**
      * @param table
      * @return
      */
@@ -248,17 +257,17 @@ public class Select extends AbstractQuery {
 
         this.handleWhereClauses();
 
+        List<String> groupBy = (List<String>) this.parts.get(KEY_GROUP);
+        if (groupBy.size() > 0) {
+            this.sql.add(SQL_GROUP_BY);
+            this.sql.add("(" + groupBy.stream().collect(Collectors.joining(",")) + ")");
+        }
+
         String orderBy = (String) this.parts.get(KEY_ORDER);
         if (orderBy != null) {
             this.sql.add(SQL_ORDER_BY);
             this.sql.add(orderBy);
             this.sql.add((String) this.parts.get(KEY_DIRECTION));
-        }
-
-        List<String> groupBy = (List<String>) this.parts.get(KEY_GROUP);
-        if (groupBy.size() > 0) {
-            this.sql.add(SQL_GROUP_BY);
-            this.sql.add("(" + groupBy.stream().collect(Collectors.joining(",")) + ")");
         }
 
         Integer limit = (Integer) this.parts.get(KEY_LIMIT);

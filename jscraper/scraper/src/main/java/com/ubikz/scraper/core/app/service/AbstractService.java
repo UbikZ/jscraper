@@ -38,6 +38,15 @@ abstract public class AbstractService {
      * @return
      * @throws Exception
      */
+    public int count(AbstractServiceFilter filter) throws Exception {
+        return this.entity.count(this.parseServiceToEntityFilter(filter));
+    }
+
+    /**
+     * @param filter
+     * @return
+     * @throws Exception
+     */
     public AbstractDto get(AbstractServiceFilter filter) throws Exception {
         return this.entity.get(this.parseServiceToEntityFilter(filter));
     }

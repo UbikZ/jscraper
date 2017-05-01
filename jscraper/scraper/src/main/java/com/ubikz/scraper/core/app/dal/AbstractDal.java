@@ -46,6 +46,16 @@ abstract public class AbstractDal {
     }
 
     /**
+     * @return
+     */
+    public int count(AbstractDalFilter filter) {
+        Select qb = this.getBaseSelect(filter, true);
+        qb.columns("COUNT(*)");
+
+        return this.count(qb);
+    }
+
+    /**
      * @param request
      * @return
      */
@@ -78,10 +88,18 @@ abstract public class AbstractDal {
      * @return
      */
     protected Select getBaseSelect(AbstractDalFilter filter) {
+        return this.getBaseSelect(filter, false);
+    }
+
+    /**
+     * @param filter
+     * @return
+     */
+    protected Select getBaseSelect(AbstractDalFilter filter, boolean isCount) {
         QueryBuilder qb = new QueryBuilder();
         AbstractQuery select = qb.select().from(this.tableName);
 
-        this.parseFilter(filter, select);
+        this.parseFilter(filter, select, isCount);
 
         return (Select) select;
     }
@@ -166,9 +184,17 @@ abstract public class AbstractDal {
 
     /**
      * @param filter
-     * @return
+     * @param select
      */
     protected void parseFilter(AbstractDalFilter filter, AbstractQuery select) {
+        this.parseFilter(filter, select, false);
+    }
+
+    /**
+     * @param filter
+     * @return
+     */
+    protected void parseFilter(AbstractDalFilter filter, AbstractQuery select, boolean isCount) {
         if (filter.getId() != null) {
             select.where("id", filter.getId());
         }
@@ -272,5 +298,18 @@ abstract public class AbstractDal {
         this.logger.debug("# Select Params > " + query.getParameters());
 
         return this.dbWrapper.jdbcTemplate.queryForMap(query.getSQL(), query.getParameters());
+    }
+
+    /**
+     * @param query
+     * @return
+     */
+    protected int count(AbstractQuery query) {
+        query.build();
+
+        this.logger.debug("# Count SQL > " + query.getSQL());
+        this.logger.debug("# Count Params > " + query.getParameters());
+
+        return this.dbWrapper.jdbcTemplate.queryForObject(query.getSQL(), query.getParameters(), Integer.class);
     }
 }

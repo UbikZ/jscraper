@@ -105,6 +105,15 @@ abstract public class AbstractContext {
     }
 
     /**
+     * @param filter
+     * @return
+     * @throws Exception
+     */
+    public int count(AbstractFilterBody filter) throws Exception {
+        return this.service.count(this.parseFilter(filter, this.serviceFilter));
+    }
+
+    /**
      * @param callable
      * @return
      * @throws Exception

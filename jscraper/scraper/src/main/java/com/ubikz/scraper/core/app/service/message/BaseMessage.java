@@ -4,9 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonPropertyOrder({"code", "success", "size", "data"})
+@JsonPropertyOrder({"code", "success", "total", "size", "data"})
 public class BaseMessage {
     private Object data;
+    private int total = 0;
     private int size = 0;
     private int code = 0;
     private int status = 0;
@@ -60,10 +61,20 @@ public class BaseMessage {
         this.size = size;
     }
 
+    @JsonProperty("total")
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
     @Override
     public String toString() {
         return "BaseMessage{" +
                 "data=" + data +
+                ", total=" + total +
                 ", size=" + size +
                 ", code=" + code +
                 ", status=" + status +
