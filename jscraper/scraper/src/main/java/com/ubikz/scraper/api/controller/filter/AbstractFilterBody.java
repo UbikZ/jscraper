@@ -8,6 +8,7 @@ abstract public class AbstractFilterBody {
     private Integer id = null;
     private Boolean isEnabled = null;
     private String label = null;
+    private String search = null;
     private String startDate = null;
     private String endDate = null;
     private Integer limit = null;
@@ -67,6 +68,7 @@ abstract public class AbstractFilterBody {
         isLazy = lazy;
     }
 
+    @JsonProperty("limit")
     public Integer getLimit() {
         return limit;
     }
@@ -75,6 +77,7 @@ abstract public class AbstractFilterBody {
         this.limit = limit;
     }
 
+    @JsonProperty("offset")
     public Integer getOffset() {
         return offset;
     }
@@ -83,12 +86,22 @@ abstract public class AbstractFilterBody {
         this.offset = offset;
     }
 
+    @JsonProperty("search")
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
+    }
+
     @Override
     public String toString() {
         return "AbstractFilterBody{" +
                 "id=" + id +
                 ", isEnabled=" + isEnabled +
                 ", label='" + label + '\'' +
+                ", search='" + search + '\'' +
                 ", startDate='" + startDate + '\'' +
                 ", endDate='" + endDate + '\'' +
                 ", limit=" + limit +

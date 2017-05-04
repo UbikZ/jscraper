@@ -7,6 +7,7 @@ abstract public class AbstractEntityFilter {
     private Integer id;
     private List<Integer> idList;
     private String label;
+    private String search;
     private Date startDate;
     private Date endDate;
     private Integer offset;
@@ -86,12 +87,21 @@ abstract public class AbstractEntityFilter {
         this.limit = limit;
     }
 
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
+    }
+
     @Override
     public String toString() {
         return "AbstractEntityFilter{" +
                 "id=" + id +
                 ", idList=" + idList +
                 ", label='" + label + '\'' +
+                ", search='" + search + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", offset=" + offset +

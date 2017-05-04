@@ -217,6 +217,7 @@ abstract public class AbstractContext {
 
         filter.setId(data.getId());
         filter.setLabel(data.getLabel());
+        filter.setSearch(data.getSearch());
         filter.setEnabled(data.getEnabled());
         filter.setLazy(data.isLazy());
         filter.setStartDate(data.getStartDate() == null ? null : formatter.parse(data.getStartDate()));

@@ -5,6 +5,7 @@ import java.util.Date;
 abstract public class AbstractServiceFilter {
     private Integer id;
     private String label;
+    private String search;
     private Date startDate;
     private Date endDate;
     private Integer limit = null;
@@ -76,11 +77,20 @@ abstract public class AbstractServiceFilter {
         this.offset = offset;
     }
 
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
+    }
+
     @Override
     public String toString() {
         return "AbstractServiceFilter{" +
                 "id=" + id +
                 ", label='" + label + '\'' +
+                ", search='" + search + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", limit=" + limit +

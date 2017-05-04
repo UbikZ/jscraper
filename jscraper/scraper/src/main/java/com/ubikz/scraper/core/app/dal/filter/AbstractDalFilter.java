@@ -7,6 +7,7 @@ abstract public class AbstractDalFilter {
     private Integer id;
     private List<Integer> idList;
     private String label;
+    private String search;
     private Date startDate;
     private Date endDate;
     private Integer limit;
@@ -77,12 +78,21 @@ abstract public class AbstractDalFilter {
         this.offset = offset;
     }
 
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
+    }
+
     @Override
     public String toString() {
         return "AbstractDalFilter{" +
                 "id=" + id +
                 ", idList=" + idList +
                 ", label='" + label + '\'' +
+                ", search='" + search + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", limit=" + limit +

@@ -97,6 +97,7 @@ abstract public class AbstractService {
     final protected void parseBaseServiceToEntityFilter(AbstractServiceFilter sFilter, AbstractEntityFilter eFilter) {
         eFilter.setId(sFilter.getId());
         eFilter.setLabel(sFilter.getLabel());
+        eFilter.setSearch(sFilter.getSearch());
         eFilter.setEnabled(sFilter.getEnabled());
         eFilter.setLazy(sFilter.isLazy());
         eFilter.setStartDate(sFilter.getStartDate());

@@ -169,6 +169,7 @@ abstract public class AbstractEntity {
         dFilter.setId(eFilter.getId());
         dFilter.setIdList(eFilter.getIdList());
         dFilter.setLabel(eFilter.getLabel());
+        dFilter.setSearch(eFilter.getSearch());
         dFilter.setEnabled(eFilter.getEnabled());
         dFilter.setStartDate(eFilter.getStartDate());
         dFilter.setEndDate(eFilter.getEndDate());

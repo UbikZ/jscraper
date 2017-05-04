@@ -207,6 +207,10 @@ abstract public class AbstractDal {
             select.where("label", filter.getLabel());
         }
 
+        if (filter.getSearch() != null) {
+            select.where("label", "LIKE", filter.getSearch() + "%");
+        }
+
         if (filter.getEnabled() != null) {
             select.where("enabled", filter.getEnabled());
         }
