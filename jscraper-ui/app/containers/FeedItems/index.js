@@ -18,10 +18,6 @@ class FeedItems extends Component {
     endDate: PropTypes.object
   };
 
-  componentDidMount() {
-    this.loadList();
-  }
-
   loadList = (filter = {}) => {
     this.props.fetchFeedItems(filter);
   };

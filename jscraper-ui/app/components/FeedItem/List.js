@@ -1,23 +1,17 @@
 import React, {Component} from 'react';
-import ReactPaginate from 'react-paginate';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+
+import Paginate from './Paginate';
 
 class List extends Component {
   static propTypes = {
     loadList: PropTypes.func.isRequired,
-    items: PropTypes.array.isRequired,
-    total: PropTypes.number.isRequired,
-    offset: PropTypes.number.isRequired,
-    limit: PropTypes.number.isRequired
+    items: PropTypes.array.isRequired
   };
 
-  handlePageClick = (data) => {
-    this.props.loadList({offset: Math.ceil(data.selected * this.props.limit)});
-  }
-
   render() {
-    const {items, total, limit, offset} = this.props;
+    const {items} = this.props;
 
     return (
       <div>
@@ -27,20 +21,9 @@ class List extends Component {
             <tr>
               <th>Id</th>
               <th>Url</th>
-              <th>Size : {items.length}</th>
+              <th className="text-center">Size : {items.length}</th>
               <th>
-                <ReactPaginate previousLabel={"previous"}
-                               nextLabel={"next"}
-                               breakLabel={<a href="">...</a>}
-                               breakClassName={"break-me"}
-                               initialPage={offset}
-                               pageCount={Math.ceil(total / limit)}
-                               marginPagesDisplayed={2}
-                               pageRangeDisplayed={5}
-                               onPageChange={this.handlePageClick}
-                               containerClassName={"pagination"}
-                               subContainerClassName={"pages pagination"}
-                               activeClassName={"active"}/>
+                <Paginate loadList={this.props.loadList} />
               </th>
             </tr>
             </thead>
@@ -49,7 +32,7 @@ class List extends Component {
               return (
                 <tr key={item.checksum}>
                   <td>{item.id}</td>
-                  <td colSpan="2"><a href={item.url} target="_blank">{item.url}</a></td>
+                  <td colSpan="3"><a href={item.url} target="_blank">{item.url}</a></td>
                 </tr>
               );
             })}
@@ -62,8 +45,8 @@ class List extends Component {
 }
 
 function mapStateToProps(state) {
-  const {items, total, limit, offset} = state.feedItems;
-  return {items, total, limit, offset};
+  const {items} = state.feedItems;
+  return {items};
 }
 
 export default connect(mapStateToProps)(List);

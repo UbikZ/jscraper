@@ -16,9 +16,10 @@ export function receiveFeedItemsError(error) {
 export function fetchFeedItems(qs = {}) {
   return (dispatch, getState) => {
     let finalQs = Object.assign({}, getState().feedItems, qs);
+    const forbiden = ['items', 'total'];
     const {startDate, endDate, offset} = finalQs;
 
-    return fetch(`/api/feed-item?${queryString.stringify(parseQueryString(finalQs))}`)
+    return fetch(`/api/feed-item?${queryString.stringify(parseQueryString(finalQs, forbiden))}`)
       .then(response => response.json())
       .then(json => {
         if (!json.success) {
@@ -32,11 +33,8 @@ export function fetchFeedItems(qs = {}) {
   };
 }
 
-function parseQueryString(qs) {
+function parseQueryString(qs, forbiden = []) {
   let result = {};
-  const forbiden = ['items', 'total'];
-
-  console.log("QS => ", qs);
 
   Object
     .keys(qs)
@@ -50,8 +48,6 @@ function parseQueryString(qs) {
         result[key] = value;
       }
     });
-
-  console.log("Result -> ", qs);
 
   return result;
 }
