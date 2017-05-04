@@ -27,6 +27,7 @@ public class IndexController {
                 put("total", 0);
                 put("offset", 0);
                 put("limit", 20);
+                put("approved", true);
                 put("tags", new ArrayList<>());
                 put("startDate", null);
                 put("endDate", null);

@@ -9,7 +9,16 @@ class Filter extends Component {
   static propTypes = {
     loadList: PropTypes.func.isRequired,
     startDate: PropTypes.object,
-    endDate: PropTypes.object
+    endDate: PropTypes.object,
+    approved: PropTypes.bool
+  };
+
+  handleInputChange = (event) => {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+
+    this.props.loadList({[name]: value});
   };
 
   handleDateChange = (date, type) => {
@@ -20,41 +29,54 @@ class Filter extends Component {
   handleEndDateChange = (date) => this.handleDateChange(date, 'endDate');
 
   render() {
-    const {startDate, endDate} = this.props;
+    const {startDate, endDate, approved} = this.props;
     
     return (
-      <div>
+      <form className="form-horizontal">
         <div className="form-group">
-          <label className="form-label">Start Date</label>
-          <DatePicker
-            selectsStart
-            selected={startDate}
-            startDate={startDate}
-            endDate={endDate}
-            onChange={this.handleStartDateChange}
-            isClearable={true}
-          />
+          <div className="col-1">
+            <label className="form-label">Start</label>
+          </div>
+          <div className="col-3">
+            <DatePicker
+              selectsStart
+              selected={startDate}
+              startDate={startDate}
+              endDate={endDate}
+              onChange={this.handleStartDateChange}
+              isClearable={true}
+            />
+          </div>
+          <div className="col-1">
+            <label className="form-label">End</label>
+          </div>
+          <div className="col-3">
+            <DatePicker
+              selectsEnd
+              selected={endDate}
+              startDate={startDate}
+              endDate={endDate}
+              onChange={this.handleEndDateChange}
+              isClearable={true}
+            />
+          </div>
         </div>
         <div className="form-group">
-          <label className="form-label">End Date</label>
-          <DatePicker
-            selectsEnd
-            selected={endDate}
-            startDate={startDate}
-            endDate={endDate}
-            onChange={this.handleEndDateChange}
-            isClearable={true}
-          />
+          <div className="col-3">
+            <label className="form-switch">
+              <input type="checkbox" name="approved" defaultChecked={approved} onChange={this.handleInputChange}/>
+              <i className="form-icon"></i> Approved
+            </label>
+          </div>
         </div>
-        <div className="divider-vert"></div>
-      </div>
+      </form>
     );
   }
 }
 
 function mapStateToProps(state) {
-  const {startDate, endDate} = state.feedItems;
-  return {startDate, endDate};
+  const {startDate, endDate, approved} = state.feedItems;
+  return {startDate, endDate, approved};
 }
 
 export default connect(mapStateToProps)(Filter);
