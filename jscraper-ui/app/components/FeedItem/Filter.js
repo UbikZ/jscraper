@@ -1,54 +1,36 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-datepicker';
+import {connect} from 'react-redux';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-export default class Filter extends Component {
+class Filter extends Component {
   static propTypes = {
-    load: PropTypes.func
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  mutateState = (name, value) => {
-    this.setState({[name]: value}, () => {
-      if (!value) {
-        delete this.state[name];
-      }
-
-      this.props.load(this.state);
-    });
-  };
-
-  handleInputChange = (event) => {
-    const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
-
-    this.mutateState(name, value);
+    loadList: PropTypes.func.isRequired,
+    startDate: PropTypes.object,
+    endDate: PropTypes.object
   };
 
   handleDateChange = (date, type) => {
-    this.mutateState(type, date);
+    this.props.loadList({[type]: date});
   };
 
   handleStartDateChange = (date) => this.handleDateChange(date, 'startDate');
   handleEndDateChange = (date) => this.handleDateChange(date, 'endDate');
 
   render() {
+    const {startDate, endDate} = this.props;
+    
     return (
       <div>
         <div className="form-group">
           <label className="form-label">Start Date</label>
           <DatePicker
             selectsStart
-            selected={this.state.startDate}
-            startDate={this.state.startDate}
-            endDate={this.state.endDate}
+            selected={startDate}
+            startDate={startDate}
+            endDate={endDate}
             onChange={this.handleStartDateChange}
             isClearable={true}
           />
@@ -57,9 +39,9 @@ export default class Filter extends Component {
           <label className="form-label">End Date</label>
           <DatePicker
             selectsEnd
-            selected={this.state.endDate}
-            startDate={this.state.startDate}
-            endDate={this.state.endDate}
+            selected={endDate}
+            startDate={startDate}
+            endDate={endDate}
             onChange={this.handleEndDateChange}
             isClearable={true}
           />
@@ -69,3 +51,10 @@ export default class Filter extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  const {startDate, endDate} = state.feedItems;
+  return {startDate, endDate};
+}
+
+export default connect(mapStateToProps)(Filter);

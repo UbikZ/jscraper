@@ -22,7 +22,15 @@ public class IndexController {
         }};
 
         Map<String, Object> initialState = new HashMap<String, Object>() {{
-            put("feedItems", new ArrayList<>());
+            put("feedItems", new HashMap<String, Object>() {{
+                put("items", new ArrayList<>());
+                put("total", 0);
+                put("offset", 0);
+                put("limit", 20);
+                put("tags", new ArrayList<>());
+                put("startDate", null);
+                put("endDate", null);
+            }});
         }};
 
         model.addAttribute("req", mapper.writeValueAsString(req));

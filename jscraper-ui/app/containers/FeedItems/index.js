@@ -5,41 +5,40 @@ import {bindActionCreators} from 'redux';
 
 import {fetchFeedItems} from './action';
 import Main from '../../components/Main';
-import FeedItemList from '../../components/FeedItemList';
+import Filter from '../../components/FeedItem/Filter';
+import List from '../../components/FeedItem/List';
 
 class FeedItems extends Component {
   static propTypes = {
-    feedItems: PropTypes.array,
-    error: PropTypes.object
+    fetchFeedItems: PropTypes.func.isRequired,
+    tags: PropTypes.array,
+    offset: PropTypes.number,
+    limit: PropTypes.number,
+    startDate: PropTypes.object,
+    endDate: PropTypes.object
   };
-
-  constructor(props) {
-    super(props);
-    this.filter = {};
-  }
 
   componentDidMount() {
     this.loadList();
   }
 
   loadList = (filter = {}) => {
-    this.filter = filter;
-    this.props.fetchFeedItems(this.filter);
+    this.props.fetchFeedItems(filter);
   };
 
   render() {
-    const {feedItems} = this.props;
-
     return (
       <Main title={'Feed Items Stuff'}>
-        <FeedItemList items={feedItems} load={this.loadList}/>
+        <Filter loadList={this.loadList} />
+        <List loadList={this.loadList} />
       </Main>
     );
   }
 }
 
-function mapStateToProps({feedItems, error}) {
-  return {feedItems, error};
+function mapStateToProps(state) {
+  const {offset, limit, tags, startDate, endDate} = state.feedItems;
+  return {offset, limit, tags, startDate, endDate};
 }
 
 function mapDispatchToProps(dispatch) {
