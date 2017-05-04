@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-datepicker';
 import {connect} from 'react-redux';
+import Select from 'react-select';
 
+import 'react-select/dist/react-select.css';
 import 'react-datepicker/dist/react-datepicker.css';
 
 class Filter extends Component {
@@ -69,14 +71,22 @@ class Filter extends Component {
             </label>
           </div>
         </div>
+        <div className="form-group">
+          {/*<Select*/}
+            {/*name="tag"*/}
+            {/*multi={true}*/}
+            {/*options={options}*/}
+            {/*onChange={logChange}*/}
+          {/*/>*/}
+        </div>
       </form>
     );
   }
 }
 
 function mapStateToProps(state) {
-  const {startDate, endDate, approved} = state.feedItems;
-  return {startDate, endDate, approved};
+  const {startDate, endDate, approved, tags} = state.feedItems;
+  return {startDate, endDate, approved, tags};
 }
 
 export default connect(mapStateToProps)(Filter);
