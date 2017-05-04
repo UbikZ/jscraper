@@ -11,9 +11,9 @@ import List from '../../components/FeedItem/List';
 class FeedItems extends Component {
   static propTypes = {
     fetchFeedItems: PropTypes.func.isRequired,
-    tags: PropTypes.array,
-    offset: PropTypes.number,
-    limit: PropTypes.number,
+    tags: PropTypes.array.isRequired,
+    offset: PropTypes.number.isRequired,
+    limit: PropTypes.number.isRequired,
     startDate: PropTypes.object,
     endDate: PropTypes.object
   };

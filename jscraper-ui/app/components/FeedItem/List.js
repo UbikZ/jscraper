@@ -21,18 +21,23 @@ class List extends Component {
             <tr>
               <th>Id</th>
               <th>Url</th>
-              <th className="text-center">Size : {items.length}</th>
+              <th className="text-center">Size&nbsp;:&nbsp;{items.length}</th>
               <th>
                 <Paginate loadList={this.props.loadList} />
               </th>
             </tr>
             </thead>
             <tbody>
-            {items.map((item) => {
+            {items.map(item => {
               return (
                 <tr key={item.checksum}>
                   <td>{item.id}</td>
-                  <td colSpan="3"><a href={item.url} target="_blank">{item.url}</a></td>
+                  <td><a href={item.url} target="_blank">{item.url}</a></td>
+                  <td colSpan="2" className="text-right">
+                    {item.tags.map((tag, i) => {
+                      return (<span key={i} className="label label-primary mr-5 mb-5">{tag.label}</span>);
+                    })}
+                  </td>
                 </tr>
               );
             })}

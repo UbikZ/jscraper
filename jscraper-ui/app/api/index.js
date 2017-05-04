@@ -27,7 +27,7 @@ function parseQs(qs, forbiden = []) {
 
   Object
     .keys(qs)
-    .filter(key => !!qs[key] && !~forbiden.indexOf(key))
+    .filter(key => !~[undefined, null].indexOf(qs[key]) && !~forbiden.indexOf(key))
     .map(key => {
       const value = qs[key];
 
@@ -37,6 +37,8 @@ function parseQs(qs, forbiden = []) {
         result[key] = value;
       }
     });
+
+  console.log("Result > ", result);
 
   return queryString.stringify(result);
 }

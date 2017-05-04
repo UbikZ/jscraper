@@ -54,7 +54,6 @@ public class FeedItemDto extends AbstractDto {
         this.checksum = checksum;
     }
 
-    @JsonIgnore
     public List<TagDto> getTags() {
         return tags;
     }

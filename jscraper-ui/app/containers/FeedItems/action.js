@@ -13,6 +13,8 @@ export function receiveFeedItemsError(error) {
 
 export function fetchFeedItems(args = {}) {
   return (dispatch, getState) => {
+    args.lazy = false;
+
     return apiFetch('feed-item', getState().feedItems, args, ['items', 'total'])
       .then(element => {
         const {startDate, endDate, offset} = element.qs;
