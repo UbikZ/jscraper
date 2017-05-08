@@ -10,7 +10,7 @@ nginx:
   volumes:
     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     - ./docker/nginx/log:/var/log/nginx
-    - ./docker/nginx/ssl:/ssl
+    - ./docker/ssl:/ssl:ro
   env_file: .env
   log_opt:
     max-size: "100k"

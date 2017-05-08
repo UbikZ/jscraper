@@ -2,10 +2,12 @@
 
 set -e
 
+DEST="/var/www/jscraper"
+
 [[ "${DEBUG}" -eq 1 ]] && MODE="dev" || MODE="prod"
 
 npm run prebuild && npm run ${MODE}
 
-cp -rp /src/static /var/www/jscraper
+mkdir -p ${DEST} && cp -rp /src/static ${DEST}
 
 tail -f /dev/null
