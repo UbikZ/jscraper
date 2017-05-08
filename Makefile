@@ -44,7 +44,7 @@ up-prod:
 up-dev:
 	@docker-compose -f docker-compose.yml up --build
 
-prod: nginx-stop clean-docker pull up-prod nginx-start
+prod: clean-docker pull up-prod
 
 dev: clean-docker up-dev
 
