@@ -39,4 +39,5 @@ pgsql:
 jscraper-ui:
   image: ubikz/jscraper-ui
   volumes:
-    - /jscraper/scraper/src/main/resources/static
+    - ./docker/scraper-ui:/var/www/jscraper
+  env_file: .env
