@@ -124,7 +124,7 @@ export default (env) => {
     plugins.push(new SWPrecacheWebpackPlugin(
       {
         cacheId: 'jscraper-app',
-        filename: 'ws.js',
+        filename: 'sw.js',
         minify: true,
         runtimeCaching: [{
           urlPattern: /\/api\//,
