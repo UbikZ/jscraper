@@ -12,6 +12,8 @@ nginx:
     - ./docker/nginx/log:/var/log/nginx
     - ./docker/nginx/ssl:/ssl
   env_file: .env
+  log_opt:
+    max-size: "100k"
 jscraper:
   image: ubikz/jscraper
   links:
