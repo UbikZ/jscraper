@@ -9,6 +9,7 @@ jscraper-ui/web/public
 docker/*
 !docker/.gitkeep
 V*__Data.sql
+static
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

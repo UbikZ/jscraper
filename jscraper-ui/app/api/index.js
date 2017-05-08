@@ -38,7 +38,5 @@ function parseQs(qs, forbiden = []) {
       }
     });
 
-  console.log("Result > ", result);
-
   return queryString.stringify(result);
 }

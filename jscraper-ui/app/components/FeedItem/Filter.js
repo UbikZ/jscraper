@@ -2,9 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-datepicker';
 import {connect} from 'react-redux';
-import Select from 'react-select';
 
-import 'react-select/dist/react-select.css';
 import 'react-datepicker/dist/react-datepicker.css';
 
 class Filter extends Component {
@@ -70,14 +68,6 @@ class Filter extends Component {
               <i className="form-icon"></i> Approved
             </label>
           </div>
-        </div>
-        <div className="form-group">
-          {/*<Select*/}
-            {/*name="tag"*/}
-            {/*multi={true}*/}
-            {/*options={options}*/}
-            {/*onChange={logChange}*/}
-          {/*/>*/}
         </div>
       </form>
     );

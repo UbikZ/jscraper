@@ -17,7 +17,7 @@ export default class Header extends Component {
               <Link to='/feed-items' className="btn btn-link">Feed Items</Link>
             </section>
             <section className="navbar-section">
-              <a href="https://github.com/ubikz/jscraper" target="_blank" className="btn btn-primary">Github</a>
+              <a href="https://github.com/ubikz/jscraper" rel="noopener" className="btn btn-primary">Github</a>
             </section>
           </nav>
         </section>

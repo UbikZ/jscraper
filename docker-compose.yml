@@ -1,3 +1,15 @@
+nginx:
+  build: nginx
+  ports:
+    - "80:80"
+  links:
+    - jscraper
+  volumes_from:
+      - jscraper-ui
+  volumes:
+    - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    - ./docker/nginx:/var/log/nginx
+  env_file: .env
 jscraper:
   build: jscraper
   links:
@@ -5,12 +17,9 @@ jscraper:
   ports:
       - "3000:3000"
       - "5005:5005"
-  volumes_from:
-      - jscraper-ui
   volumes:
       - ./docker/scraper/log:/var/log
       - ./docker/scraper/gradle:/jscraper/cache
-      - ./docker/scraper/nginx:/nginx
   env_file: .env
 pgsql:
   image: postgres:9.6.2-alpine
@@ -23,4 +32,5 @@ pgsql:
 jscraper-ui:
   build: jscraper-ui
   volumes:
-    - ./docker/scraper-ui:/jscraper/scraper/src/main/resources/static
+    - ./docker/scraper-ui:/var/www/jscraper
+  env_file: .env

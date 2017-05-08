@@ -1,6 +1,18 @@
+import moment from 'moment';
 import {RECEIVE_ITEMS, RECEIVE_ITEMS_ERROR} from './action';
 
-export default function itemReducer(state = {}, action) {
+const initialState = {
+  items: [],
+  total: 0,
+  offset: 0,
+  limit: 20,
+  approved: true,
+  tags: [],
+  startDate: moment(),
+  endDate: moment()
+};
+
+export default function itemReducer(state = initialState, action) {
   switch (action.type) {
     case RECEIVE_ITEMS: {
       return {

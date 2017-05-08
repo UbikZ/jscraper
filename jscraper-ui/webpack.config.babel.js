@@ -1,103 +1,89 @@
 /*global __dirname, process*/
-import webpack from 'webpack';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import autoprefixer from 'autoprefixer';
-import OfflinePlugin from 'offline-plugin';
-import path from 'path';
-import V8LazyParseWebpackPlugin from 'v8-lazy-parse-webpack-plugin';
-const ENV = process.env.NODE_ENV || 'development';
+import webpack from "webpack";
+import path from "path";
+import ExtractTextPlugin from "extract-text-webpack-plugin";
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import PrepackWebpackPlugin from "prepack-webpack-plugin";
+import PreloadWebpackPlugin from "preload-webpack-plugin";
+import OfflinePlugin from "offline-plugin";
+import autoprefixer from "autoprefixer";
 
-const CSS_MAPS = ENV !== 'production';
+const sourcePath = path.join(__dirname, './app');
+const buildDirectory = path.join(__dirname, './static');
+const modulesPath = path.resolve(__dirname, 'node_modules');
 
-export default {
-  entry: {
-    client: 'client.js',
-    server: 'server.js'
-  },
-  output: {
-    path: path.join(__dirname, 'static'),
-    filename: '[name].js'
-  },
-  resolve: {
-    extensions: ['', '.js', '.json', '.less', '.css'],
-    modulesDirectories: [
-      path.resolve(__dirname, 'app'),
-      path.resolve(__dirname, 'node_modules'),
-      'node_modules'
-    ]
-  },
-  module: {
-    preLoaders: [
-      {
-        test: /\.jsx?$/,
-        exclude: path.resolve(__dirname, 'app'),
-        loader: 'source-map-loader'
+const stats = {
+  assets: true,
+  children: false,
+  chunks: false,
+  hash: false,
+  modules: false,
+  publicPath: false,
+  timings: true,
+  version: false,
+  warnings: true,
+  colors: {
+    green: '\u001b[32m'
+  }
+};
+
+export default (env) => {
+  const nodeEnv = env && env.prod ? 'production' : 'development';
+  const isProduction = nodeEnv === 'production';
+  const serviceWorkerBuild = env && env.sw;
+
+  const plugins = [
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'vendor-[hash].js',
+      minChunks(module) {
+        const context = module.context;
+        return context && context.indexOf('node_modules') >= 0;
       }
-    ],
-    loaders: [
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader'
-      },
-      {
-        test: /\.(less|css)$/,
-        loader: ExtractTextPlugin.extract('style-loader', [
-          `css-loader?sourceMap=${CSS_MAPS}`,
-          'postcss-loader',
-          `less-loader?sourceMap=${CSS_MAPS}`
-        ].join('!'))
-      },
-      {
-        test: /\.json$/,
-        loader: 'json-loader'
-      },
-      {
-        test: /\.(xml|html|txt|md)$/,
-        loader: 'raw-loader'
-      },
-      {
-        test: /\.(svg|woff2?|ttf|eot|jpe?g|png|gif)(\?.*)?$/i,
-        loader: ENV === 'production' ? 'file-loader' : 'url-loader?limit=100000'
-      }
-    ]
-  },
-  externals: [
-    {
-      'isomorphic-fetch': {
-        root: 'isomorphic-fetch',
-        commonjs2: 'isomorphic-fetch',
-        commonjs: 'isomorphic-fetch',
-        amd: 'isomorphic-fetch'
-      }
-    }
-  ],
-  postcss: [autoprefixer({browsers: ['last 5 versions']})],
-  plugins: ([
-    new webpack.NoErrorsPlugin(),
-    new ExtractTextPlugin('/[name].css'),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(ENV)
     }),
+    new ExtractTextPlugin('style-[hash].css'),
+    new PreloadWebpackPlugin(),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(nodeEnv)
+      }
+    }),
+    new webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin({
-      hash: true,
-      template: path.resolve(__dirname, 'app/index.html'),
-      filename: 'index.html',
-      minify: {
-        collapseWhitespace: true
-      },
-      excludeChunks: ['server']
-    })
-  ]).concat(ENV === 'production'
-    ? [
-      new V8LazyParseWebpackPlugin(),
+      template: path.join(sourcePath, 'index.html'),
+      path: buildDirectory,
+      filename: 'index.html'
+    }),
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        postcss: [
+          autoprefixer({
+            browsers: [
+              'last 3 version',
+              'ie >= 10'
+            ]
+          })
+        ],
+        context: sourcePath
+      }
+    }),
+    new PrepackWebpackPlugin()
+  ];
+
+  const rules = [
+    {
+      test: /\.(jsx?)$/,
+      exclude: /node_modules/,
+      use: 'babel-loader'
+    }
+  ];
+
+  if (isProduction) {
+    plugins.push(
       new webpack.optimize.UglifyJsPlugin({
-        output: {
-          comments: false
-        },
         compress: {
           warnings: false,
+          screw_ie8: true,
           conditionals: true,
           unused: true,
           comparisons: true,
@@ -106,34 +92,69 @@ export default {
           evaluate: true,
           if_return: true,
           join_vars: true,
-          negate_iife: false
-        }
-      }),
-      new OfflinePlugin({
-        relativePaths: false,
-        AppCache: false,
-        excludes: ['_redirects'],
-        ServiceWorker: {
-          events: true
         },
-        cacheMaps: [
-          {
-            match: /.*/,
-            to: '/',
-            requestTypes: ['navigate']
-          }
-        ],
-        publicPath: '/'
+        output: {
+          comments: false,
+        }
       })
-    ] : []),
-  stats: {colors: true},
-  node: {
-    global: true,
-    process: false,
-    Buffer: false,
-    __filename: false,
-    __dirname: false,
-    setImmediate: false
-  },
-  devtool: ENV === 'production' ? 'source-map' : 'cheap-module-eval-source-map'
-};
+    );
+
+    rules.push(
+      {
+        test: /\.css$/,
+        include: [sourcePath, modulesPath],
+        loader: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: 'css-loader!postcss-loader',
+        })
+      }
+    );
+  } else {
+    rules.push(
+      {
+        test: /\.css$/,
+        include: [sourcePath, modulesPath],
+        loader: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: 'css-loader!postcss-loader?sourceMap',
+        })
+      }
+    );
+  }
+
+  if (serviceWorkerBuild) {
+    plugins.push(new OfflinePlugin());
+  }
+
+  return {
+    devtool: isProduction ? false : 'source-map',
+    context: sourcePath,
+    entry: {
+      main: 'index.js'
+    },
+    output: {
+      path: buildDirectory,
+      publicPath: '/',
+      filename: 'app-[hash].js'
+    },
+    module: {
+      rules
+    },
+    resolve: {
+      extensions: ['.js', '.css'],
+      modules: [
+        sourcePath,
+        'node_modules',
+        modulesPath
+      ]
+    },
+    plugins,
+    performance: isProduction && {
+      maxAssetSize: 300000,
+      maxEntrypointSize: 300000,
+      hints: 'warning'
+    },
+    stats
+  };
+}
+;

@@ -11,16 +11,6 @@ sed -i \
     -e "s/{{PG_PWD}}/${POSTGRES_PASSWORD}/g" \
     /jscraper/scraper/src/main/resources/application.properties
 
-for CONF_FILE in `find /jscraper/nginx/sites-enabled -type f -name "*.conf"`; do
-	sed -i \
-	    -e "s/{{NGINX_DOMAIN}}/$NGINX_DOMAIN/g" \
-		-e "s#{{NGINX_SSL_CERT}}#$NGINX_SSL_CERT#g" \
-		-e "s#{{NGINX_SSL_CERT_KEY}}#$NGINX_SSL_CERT_KEY#g" \
-		${CONF_FILE}
-done;
-
-cp -rp /jscraper/nginx/sites-enabled /nginx
-
 echo "[DEBUG] > Configuration ok."
 
 echo "[DEBUG] > Build packages"
