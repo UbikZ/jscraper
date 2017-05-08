@@ -1,3 +1,16 @@
+nginx:
+  image: ubikz/jscraper-nginx
+  ports:
+    - "80:80"
+    - "443:443"
+  links:
+    - jscraper
+  volumes_from:
+    - jscraper-ui
+  volumes:
+    - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    - ./docker/nginx:/var/log/nginx
+  env_file: .env
 jscraper:
   image: ubikz/jscraper
   links:
@@ -7,7 +20,6 @@ jscraper:
   volumes:
       - ./docker/scraper/log:/var/log
       - ./docker/scraper/gradle:/jscraper/cache
-      - ./docker/scraper/nginx:/nginx
   env_file: .env
   log_opt:
     max-size: "100k"

@@ -4,8 +4,7 @@ import path from "path";
 import ExtractTextPlugin from "extract-text-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import PrepackWebpackPlugin from "prepack-webpack-plugin";
-import PreloadWebpackPlugin from "preload-webpack-plugin";
-import OfflinePlugin from "offline-plugin";
+import SWPrecacheWebpackPlugin from "sw-precache-webpack-plugin";
 import autoprefixer from "autoprefixer";
 
 const sourcePath = path.join(__dirname, './app');
@@ -42,7 +41,6 @@ export default (env) => {
       }
     }),
     new ExtractTextPlugin('style-[hash].css'),
-    new PreloadWebpackPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(nodeEnv)
@@ -123,7 +121,17 @@ export default (env) => {
   }
 
   if (serviceWorkerBuild) {
-    plugins.push(new OfflinePlugin());
+    plugins.push(new SWPrecacheWebpackPlugin(
+      {
+        cacheId: 'jscraper-app',
+        filename: 'ws.js',
+        minify: true,
+        runtimeCaching: [{
+          urlPattern: /\/api\//,
+          handler: 'networkFirst'
+        }]
+      }
+    ));
   }
 
   return {
@@ -156,5 +164,4 @@ export default (env) => {
     },
     stats
   };
-}
-;
+};
