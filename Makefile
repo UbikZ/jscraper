@@ -2,7 +2,8 @@
 
 rootDir = $(shell pwd)
 volDir = $(rootDir)/docker
-imageId = ubikz/jscraper
+imageBackId = ubikz/jscraper
+imageFrontId = ubikz/jscraper-ui
 containerIds = $(shell docker ps | grep jscraper | awk '{print $$1}')
 delImageIds = $(shell docker images -aq -f "dangling=true")
 
@@ -18,7 +19,8 @@ nginx-start:
 	@/etc/init.d/nginx start
 
 pull:
-	@docker pull $(imageId)
+	@docker pull $(imageBackId)
+	@docker pull $(imageFrontId)
 
 clean-docker: clean-ui
 	@for id in $(containerIds); do docker rm -f $$id; done

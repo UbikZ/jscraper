@@ -9,7 +9,8 @@ nginx:
     - jscraper-ui
   volumes:
     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    - ./docker/nginx:/var/log/nginx
+    - ./docker/nginx/log:/var/log/nginx
+    - ./docker/nginx/ssl:/ssl
   env_file: .env
 jscraper:
   image: ubikz/jscraper
