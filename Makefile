@@ -3,7 +3,6 @@
 rootDir = $(shell pwd)
 volDir = $(rootDir)/docker
 imageBackId = ubikz/jscraper
-imageFrontId = ubikz/jscraper-ui
 containerIds = $(shell docker ps | grep jscraper | awk '{print $$1}')
 delImageIds = $(shell docker images -aq -f "dangling=true")
 
@@ -22,15 +21,12 @@ pull:
 	@docker pull $(imageBackId)
 	@docker pull $(imageFrontId)
 
-clean-docker: clean-ui
+clean-docker:
 	@for id in $(containerIds); do docker rm -f $$id; done
 	@for id in $(delImageIds); do docker rmi -f $$id; done
 
 clean-db:
 	@rm -rf $(volDir)/pgsql
-
-clean-ui:
-	@rm -rf $(volDir)/scraper-ui
 
 clean-cache:
 	@rm -rf $(volDir)/gradle
