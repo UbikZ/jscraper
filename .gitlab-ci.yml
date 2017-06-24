@@ -40,9 +40,7 @@ deploy:front-latest:
     - yarn --version
     - cd jscraper-ui
     - yarn install
-    - yarn prebuild
-    - yarn prod
-    - pip install awscli
+    - export API_HOST=$API_HOST && yarn prod
   script:
     - aws s3 cp ./static s3://$S3_BUCKET_NAME/ --recursive --include "*"
   only:
