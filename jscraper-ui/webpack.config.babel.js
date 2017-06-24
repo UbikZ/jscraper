@@ -143,7 +143,7 @@ export default (env) => {
     },
     output: {
       path: buildDirectory,
-      publicPath: '/',
+      publicPath: '',
       filename: 'app.js'
     },
     module: {
