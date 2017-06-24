@@ -5,8 +5,6 @@ nginx:
     - "443:443"
   links:
     - jscraper
-#  volumes_from:
-#    - jscraper-ui
   volumes:
     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     - ./docker/nginx/log:/var/log/nginx
@@ -36,8 +34,3 @@ pgsql:
   env_file: .env
   log_opt:
     max-size: "100k"
-#jscraper-ui:
-#  image: ubikz/jscraper-ui
-#  volumes:
-#    - ./docker/scraper-ui:/var/www/jscraper
-#  env_file: .env

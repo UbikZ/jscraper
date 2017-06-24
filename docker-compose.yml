@@ -4,8 +4,6 @@ nginx:
     - "80:80"
   links:
     - jscraper
-  volumes_from:
-      - jscraper-ui
   volumes:
     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     - ./docker/nginx/log:/var/log/nginx
@@ -28,9 +26,4 @@ pgsql:
   volumes:
     - ./docker/pgsql/data:/var/lib/postgresql/data
     - ./pgsql/initdb.d:/docker-entrypoint-initdb.d:ro
-  env_file: .env
-jscraper-ui:
-  build: jscraper-ui
-  volumes:
-    - ./docker/scraper-ui:/var/www/jscraper
   env_file: .env
