@@ -2,7 +2,8 @@ import 'isomorphic-fetch';
 import queryString from 'query-string';
 import moment from 'moment';
 
-const URL_PREFIX = '/api';
+const API_HOST = process.env.API_HOST;
+const URL_PREFIX = `${API_HOST ? API_HOST : ''}/api`;
 
 export default function apiFetch(url, state, args, forbiden = []) {
   const finalQs = Object.assign({}, state, args);

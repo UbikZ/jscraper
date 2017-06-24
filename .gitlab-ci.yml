@@ -12,13 +12,13 @@ stages:
   - test
   - deploy
 
-tests:node-6:
-  <<: *test_front_definition
-  image: node:6-alpine
-
-tests:node-7:
-  <<: *test_front_definition
-  image: node:7-alpine
+#tests:node-6:
+#  <<: *test_front_definition
+#  image: node:6-alpine
+#
+#tests:node-7:
+#  <<: *test_front_definition
+#  image: node:7-alpine
 
 tests:node-8:
   <<: *test_front_definition
@@ -38,9 +38,12 @@ deploy:front-latest:
   before_script:
     - node --version
     - yarn --version
-    - cd jscraper-ui && yarn install && yarn prebuild && yarn prod
+    - cd jscraper-ui
+    - yarn install
+    - yarn prebuild
+    - yarn prod
     - pip install awscli
   script:
-    - aws s3 cp ./jscraper-ui/static s3://scraper.ubikz.com/ --recursive --include "*"
+    - aws s3 cp ./static s3://$S3_BUCKET_NAME/ --recursive --include "*"
   only:
     - aws
