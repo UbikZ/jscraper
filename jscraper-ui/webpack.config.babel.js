@@ -34,13 +34,13 @@ export default (env) => {
   const plugins = [
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
-      filename: 'vendor-[hash].js',
+      filename: 'vendor.js',
       minChunks(module) {
         const context = module.context;
         return context && context.indexOf('node_modules') >= 0;
       }
     }),
-    new ExtractTextPlugin('style-[hash].css'),
+    new ExtractTextPlugin('style.css'),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(nodeEnv)
@@ -143,7 +143,7 @@ export default (env) => {
     output: {
       path: buildDirectory,
       publicPath: '/',
-      filename: 'app-[hash].js'
+      filename: 'app.js'
     },
     module: {
       rules

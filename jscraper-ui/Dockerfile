@@ -1,4 +1,4 @@
-FROM node:7.8-alpine
+FROM node:8-alpine
 
 MAINTAINER Gabriel Malet <gabriemalet@gmail.com>
 
@@ -7,7 +7,7 @@ RUN apk update \
     && rm -rf /var/cache/apk/*
 
 ADD package.json /tmp/package.json
-RUN cd /tmp && npm install
+RUN cd /tmp && yarn install
 RUN mkdir -p /src && cp -a /tmp/node_modules /src/
 
 WORKDIR /src

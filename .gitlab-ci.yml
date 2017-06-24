@@ -1,0 +1,51 @@
+.test_front_template: &test_front_definition
+  stage: test
+  before_script:
+    - node --version
+    - yarn --version
+    - yarn install
+  script:
+    - cd jscraper-ui && yarn lint
+
+stages:
+  - test
+  - deploy
+
+tests:node-6:
+  <<: *test_definition
+  image: node:6-alpine
+  only:
+    - master
+
+tests:node-7:
+  <<: *test_definition
+  image: node:7-alpine
+  only:
+    - master
+
+tests:node-8:
+  <<: *test_definition
+  image: node:8-alpine
+  only:
+    - master
+
+deploy:back:
+  stage: deploy
+  image: ubikz/docker-ssh-remote-exec:alpine
+  script:
+    - ssh root@ubikz.com "cd dockers/jscraper && git pull origin master && make prod"
+  only:
+    - master
+
+deploy:front-latest:
+  stage: deploy
+  image: ubikz/docker-aws-static-deploy:2.7.8
+  before_script:
+    - node --version
+    - yarn --version
+    - cd jscraper-ui && yarn install && yarn prebuild && yarn prod
+    - pip install awscli
+  script:
+    - aws s3 cp ./jscraper-ui/static s3://scraper.ubikz.com/ --recursive --include "*"
+  only:
+    - master

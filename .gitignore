@@ -1,4 +1,5 @@
 build
+.yarnclean
 jscraper-ui/node_modules
 jscraper-ui/web/public
 .DS_Store

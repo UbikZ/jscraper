@@ -8,9 +8,9 @@
     "analyze": "webpack --display-error-details",
     "clean": "rm -rf ./static && mkdir static",
     "lint": "eslint ./app",
-    "prebuild": "npm run clean && npm run lint",
-    "dev": "npm run prebuild && export NODE_ENV=development && webpack",
-    "prod": "npm run prebuild && export NODE_ENV=production && webpack --env.prod=true --env.sw=true"
+    "prebuild": "yarn clean && yarn lint",
+    "dev": "yarn prebuild && export NODE_ENV=development && webpack",
+    "prod": "yarn prebuild && export NODE_ENV=production && webpack --env.prod=true --env.sw=true"
   },
   "dependencies": {
     "es6-promise": "^4.1.0",
