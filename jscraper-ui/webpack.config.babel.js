@@ -43,7 +43,8 @@ export default (env) => {
     new ExtractTextPlugin('style.css'),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify(nodeEnv)
+        NODE_ENV: JSON.stringify(nodeEnv),
+        API_HOST: process.env.API_HOST
       }
     }),
     new webpack.NamedModulesPlugin(),

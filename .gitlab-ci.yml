@@ -40,9 +40,8 @@ deploy:front-latest:
     - node --version
     - yarn --version
     - yarn install
-    - yarn prod
+    - export API_HOST=$API_HOST && yarn prod
   script:
-    - ls -alt
-    - bash ./jscraper-ui/scripts/aws-ci.sh
+    - bash ./scripts/aws-ci.sh
   only:
     - aws
