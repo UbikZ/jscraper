@@ -10,7 +10,8 @@
 
 stages:
   - test
-  - deploy
+  - deploy-back
+  - deploy-front
 
 #tests:node-6:
 #  <<: *test_front_definition
@@ -25,7 +26,7 @@ tests:node-8:
   image: node:8-alpine
 
 deploy:back:
-  stage: deploy
+  stage: deploy-back
   image: ubikz/docker-ssh-remote-exec:alpine
   script:
     - ssh root@ubikz.com "cd dockers/jscraper && git pull origin master && make prod"
@@ -33,7 +34,7 @@ deploy:back:
     - master
 
 deploy:front-latest:
-  stage: deploy
+  stage: deploy-front
   image: ubikz/docker-aws-static-deploy:2.7.8
   before_script:
     - cd jscraper-ui
