@@ -19,7 +19,6 @@ nginx-start:
 
 pull:
 	@docker pull $(imageBackId)
-	@docker pull $(imageFrontId)
 
 clean-docker:
 	@for id in $(containerIds); do docker rm -f $$id; done
