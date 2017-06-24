@@ -6,7 +6,7 @@
   script:
     - cd jscraper-ui && yarn install && yarn lint
   only:
-    - master@ubikz/jscraper
+    - aws@ubikz/jscraper
 
 stages:
   - test
@@ -30,7 +30,7 @@ deploy:back:
   script:
     - ssh root@ubikz.com "cd dockers/jscraper && git pull origin master && make prod"
   only:
-    - master@ubikz/jscraper
+    - aws@ubikz/jscraper
 
 deploy:front-latest:
   stage: deploy
@@ -43,4 +43,4 @@ deploy:front-latest:
   script:
     - aws s3 cp ./jscraper-ui/static s3://scraper.ubikz.com/ --recursive --include "*"
   only:
-    - master@ubikz/jscraper
+    - aws@ubikz/jscraper
