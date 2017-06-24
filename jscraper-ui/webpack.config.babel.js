@@ -44,7 +44,7 @@ export default (env) => {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(nodeEnv),
-        API_HOST: process.env.API_HOST
+        API_HOST: JSON.stringify(process.env.API_HOST)
       }
     }),
     new webpack.NamedModulesPlugin(),
@@ -104,7 +104,7 @@ export default (env) => {
         include: [sourcePath, modulesPath],
         loader: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: 'css-loader!postcss-loader',
+          use: 'css-loader!postcss-loader'
         })
       }
     );
@@ -115,7 +115,7 @@ export default (env) => {
         include: [sourcePath, modulesPath],
         loader: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: 'css-loader!postcss-loader?sourceMap',
+          use: 'css-loader!postcss-loader?sourceMap'
         })
       }
     );
