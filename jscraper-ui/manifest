@@ -1,0 +1,6 @@
+
+app.js Content-Type=application/javascript,Content-Encoding=gzip
+index.html Content-Type=text/html,Content-Encoding=gzip
+style.css Content-Type=text/css,Content-Encoding=gzip
+sw.js Content-Type=application/javascript,Content-Encoding=gzip
+vendor.js Content-Type=application/javascript,Content-Encoding=gzip
