@@ -3,31 +3,26 @@
   before_script:
     - node --version
     - yarn --version
-    - yarn install
   script:
-    - cd jscraper-ui && yarn lint
+    - cd jscraper-ui && yarn install && yarn lint
+  only:
+    - master@ubikz/jscraper
 
 stages:
   - test
   - deploy
 
 tests:node-6:
-  <<: *test_definition
+  <<: *test_front_definition
   image: node:6-alpine
-  only:
-    - master
 
 tests:node-7:
-  <<: *test_definition
+  <<: *test_front_definition
   image: node:7-alpine
-  only:
-    - master
 
 tests:node-8:
-  <<: *test_definition
+  <<: *test_front_definition
   image: node:8-alpine
-  only:
-    - master
 
 deploy:back:
   stage: deploy
@@ -35,7 +30,7 @@ deploy:back:
   script:
     - ssh root@ubikz.com "cd dockers/jscraper && git pull origin master && make prod"
   only:
-    - master
+    - master@ubikz/jscraper
 
 deploy:front-latest:
   stage: deploy
@@ -48,4 +43,4 @@ deploy:front-latest:
   script:
     - aws s3 cp ./jscraper-ui/static s3://scraper.ubikz.com/ --recursive --include "*"
   only:
-    - master
+    - master@ubikz/jscraper
