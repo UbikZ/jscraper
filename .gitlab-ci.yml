@@ -42,6 +42,6 @@ deploy:front-latest:
     - yarn install
     - yarn prod
   script:
-    - bash ./jscraper-ui/scripts/aws-cli.sh
+    - bash ./jscraper-ui/scripts/aws-ci.sh
   only:
     - aws
