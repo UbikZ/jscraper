@@ -40,7 +40,7 @@ deploy:front-latest:
     - node --version
     - yarn --version
     - yarn install
-    - export API_HOST=$API_HOST && yarn prod
+    - export API_HOST=$API_HOST && export CF_HOST=$CF_HOST && yarn prod
   script:
     - bash ./scripts/aws-ci.sh
   only:

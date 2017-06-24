@@ -143,7 +143,7 @@ export default (env) => {
     },
     output: {
       path: buildDirectory,
-      publicPath: '/',
+      publicPath: path.join(process.env.CF_HOST || '', '/'),
       filename: 'app.js'
     },
     module: {
