@@ -49,10 +49,7 @@ abstract public class AbstractDal {
      * @return
      */
     public int count(AbstractDalFilter filter) {
-        Select qb = this.getBaseSelect(filter, true);
-        qb.columns("COUNT(*)");
-
-        return this.count(qb);
+        return this.count(this.getBaseSelect(filter, true));
     }
 
     /**
@@ -97,11 +94,12 @@ abstract public class AbstractDal {
      */
     protected Select getBaseSelect(AbstractDalFilter filter, boolean isCount) {
         QueryBuilder qb = new QueryBuilder();
-        AbstractQuery select = qb.select().from(this.tableName);
+        Select select = qb.select().from(this.tableName);
+        select.columns("COUNT(DISTINCT id)");
 
         this.parseFilter(filter, select, isCount);
 
-        return (Select) select;
+        return select;
     }
 
     /**
@@ -223,6 +221,16 @@ abstract public class AbstractDal {
             select.where("date", "<=", new Timestamp(
                     filter.getEndDate().getTime() + (59 + 59 * 60 + 23 * 3600) * 1000
             ));
+        }
+
+        if (select instanceof Select) {
+            if (filter.getLimit() != null) {
+                ((Select) select).limit(filter.getLimit());
+            }
+
+            if (filter.getOffset() != null) {
+                ((Select) select).offset(filter.getOffset());
+            }
         }
     }
 

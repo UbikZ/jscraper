@@ -157,25 +157,19 @@ public class FeedItemDal extends AbstractDal {
             select.addColumn("string_agg(DISTINCT fit.tag_id::character varying, ',') AS tags")
                     .orderBy("fi.id")
                     .groupBy("fi.id");
+        } else {
+            select.columns("COUNT(DISTINCT fi.id)");
+        }
 
-            if (feedItemDalFilter.getTagNames() != null && feedItemDalFilter.getTagNames().size() > 0) {
-                select.join("feed_item_tag", "fit", "fi.id = fit.feed_item_id")
-                        .join("tag", "t", "fit.tag_id = t.id");
+        if (feedItemDalFilter.getTagNames() != null && feedItemDalFilter.getTagNames().size() > 0) {
+            select.join("feed_item_tag", "fit", "fi.id = fit.feed_item_id")
+                    .join("tag", "t", "fit.tag_id = t.id");
 
-                for (String tag : feedItemDalFilter.getTagNames()) {
-                    select.orWhere("t.label", "LIKE", "%" + tag + "%");
-                }
-            } else {
-                select.joinLeft("feed_item_tag", "fit", "fi.id = fit.feed_item_id");
+            for (String tag : feedItemDalFilter.getTagNames()) {
+                select.orWhere("t.label", "LIKE", "%" + tag + "%");
             }
-
-            if (feedItemDalFilter.getLimit() != null) {
-                select.limit(feedItemDalFilter.getLimit());
-            }
-
-            if (feedItemDalFilter.getOffset() != null) {
-                select.offset(feedItemDalFilter.getOffset());
-            }
+        } else {
+            select.joinLeft("feed_item_tag", "fit", "fi.id = fit.feed_item_id");
         }
 
         if (feedItemDalFilter.getUrl() != null) {
