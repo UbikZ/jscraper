@@ -4,6 +4,7 @@ import path from "path";
 import ExtractTextPlugin from "extract-text-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import PrepackWebpackPlugin from "prepack-webpack-plugin";
+import WebpackMd5Hash from 'webpack-md5-hash';
 import SWPrecacheWebpackPlugin from "sw-precache-webpack-plugin";
 import autoprefixer from "autoprefixer";
 
@@ -34,19 +35,19 @@ export default (env) => {
   const plugins = [
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
-      filename: 'vendor.js',
       minChunks(module) {
         const context = module.context;
         return context && context.indexOf('node_modules') >= 0;
       }
     }),
-    new ExtractTextPlugin('styles.css'),
+    new ExtractTextPlugin('styles.css?v=[contenthash]'),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(nodeEnv),
         API_HOST: JSON.stringify(process.env.API_HOST)
       }
     }),
+    new WebpackMd5Hash(),
     new webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin({
       template: path.join(sourcePath, 'index.html'),
@@ -144,7 +145,7 @@ export default (env) => {
     output: {
       path: buildDirectory,
       publicPath: '',
-      filename: 'app.js'
+      filename: '[name].js?v=[chunkhash]'
     },
     module: {
       rules
