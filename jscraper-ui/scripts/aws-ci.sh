@@ -7,7 +7,7 @@ invalidate=0
 # Enable CLI for CloudFront
 aws configure set preview.cloudfront true
 
-while read line;
+while read line || [ -n "$line" ];
 do
     file=$(echo ${line} | awk '{print $1}')
     metadata=$(echo ${line} | awk '{print $2}')
