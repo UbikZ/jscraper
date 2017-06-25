@@ -2,6 +2,9 @@
 
 set -e
 
+# Enable CLI for CloudFront
+aws configure set preview.cloudfront true
+
 while read line;
 do
     file=$(echo ${line} | awk '{print $1}')
