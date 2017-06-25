@@ -15,15 +15,17 @@ do
 
     echo "Metadata for ${file}"
     cat metadata
-    echo "Current Checksum for ${file}"
-    cat metadata
+    echo "Checksums for ${file}"
+    echo "Current ${currCheckum} vs Aws ${awsChecksum}"
 
     if [[ ${currChecksum} != ${awsChecksum} ]]; then
+        echo "Pushing file ${file} to s3"
         # Push files
         aws s3 cp ./static/${file} s3://${S3_BUCKET_NAME}/${file} \
             --metadata md5chksum=${currChecksum},${metadata} \
             --content-md5 ${currChecksum}
 
+        echo "Invalidate CloudFront cache for ${file}"
         # Invalidate Cloud Front Cache
         aws cloudfront create-invalidation --distribution-id ${CF_DISTRIBUTION_ID} --paths "/*";
     fi
