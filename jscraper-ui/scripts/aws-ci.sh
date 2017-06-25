@@ -14,8 +14,9 @@ do
     currCheckum=$(node ./scripts/currentChecksum.js ./static/${file})
 
     echo "Current ${currCheckum} vs Aws ${awsChecksum}"
+    [ "$currChecksum" != "$awsChecksum" ] && echo "Need to update." || "Up to date."
 
-    if [[ "${currChecksum}" != "${awsChecksum}" ]]; then
+    if [ "$currChecksum" != "$awsChecksum" ]; then
         echo "Pushing file ${file} to s3"
         # Push files
         aws s3 cp ./static/${file} s3://${S3_BUCKET_NAME}/${file} \
