@@ -10,12 +10,7 @@ import List from '../../components/FeedItem/List';
 
 class FeedItems extends Component {
   static propTypes = {
-    fetchFeedItems: PropTypes.func.isRequired,
-    tags: PropTypes.array.isRequired,
-    offset: PropTypes.number.isRequired,
-    limit: PropTypes.number.isRequired,
-    startDate: PropTypes.object,
-    endDate: PropTypes.object
+    fetchFeedItems: PropTypes.func.isRequired
   };
 
   loadList = (filter = {}) => {
@@ -24,7 +19,7 @@ class FeedItems extends Component {
 
   render() {
     return (
-      <Main title={'Feed Items Stuff'}>
+      <Main title={'Feed Items'}>
         <Filter loadList={this.loadList} />
         <List loadList={this.loadList} />
       </Main>
@@ -32,9 +27,8 @@ class FeedItems extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  const {offset, limit, tags, startDate, endDate} = state.feedItems;
-  return {offset, limit, tags, startDate, endDate};
+function mapStateToProps() {
+  return {};
 }
 
 function mapDispatchToProps(dispatch) {

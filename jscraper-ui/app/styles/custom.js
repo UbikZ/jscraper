@@ -1,4 +1,12 @@
 export const custom = `
+  .a-icon {
+      color: #fff;
+      cursor: pointer;
+      &:hover {
+        color: #e85600;
+      }
+  }
+  
   .bg-gray {
       background: #f8f9fa;
       color: #667189;

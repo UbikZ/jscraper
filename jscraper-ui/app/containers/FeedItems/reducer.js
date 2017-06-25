@@ -22,6 +22,7 @@ export default function itemReducer(state = initialState, action) {
         startDate: action.startDate,
         endDate: action.endDate,
         offset: action.offset,
+        tags: action.tags,
         approved: action.approved
       };
     }
