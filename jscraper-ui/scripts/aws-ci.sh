@@ -20,8 +20,7 @@ do
         echo "Pushing file ${file} to s3"
         # Push files
         aws s3 cp ./static/${file} s3://${S3_BUCKET_NAME}/${file} \
-            --metadata md5chksum=${currChecksum},${metadata} \
-            --content-md5 ${currChecksum}
+            --metadata md5chksum=${currChecksum},${metadata}
 
         echo "Invalidate CloudFront cache for ${file}"
         # Invalidate Cloud Front Cache
