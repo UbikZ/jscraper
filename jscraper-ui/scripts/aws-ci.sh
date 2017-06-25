@@ -10,8 +10,8 @@ do
     # Get current object
     aws s3api head-object --bucket ${S3_BUCKET_NAME} --key ${file} > metadata
 
-    awsChecksum = $(node ./scripts/awsChecksum.js metadata)
-    currCheckum = $(node ./scripts/currentChecksum.js ./static/${file})
+    awsChecksum=$(node ./scripts/awsChecksum.js metadata)
+    currCheckum=$(node ./scripts/currentChecksum.js ./static/${file})
 
     echo "Metadata for ${file}"
     cat metadata
