@@ -7,8 +7,8 @@ import PrepackWebpackPlugin from "prepack-webpack-plugin";
 import SWPrecacheWebpackPlugin from "sw-precache-webpack-plugin";
 import autoprefixer from "autoprefixer";
 
-const sourcePath = path.join(__dirname, './app');
-const buildDirectory = path.join(__dirname, './static');
+const sourcePath = path.join(__dirname, 'app');
+const buildDirectory = path.join(__dirname, 'static');
 const modulesPath = path.resolve(__dirname, 'node_modules');
 
 const stats = {
@@ -40,7 +40,7 @@ export default (env) => {
         return context && context.indexOf('node_modules') >= 0;
       }
     }),
-    new ExtractTextPlugin('style.css'),
+    new ExtractTextPlugin('styles.css'),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(nodeEnv),
@@ -90,10 +90,10 @@ export default (env) => {
           dead_code: true,
           evaluate: true,
           if_return: true,
-          join_vars: true,
+          join_vars: true
         },
         output: {
-          comments: false,
+          comments: false
         }
       })
     );

@@ -14,7 +14,7 @@ import 'spectre.css/dist/spectre.css';
 import 'spectre.css/dist/spectre-icons.css';
 import 'spectre.css/dist/spectre-exp.css';
 import 'react-datepicker/dist/react-datepicker.css';
-import './style/spectre-custom.css';
+import './styles';
 
 const middlewares = [thunkMiddleware];
 if (process.env.NODE_ENV !== 'production') {
