@@ -1,4 +1,4 @@
-app.js Content-Type=application/javascript,Content-Encoding=gzip
+main.js Content-Type=application/javascript,Content-Encoding=gzip
 index.html Content-Type=text/html,Content-Encoding=gzip
 styles.css Content-Type=text/css,Content-Encoding=gzip
 sw.js Content-Type=application/javascript,Content-Encoding=gzip
