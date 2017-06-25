@@ -13,7 +13,9 @@ do
     metadata=$(echo ${line} | awk '{print $2}')
 
     # Get current object
+    set +e
     aws s3api head-object --bucket ${S3_BUCKET_NAME} --key ${file} > metadata
+    set -e
 
     awsChecksum=$(node ./scripts/awsChecksum.js metadata)
     currChecksum=$(node ./scripts/currentChecksum.js ./static/${file})
