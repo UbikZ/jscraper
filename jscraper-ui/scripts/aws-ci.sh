@@ -12,6 +12,7 @@ do
     file=$(echo ${line} | awk '{print $1}')
     metadata=$(echo ${line} | awk '{print $2}')
 
+    echo "Check file ${line}..."
     # Get current object
     set +e
     aws s3api head-object --bucket ${S3_BUCKET_NAME} --key ${file} > metadata
@@ -31,10 +32,10 @@ do
             --metadata md5chksum=${currChecksum},${metadata}
 
     fi
-
-    if [ ${invalidate} -eq 1 ]; then
-        echo "Invalidate CloudFront cache."
-        # Invalidate Cloud Front Cache
-        aws cloudfront create-invalidation --distribution-id ${CF_DISTRIBUTION_ID} --paths "/*";
-    fi
 done < manifest
+
+if [ ${invalidate} -eq 1 ]; then
+    echo "Invalidate CloudFront cache."
+    # Invalidate Cloud Front Cache
+    aws cloudfront create-invalidation --distribution-id ${CF_DISTRIBUTION_ID} --paths "/*" >/dev/null
+fi
