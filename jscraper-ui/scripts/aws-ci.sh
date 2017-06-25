@@ -11,9 +11,9 @@ do
     aws s3api head-object --bucket ${S3_BUCKET_NAME} --key ${file} > metadata
 
     awsChecksum=$(node ./scripts/awsChecksum.js metadata)
-    currCheckum=$(node ./scripts/currentChecksum.js ./static/${file})
+    currChecksum=$(node ./scripts/currentChecksum.js ./static/${file})
 
-    echo "Current ${currCheckum} vs Aws ${awsChecksum}"
+    echo "Current ${currChecksum} vs Aws ${awsChecksum}"
     [ "$currChecksum" != "$awsChecksum" ] && echo "Need to update." || echo "Up to date."
 
     if [ "$currChecksum" != "$awsChecksum" ]; then
