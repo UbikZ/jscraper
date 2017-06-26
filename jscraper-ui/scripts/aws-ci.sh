@@ -2,6 +2,11 @@
 
 set -e
 
+invalidateIndex=0
+
+# Enable CLI for CloudFront
+aws configure set preview.cloudfront true
+
 while read line || [ -n "$line" ];
 do
     file=$(echo ${line} | awk '{print $1}')
@@ -16,15 +21,20 @@ do
     awsChecksum=$(node ./scripts/awsChecksum.js metadata)
     currChecksum=$(node ./scripts/currentChecksum.js ./static/${file})
 
-    echo "Current ${currChecksum} vs Aws ${awsChecksum}"
-    [ "$currChecksum" != "$awsChecksum" ] && echo "Need to update." || echo "Up to date."
+    [ "$currChecksum" != "$awsChecksum" ] && echo "Need to update (${currChecksum} vs Aws ${awsChecksum})." || echo "Up to date. (${currChecksum})"
 
     if [ "$currChecksum" != "$awsChecksum" ]; then
-        invalidate=1
-        echo "Pushing file ${file} to s3"
+        [ "${file}" == "index.html" ] && invalidateIndex=1
+        echo "Pushing file ${file} to s3."
         # Push files
         aws s3 cp ./static/${file} s3://${S3_BUCKET_NAME}/${file} \
             --metadata md5chksum=${currChecksum},${metadata}
 
     fi
 done < manifest
+
+if [ ${invalidateIndex} -eq 1 ]; then
+    echo "Invalidate CloudFront index.html cache."
+    # Invalidate Cloud Front Cache for index.html
+    aws cloudfront create-invalidation --distribution-id ${CF_DISTRIBUTION_ID} --paths "/index.html";
+fi
