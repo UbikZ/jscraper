@@ -226,7 +226,7 @@ abstract public class AbstractDal {
             ));
         }
 
-        if (select instanceof Select) {
+        if (!isCount && select instanceof Select) {
             if (filter.getLimit() != null) {
                 ((Select) select).limit(filter.getLimit());
             }
