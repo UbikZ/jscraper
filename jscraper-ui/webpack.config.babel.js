@@ -5,7 +5,6 @@ import ExtractTextPlugin from "extract-text-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import PrepackWebpackPlugin from "prepack-webpack-plugin";
 import WebpackMd5Hash from 'webpack-md5-hash';
-import SWPrecacheWebpackPlugin from "sw-precache-webpack-plugin";
 import autoprefixer from "autoprefixer";
 
 const sourcePath = path.join(__dirname, 'app');
@@ -30,7 +29,6 @@ const stats = {
 export default (env) => {
   const nodeEnv = env && env.prod ? 'production' : 'development';
   const isProduction = nodeEnv === 'production';
-  const serviceWorkerBuild = env && env.sw;
 
   const plugins = [
     new webpack.optimize.CommonsChunkPlugin({
@@ -120,20 +118,6 @@ export default (env) => {
         })
       }
     );
-  }
-
-  if (serviceWorkerBuild) {
-    plugins.push(new SWPrecacheWebpackPlugin(
-      {
-        cacheId: 'jscraper-app',
-        filename: 'sw.js',
-        minify: true,
-        runtimeCaching: [{
-          urlPattern: /\/api\//,
-          handler: 'networkFirst'
-        }]
-      }
-    ));
   }
 
   return {
