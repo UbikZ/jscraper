@@ -95,7 +95,10 @@ abstract public class AbstractDal {
     protected Select getBaseSelect(AbstractDalFilter filter, boolean isCount) {
         QueryBuilder qb = new QueryBuilder();
         Select select = qb.select().from(this.tableName);
-        select.columns("COUNT(DISTINCT id)");
+
+        if (isCount) {
+            select.columns("COUNT(DISTINCT id)");
+        }
 
         this.parseFilter(filter, select, isCount);
 

@@ -2,11 +2,6 @@
 
 set -e
 
-invalidate=0
-
-# Enable CLI for CloudFront
-aws configure set preview.cloudfront true
-
 while read line || [ -n "$line" ];
 do
     file=$(echo ${line} | awk '{print $1}')
@@ -33,9 +28,3 @@ do
 
     fi
 done < manifest
-
-if [ ${invalidate} -eq 1 ]; then
-    echo "Invalidate CloudFront cache."
-    # Invalidate Cloud Front Cache
-    aws cloudfront create-invalidation --distribution-id ${CF_DISTRIBUTION_ID} --paths "/*" >/dev/null
-fi
