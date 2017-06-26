@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {RECEIVE_ITEMS, RECEIVE_ITEMS_ERROR} from './action';
+import {PENDING_ITEMS, RECEIVE_ITEMS, RECEIVE_ITEMS_ERROR} from './action';
 
 const initialState = {
   items: [],
@@ -7,6 +7,7 @@ const initialState = {
   offset: 0,
   limit: 20,
   approved: true,
+  pending: false,
   tags: [],
   startDate: moment(),
   endDate: moment()
@@ -14,6 +15,12 @@ const initialState = {
 
 export default function itemReducer(state = initialState, action) {
   switch (action.type) {
+    case PENDING_ITEMS: {
+      return {
+        ...state,
+        pending: action.pending
+      };
+    }
     case RECEIVE_ITEMS: {
       return {
         ...state,
@@ -23,6 +30,7 @@ export default function itemReducer(state = initialState, action) {
         endDate: action.endDate,
         offset: action.offset,
         tags: action.tags,
+        pending: action.pending,
         approved: action.approved
       };
     }

@@ -2,7 +2,7 @@
 import React from 'react';
 import {render} from 'react-dom';
 import {BrowserRouter} from 'react-router-dom';
-import {applyMiddleware, createStore} from 'redux';
+import {applyMiddleware, createStore, compose} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import {Provider} from 'react-redux';
 
@@ -14,15 +14,17 @@ import 'spectre.css/dist/spectre.css';
 import 'spectre.css/dist/spectre-icons.css';
 import 'spectre.css/dist/spectre-exp.css';
 import 'react-datepicker/dist/react-datepicker.css';
+import 'spinkit/css/spinkit.css';
 import './styles';
 
 const middlewares = [thunkMiddleware];
+let composeEnhancers;
 if (process.env.NODE_ENV !== 'production') {
-  middlewares.push(require('redux-logger').createLogger());
+  composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 }
 
 const markup = (
-  <Provider store={createStore(reducer, applyMiddleware(...middlewares))}>
+  <Provider store={createStore(reducer, composeEnhancers(applyMiddleware(...middlewares)))}>
     <BrowserRouter>
       <App/>
     </BrowserRouter>

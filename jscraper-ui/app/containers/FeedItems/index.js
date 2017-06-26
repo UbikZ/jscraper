@@ -10,7 +10,8 @@ import List from '../../components/FeedItem/List';
 
 class FeedItems extends Component {
   static propTypes = {
-    fetchFeedItems: PropTypes.func.isRequired
+    fetchFeedItems: PropTypes.func.isRequired,
+    pending: PropTypes.bool.isRequired
   };
 
   loadList = (filter = {}) => {
@@ -18,8 +19,10 @@ class FeedItems extends Component {
   };
 
   render() {
+    const {pending} = this.props;
+
     return (
-      <Main title={'Feed Items'}>
+      <Main title={'Feed Items'} pending={pending}>
         <Filter loadList={this.loadList} />
         <List loadList={this.loadList} />
       </Main>
@@ -27,8 +30,9 @@ class FeedItems extends Component {
   }
 }
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  const {pending} = state.feedItems;
+  return {pending};
 }
 
 function mapDispatchToProps(dispatch) {
