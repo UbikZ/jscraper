@@ -18,9 +18,9 @@ import 'spinkit/css/spinkit.css';
 import './styles';
 
 const middlewares = [thunkMiddleware];
-let composeEnhancers;
+let composeEnhancers = compose;
 if (process.env.NODE_ENV !== 'production') {
-  composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || composeEnhancers;
 }
 
 const markup = (
