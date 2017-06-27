@@ -26,7 +26,7 @@ class Paginate extends Component {
                      initialPage={offset}
                      pageCount={Math.ceil(total / limit)}
                      marginPagesDisplayed={2}
-                     pageRangeDisplayed={5}
+                     pageRangeDisplayed={3}
                      onPageChange={this.handlePageClick}
                      containerClassName={"pagination float-right"}
                      previousClassName={clsPageItem}

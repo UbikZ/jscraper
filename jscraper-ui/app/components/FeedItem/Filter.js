@@ -24,7 +24,7 @@ class Filter extends Component {
       e.target.value = '';
     }
   };
-  handleTags = (tags) => this.props.loadList({tags});
+  handleTags = (tags) => this.props.loadList({tags, offset: 0});
 
   handleInputChange = (event) => {
     const target = event.target;
