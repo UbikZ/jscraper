@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 abstract public class AbstractEntity {
-    protected final Logger logger = LoggerFactory.getLogger(AbstractEntity.class);
     protected AbstractDal dal;
     protected AbstractEntityHelper helper;
 

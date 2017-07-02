@@ -16,8 +16,8 @@ public class TagProhibitedDal extends AbstractDal {
     }
 
     @Override
-    protected Select getBaseSelect(AbstractDalFilter filter) {
-        Select select = super.getBaseSelect(filter);
+    protected Select getBaseSelect(AbstractDalFilter filter, boolean isCount) {
+        Select select = super.getBaseSelect(filter, isCount);
 
         select.orderBy("label", true);
 

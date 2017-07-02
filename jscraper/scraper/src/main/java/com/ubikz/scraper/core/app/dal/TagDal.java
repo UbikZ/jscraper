@@ -21,9 +21,9 @@ public class TagDal extends AbstractDal {
      * @return
      */
     @Override
-    protected void parseFilter(AbstractDalFilter filter, AbstractQuery select) {
+    protected void parseFilter(AbstractDalFilter filter, AbstractQuery select, boolean isCount) {
         TagDalFilter tagDalFilter = (TagDalFilter) filter;
-        super.parseFilter(tagDalFilter, select);
+        super.parseFilter(tagDalFilter, select, isCount);
 
         if (tagDalFilter.getNameList() != null && tagDalFilter.getNameList().size() > 0) {
             select.where("label", "in", tagDalFilter.getNameList());

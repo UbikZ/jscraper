@@ -78,9 +78,9 @@ public class FeedDal extends AbstractDal {
      * @return
      */
     @Override
-    protected void parseFilter(AbstractDalFilter filter, AbstractQuery select) {
+    protected void parseFilter(AbstractDalFilter filter, AbstractQuery select, boolean isCount) {
         FeedDalFilter feedDalFilter = (FeedDalFilter) filter;
-        super.parseFilter(feedDalFilter, select);
+        super.parseFilter(feedDalFilter, select, isCount);
 
         if (feedDalFilter.getUrl() != null) {
             select.where("url", feedDalFilter.getUrl());

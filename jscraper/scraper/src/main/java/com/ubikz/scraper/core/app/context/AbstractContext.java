@@ -41,7 +41,7 @@ abstract public class AbstractContext {
      * @return
      * @throws Exception
      */
-    public BaseMessage create(AbstractRequestBody request) throws Exception {
+    public BaseMessage create(AbstractRequestBody request) {
         return this.handle(() -> this.service.create(
                 this.parseRequest(request, this.serviceRequest)
         ), HttpStatus.CREATED, this.CREATED);
@@ -52,7 +52,7 @@ abstract public class AbstractContext {
      * @return
      * @throws Exception
      */
-    public BaseMessage update(Integer id, AbstractRequestBody request) throws Exception {
+    public BaseMessage update(Integer id, AbstractRequestBody request) {
         return this.handle(() -> {
             AbstractServiceRequest serviceRequest = this.serviceRequest;
             serviceRequest.setId(id);
@@ -70,7 +70,7 @@ abstract public class AbstractContext {
      * @return
      * @throws Exception
      */
-    public BaseMessage getById(int id) throws Exception {
+    public BaseMessage getById(int id) {
         AbstractFilterBody filter = this.filterBody;
         filter.setId(id);
 
@@ -84,7 +84,7 @@ abstract public class AbstractContext {
      * @return
      * @throws Exception
      */
-    public BaseMessage deleteById(int id) throws Exception {
+    public BaseMessage deleteById(int id) {
         AbstractFilterBody filter = this.filterBody;
         filter.setId(id);
 
@@ -98,7 +98,7 @@ abstract public class AbstractContext {
      * @return
      * @throws Exception
      */
-    public BaseMessage getAll(AbstractFilterBody filter) throws Exception {
+    public BaseMessage getAll(AbstractFilterBody filter) {
         return this.handle(() -> this.service.getAll(
                 this.parseFilter(filter, this.serviceFilter)
         ), HttpStatus.OK, this.GET_ALL);
@@ -118,7 +118,7 @@ abstract public class AbstractContext {
      * @return
      * @throws Exception
      */
-    final protected BaseMessage handle(Callable callable) throws Exception {
+    final protected BaseMessage handle(Callable callable) {
         return this.handle(callable, HttpStatus.OK, 1);
     }
 
@@ -129,7 +129,7 @@ abstract public class AbstractContext {
      * @return
      * @throws Exception
      */
-    final protected BaseMessage handle(Callable callable, HttpStatus defaultStatus, int defaultCode) throws Exception {
+    final protected BaseMessage handle(Callable callable, HttpStatus defaultStatus, int defaultCode) {
         BaseMessage result = new BaseMessage();
         ErrorMessage errorMessage = new ErrorMessage();
         Exception exception = null;

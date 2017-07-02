@@ -9,6 +9,7 @@ sed -i \
     -e "s/{{PG_PORT}}/${POSTGRES_PORT}/g" \
     -e "s/{{PG_USER}}/${POSTGRES_USER}/g" \
     -e "s/{{PG_PWD}}/${POSTGRES_PASSWORD}/g" \
+    -e "s/{{JWT_SECRET}}/${JWT_SECRET}/g" \
     /jscraper/scraper/src/main/resources/application.properties
 
 echo "[DEBUG] > Configuration ok."

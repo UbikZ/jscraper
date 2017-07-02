@@ -45,9 +45,10 @@ public class FeedTypeDal extends AbstractDal {
      * @param filter
      * @return
      */
-    protected void parseFilter(AbstractDalFilter filter, AbstractQuery select) {
+    @Override
+    protected void parseFilter(AbstractDalFilter filter, AbstractQuery select, boolean isCount) {
         FeedTypeDalFilter feedTypeDalFilter = (FeedTypeDalFilter) filter;
-        super.parseFilter(feedTypeDalFilter, select);
+        super.parseFilter(feedTypeDalFilter, select, isCount);
 
         if (feedTypeDalFilter.getIdList() != null && feedTypeDalFilter.getIdList().size() > 0) {
             select.where("id", "in", feedTypeDalFilter.getIdList());
