@@ -13,7 +13,7 @@ export default class App extends Component {
         <Header/>
         <div>
           <Route path='/' exact component={Home}/>
-          <Route path='/feed-items' exact component={FeedItems}/>
+          <Route path='/feed-items' component={FeedItems}/>
         </div>
         <Footer/>
       </div>

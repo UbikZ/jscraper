@@ -1,4 +1,4 @@
-import apiFetch from '../../api';
+import {apiFetch} from '../../api';
 
 export const PENDING_ITEMS = 'PENDING_ITEMS';
 export const RECEIVE_ITEMS = 'RECEIVE_ITEMS';

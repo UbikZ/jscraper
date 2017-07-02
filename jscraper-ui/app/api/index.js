@@ -4,7 +4,9 @@ import moment from 'moment';
 
 const URL_PREFIX = `${process.env.API_HOST || ''}/api`;
 
-export default function apiFetch(url, state, args, forbiden = []) {
+export const api = (url, config) => fetch(`${URL_PREFIX}/${url}`, config);
+
+export const apiFetch = (url, state, args, forbiden = []) => {
   const finalQs = Object.assign({}, state, args);
 
   return new Promise((resolve, reject) => {
@@ -20,7 +22,7 @@ export default function apiFetch(url, state, args, forbiden = []) {
         reject({error, qs: finalQs});
       });
   });
-}
+};
 
 function parseQs(qs, forbiden = []) {
   let result = {};

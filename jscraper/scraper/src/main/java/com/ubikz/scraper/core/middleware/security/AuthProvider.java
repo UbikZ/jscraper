@@ -1,4 +1,4 @@
-package com.ubikz.scraper.core.middleware;
+package com.ubikz.scraper.core.middleware.security;
 
 import com.ubikz.scraper.api.controller.filter.UserFilterBody;
 import com.ubikz.scraper.core.app.context.UserContext;
@@ -17,11 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class AuthenticationMiddleware implements AuthenticationProvider {
+public class AuthProvider implements AuthenticationProvider {
     private UserContext userContext;
 
     @Autowired
-    public AuthenticationMiddleware(UserContext userContext) {
+    public AuthProvider(UserContext userContext) {
         this.userContext = userContext;
     }
 
