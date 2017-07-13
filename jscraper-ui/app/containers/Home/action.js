@@ -13,12 +13,13 @@ function requestLogin(creds) {
   };
 }
 
-function receiveLogin(user) {
+function receiveLogin(token, roles) {
   return {
     type: LOGIN_SUCCESS,
     isFetching: false,
     isAuthenticated: true,
-    id_token: user.id_token
+    token,
+    roles
   };
 }
 
@@ -38,12 +39,15 @@ export function loginUser(creds = {}) {
     body: JSON.stringify(creds)
   };
 
-  return dispatch => {
+  return (dispatch, getState) => {
     dispatch(requestLogin(creds));
-    return api('authenticate', config)
-      .then(response => {
-        console.log(response);
+    return api('authenticate', getState(), config)
+      .then(json => {
+        const {token, roles} = json.data;
+        dispatch(receiveLogin(token, roles.map(role => role.authority)));
       })
-      .catch(err => console.error('Error :', err));
+      .catch(json => {
+        dispatch(loginError(json.error));
+      });
   };
 }

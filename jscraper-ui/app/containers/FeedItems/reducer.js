@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {PENDING_ITEMS, RECEIVE_ITEMS, RECEIVE_ITEMS_ERROR} from './action';
+import {FETCHING_ITEMS, RECEIVE_ITEMS, RECEIVE_ITEMS_ERROR} from './action';
 
 const initialState = {
   items: [],
@@ -7,36 +7,39 @@ const initialState = {
   offset: 0,
   limit: 20,
   approved: true,
-  pending: false,
+  isFetching: false,
   tags: [],
   startDate: moment(),
   endDate: moment()
 };
 
 export default function itemReducer(state = initialState, action) {
+  const {items, total, startDate, endDate, offset, tags, isFetching, approved, error} = action;
   switch (action.type) {
-    case PENDING_ITEMS: {
+    case FETCHING_ITEMS: {
       return {
         ...state,
-        pending: action.pending
+        isFetching
       };
     }
     case RECEIVE_ITEMS: {
       return {
         ...state,
-        items: action.items,
-        total: action.total,
-        startDate: action.startDate,
-        endDate: action.endDate,
-        offset: action.offset,
-        tags: action.tags,
-        pending: action.pending,
-        approved: action.approved
+        items,
+        total,
+        startDate,
+        endDate,
+        offset,
+        tags,
+        isFetching,
+        approved
       };
     }
     case RECEIVE_ITEMS_ERROR: {
-      const {error} = action;
-      return error;
+      return {
+        ...state,
+        error
+      };
     }
     default:
       return state;

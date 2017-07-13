@@ -16,11 +16,13 @@ class Home extends Component {
   };
 
   render() {
-    const {loginUser, isAuthenticated, isFetching, errorMessage} = this.props;
+    const {loginUser, isAuthenticated, isFetching} = this.props;
 
     return (
-      <Main title={'Home Stuff'} pending={isFetching}>
-        <Login loginUser={loginUser}/>
+      <Main title={'Home Stuff'}>
+        {!isAuthenticated
+          ? (<Login loginUser={loginUser} isFetching={isFetching}/>)
+          : (<span></span>)}
       </Main>
     );
   }

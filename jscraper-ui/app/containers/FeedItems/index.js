@@ -11,7 +11,7 @@ import List from '../../components/FeedItem/List';
 class FeedItems extends Component {
   static propTypes = {
     fetchFeedItems: PropTypes.func.isRequired,
-    pending: PropTypes.bool.isRequired
+    isFetching: PropTypes.bool.isRequired
   };
 
   loadList = (filter = {}) => {
@@ -19,10 +19,10 @@ class FeedItems extends Component {
   };
 
   render() {
-    const {pending} = this.props;
+    const {isFetching} = this.props;
 
     return (
-      <Main title={'Feed Items'} pending={pending}>
+      <Main title={'Feed Items'} isFetching={isFetching}>
         <Filter loadList={this.loadList} />
         <List loadList={this.loadList} />
       </Main>
@@ -31,8 +31,8 @@ class FeedItems extends Component {
 }
 
 function mapStateToProps(state) {
-  const {pending} = state.feedItems;
-  return {pending};
+  const {isFetching} = state.feedItems;
+  return {isFetching};
 }
 
 function mapDispatchToProps(dispatch) {

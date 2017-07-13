@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
-import {Route} from 'react-router-dom';
+import {Redirect, Route} from 'react-router-dom';
 
-import Header from '../../components/Header';
 import Home from '../../containers/Home';
 import FeedItems from '../../containers/FeedItems';
-import Footer from "../../components/Footer/index";
+
+import Footer from "../../components/Footer";
+import Header from '../../components/Header';
+import CheckAuthentication from '../../components/Main/CheckAuthentication';
 
 export default class App extends Component {
   render() {
@@ -12,8 +14,12 @@ export default class App extends Component {
       <div>
         <Header/>
         <div>
-          <Route path='/' exact component={Home}/>
-          <Route path='/feed-items' component={FeedItems}/>
+          <Redirect from='/' to='/'/>
+          <Route exact path='/' component={Home}/>
+
+          <CheckAuthentication role="ROLE_USER">
+            <Route exact path='/feed-items' component={FeedItems}/>
+          </CheckAuthentication>
         </div>
         <Footer/>
       </div>

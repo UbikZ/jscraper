@@ -4,24 +4,25 @@ import moment from 'moment';
 
 const URL_PREFIX = `${process.env.API_HOST || ''}/api`;
 
-export const api = (url, config) => fetch(`${URL_PREFIX}/${url}`, config);
+export const api = (url, globalState, config = {}, additional = {}) => new Promise((resolve, reject) => {
+  config.headers = {'Authorization': `Bearer ${globalState.authentication.token}`};
 
-export const apiFetch = (url, state, args, forbiden = []) => {
-  const finalQs = Object.assign({}, state, args);
+  return fetch(`${URL_PREFIX}/${url}`, config)
+    .then(res => res.json())
+    .then(json => {
+      if (json.success) {
+        resolve({...json, ...additional});
+      } else {
+        reject(json);
+      }
+    })
+    .catch(err => console.error("Error :", err));
+});
 
-  return new Promise((resolve, reject) => {
-    fetch(`${URL_PREFIX}/${url}?${parseQs(finalQs, forbiden)}`)
-      .then(res => res.json())
-      .then(json => {
-        if (!json.success) {
-          throw new Error(json.data);
-        }
-        resolve({json, qs: finalQs});
-      })
-      .catch(error => {
-        reject({error, qs: finalQs});
-      });
-  });
+export const apiFetch = (url, globalState, stateName, args, forbiden = []) => {
+  const finalQs = Object.assign({}, globalState[stateName], args);
+
+  return api(`${url}?${parseQs(finalQs, forbiden)}`, globalState, {method: 'GET'}, {qs: finalQs});
 };
 
 function parseQs(qs, forbiden = []) {

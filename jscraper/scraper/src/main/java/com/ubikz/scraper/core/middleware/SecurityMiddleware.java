@@ -27,7 +27,7 @@ public class SecurityMiddleware extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/api/user").hasRole("ADMIN")
-                .antMatchers("/api/feed-item").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/feed-item").hasRole("USER")
                 .antMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
                 .anyRequest().authenticated()
                 .and()

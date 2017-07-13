@@ -19,6 +19,7 @@ const ColumnHeadPaginate = styled.div`
 const ColumnBody = styled.div`
   border-bottom: .1rem solid #f0f1f4;
   padding: 1.5rem 1rem;
+  overflow: hidden;
 `;
 
 const ContainerStriped = styled.div`

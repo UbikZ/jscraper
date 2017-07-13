@@ -1,5 +1,7 @@
 package com.ubikz.scraper.core.middleware.security;
 
+import com.ubikz.scraper.api.controller.ApiController;
+import com.ubikz.scraper.core.app.service.message.BaseMessage;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -10,20 +12,25 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Component
 public class TokenAuthentication {
 
-    private static final String HEADER_STRING = "Authorization";
+    private static final String HEADER_AUTH = "Authorization";
+    private static final String HEADER_CONTENT = "Content-Type";
+
     private static final String TOKEN_PREFIX = "Bearer";
     private static final String CLAIM_AUTHORITIES_KEY = "authorities";
     private static final String CLAIM_USERNAME_KEY = "username";
     private static final String CLAIM_CREDENTIALS_KEY = "credentials";
 
-    static void addAuthentication(HttpServletResponse res, Authentication auth, JwtProperties props) {
-        String JWT = Jwts.builder()
+    static void addAuthentication(HttpServletResponse res, Authentication auth, JwtProperties props) throws IOException {
+        BaseMessage message = new BaseMessage();
+
+        String jwt = Jwts.builder()
                 .setClaims(new HashMap<String, Object>() {{
                     put(CLAIM_USERNAME_KEY, auth.getName());
                     put(CLAIM_CREDENTIALS_KEY, auth.getCredentials());
@@ -32,13 +39,22 @@ public class TokenAuthentication {
                 .setExpiration(TokenAuthentication.getExpirationTime(props.getExpire()))
                 .signWith(SignatureAlgorithm.HS512, props.getSecret())
                 .compact();
-        res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + JWT);
+
+        message.setStatus(200);
+        message.setSuccess(true);
+        message.setData(new HashMap<String, Object>() {{
+            put("token", jwt);
+            put("roles", auth.getAuthorities());
+        }});
+
+        res.addHeader(HEADER_CONTENT, "application/json");
+        res.getWriter().print(ApiController.buildMessage(message));
     }
 
     static Authentication getAuthentication(HttpServletRequest request, JwtProperties props) {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         Authentication auth = null;
-        String token = request.getHeader(HEADER_STRING);
+        String token = request.getHeader(HEADER_AUTH);
         if (token != null) {
             Claims claims = Jwts.parser()
                     .setSigningKey(props.getSecret())

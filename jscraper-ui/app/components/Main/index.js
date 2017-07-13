@@ -7,11 +7,11 @@ export default class Main extends Component {
   static propTypes = {
     title: PropTypes.string,
     content: PropTypes.any,
-    pending: PropTypes.bool
+    isFetching: PropTypes.bool
   };
 
   render() {
-    const {title, children, pending} = this.props;
+    const {title, children, isFetching} = this.props;
 
     return (
       <section className="container grid-960">
@@ -19,7 +19,7 @@ export default class Main extends Component {
           <div className="docs-content column col-12">
             <section className="container">
               <header className="text-center">
-                <h3>{pending ? (<Loader/>) : title}</h3>
+                <h3>{isFetching ? (<Loader/>) : title}</h3>
               </header>
               <section className="notes">{children}</section>
             </section>
