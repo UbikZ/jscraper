@@ -19,10 +19,10 @@ export const api = (url, globalState, config = {}, additional = {}) => new Promi
     .catch(err => console.error("Error :", err));
 });
 
-export const apiFetch = (url, globalState, stateName, args, forbiden = []) => {
+export const apiWrapper = (url, globalState, stateName, args, forbiden = [], config = {method: 'GET'}) => {
   const finalQs = Object.assign({}, globalState[stateName], args);
 
-  return api(`${url}?${parseQs(finalQs, forbiden)}`, globalState, {method: 'GET'}, {qs: finalQs});
+  return api(`${url}?${parseQs(finalQs, forbiden)}`, globalState, config, {qs: finalQs});
 };
 
 function parseQs(qs, forbiden = []) {

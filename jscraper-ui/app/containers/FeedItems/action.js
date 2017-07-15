@@ -1,4 +1,4 @@
-import {apiFetch} from '../../api';
+import {apiWrapper} from '../../api';
 
 export const FETCHING_ITEMS = 'FETCHING_ITEMS';
 export const RECEIVE_ITEMS = 'RECEIVE_ITEMS';
@@ -37,7 +37,7 @@ export function fetchFeedItems(args = {}) {
     args.lazy = false;
 
     dispatch(fetchingFeedItems());
-    return apiFetch('feed-item', getState(), 'feedItems', args, ['items', 'total'])
+    return apiWrapper('feed-item', getState(), 'feedItems', args, ['items', 'total'])
       .then(element => {
         const {data, total, qs} = element;
         const {startDate, endDate, offset, approved, tags} = qs;

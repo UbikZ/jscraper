@@ -14,6 +14,9 @@ export default class Header extends Component {
               <CheckAuthentication role="ROLE_USER">
                 <Link to='/feed-items' className="btn btn-link">Feed Items</Link>
               </CheckAuthentication>
+              <CheckAuthentication role="ROLE_ADMIN">
+                <Link to='/tags' className="btn btn-link">Tags</Link>
+              </CheckAuthentication>
             </section>
             <section className="navbar-section">
               <a href="https://github.com/ubikz/jscraper" rel="noopener" className="btn btn-primary">Github</a>

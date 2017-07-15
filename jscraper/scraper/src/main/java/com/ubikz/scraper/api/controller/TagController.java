@@ -6,6 +6,7 @@ import com.ubikz.scraper.api.controller.request.TagProhibitedRequestBody;
 import com.ubikz.scraper.api.controller.request.TagRequestBody;
 import com.ubikz.scraper.core.app.context.TagContext;
 import com.ubikz.scraper.core.app.context.TagProhibitedContext;
+import com.ubikz.scraper.core.app.service.message.BaseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +38,10 @@ public class TagController extends ApiController {
 
     @RequestMapping(value = uriPath, method = RequestMethod.GET, produces = "application/json")
     public String get(final TagFilterBody filter) throws Exception {
-        return this.sendResponse(this.tagContext.getAll(filter));
+        BaseMessage msg = this.tagContext.getAll(filter);
+        msg.setTotal(this.tagContext.count(filter));
+        
+        return this.sendResponse(msg);
     }
 
     /**

@@ -3,6 +3,7 @@ import {Redirect, Route} from 'react-router-dom';
 
 import Home from '../../containers/Home';
 import FeedItems from '../../containers/FeedItems';
+import TagItems from '../../containers/TagItems';
 
 import Footer from "../../components/Footer";
 import Header from '../../components/Header';
@@ -16,9 +17,11 @@ export default class App extends Component {
         <div>
           <Redirect from='/' to='/'/>
           <Route exact path='/' component={Home}/>
-
           <CheckAuthentication role="ROLE_USER">
             <Route exact path='/feed-items' component={FeedItems}/>
+          </CheckAuthentication>
+          <CheckAuthentication role="ROLE_ADMIN">
+            <Route exact path='/tags' component={TagItems}/>
           </CheckAuthentication>
         </div>
         <Footer/>
