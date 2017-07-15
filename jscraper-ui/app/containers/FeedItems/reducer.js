@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {FETCHING_ITEMS, RECEIVE_ITEMS, RECEIVE_ITEMS_ERROR} from './action';
+import {FETCH_FEEDITEMS_REQUEST, FETCH_FEEDITEMS_SUCCESS, FETCH_FEEDITEMS_FAILURE} from './action';
 
 const initialState = {
   items: [],
@@ -16,13 +16,13 @@ const initialState = {
 export default function itemReducer(state = initialState, action) {
   const {items, total, startDate, endDate, offset, tags, isFetching, approved, error} = action;
   switch (action.type) {
-    case FETCHING_ITEMS: {
+    case FETCH_FEEDITEMS_REQUEST: {
       return {
         ...state,
         isFetching
       };
     }
-    case RECEIVE_ITEMS: {
+    case FETCH_FEEDITEMS_SUCCESS: {
       return {
         ...state,
         items,
@@ -35,7 +35,7 @@ export default function itemReducer(state = initialState, action) {
         approved
       };
     }
-    case RECEIVE_ITEMS_ERROR: {
+    case FETCH_FEEDITEMS_FAILURE: {
       return {
         ...state,
         error

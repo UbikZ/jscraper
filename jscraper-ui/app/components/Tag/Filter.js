@@ -12,7 +12,7 @@ export default class Filter extends Component {
   searchByLabel = (e) => {
     const value = e.target.value;
     if (e.key === 'Enter') {
-      this.props.loadList({label: value});
+      this.props.loadList({label: value, offset: 0});
     }
   };
 

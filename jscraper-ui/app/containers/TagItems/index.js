@@ -3,20 +3,20 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
-import {fetchTagItems, editTag, deleteTag} from './action';
+import {fetchTags, editTag, deleteTag} from './action';
 import Main from '../../components/Main';
 import Filter from '../../components/Tag/Filter';
 import List from '../../components/Tag/List';
 
 class TagItems extends Component {
   static propTypes = {
-    fetchTagItems: PropTypes.func.isRequired,
+    fetchTags: PropTypes.func.isRequired,
     editTag: PropTypes.func.isRequired,
     deleteTag: PropTypes.func.isRequired,
     isFetching: PropTypes.bool.isRequired
   };
 
-  loadList = (filter = {}) => this.props.fetchTagItems(filter);
+  loadList = (filter = {}) => this.props.fetchTags(filter);
   editElement = (id) => this.props.editTag(id);
   deleteElement = (id) => this.props.deleteTag(id);
 
@@ -39,7 +39,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    fetchTagItems,
+    fetchTags,
     editTag,
     deleteTag
   }, dispatch);

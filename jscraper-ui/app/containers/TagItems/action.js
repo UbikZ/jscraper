@@ -1,22 +1,22 @@
 import {apiWrapper} from '../../api';
 
-export const FETCHING_TAGS = 'FETCHING_TAGS';
-export const RECEIVE_TAGS = 'RECEIVE_TAGS';
-export const RECEIVE_TAGS_ERROR = 'RECEIVE_TAGS_ERROR';
+export const FETCH_TAGS_REQUEST = 'FETCH_TAGS_REQUEST';
+export const FETCH_TAGS_SUCCESS = 'FETCH_TAGS_SUCCESS';
+export const FETCH_TAGS_FAILURE = 'FETCH_TAGS_FAILURE';
 export const DELETE_TAG_REQUEST = 'DELETE_TAG_REQUEST';
 export const DELETE_TAG_SUCCESS = 'DELETE_TAG_SUCCESS';
 export const DELETE_TAG_FAILURE = 'DELETE_TAG_FAILURE';
 
-export function fetchingTagItems() {
+export function fetchTagsRequest() {
   return {
-    type: FETCHING_TAGS,
+    type: FETCH_TAGS_REQUEST,
     isFetching: true
   };
 }
 
-export function receiveTagItems(items, total, offset) {
+export function fetchTagsSuccess(items, total, offset) {
   return {
-    type: RECEIVE_TAGS,
+    type: FETCH_TAGS_SUCCESS,
     items,
     total,
     offset,
@@ -24,9 +24,9 @@ export function receiveTagItems(items, total, offset) {
   };
 }
 
-export function receiveTagItemsError(error) {
+export function fetchTagsFailure(error) {
   return {
-    type: RECEIVE_TAGS_ERROR,
+    type: FETCH_TAGS_FAILURE,
     error
   };
 }
@@ -53,22 +53,22 @@ function deleteTagFailure(message) {
   };
 }
 
-export function fetchTagItems(args = {}) {
+export function fetchTags(args = {}) {
   return (dispatch, getState) => {
     args.lazy = false;
     if (!args.label) {
       delete args.label;
     }
 
-    dispatch(fetchingTagItems());
+    dispatch(fetchTagsRequest());
     return apiWrapper('tag', getState(), 'tagItems', args, ['items', 'total'])
       .then(element => {
         const {data, total, qs} = element;
         const {offset} = qs;
-        dispatch(receiveTagItems(data, total, offset));
+        dispatch(fetchTagsSuccess(data, total, offset));
       })
       .catch(data => {
-        dispatch(receiveTagItemsError(data.error));
+        dispatch(fetchTagsFailure(data.error));
       });
   };
 }
@@ -80,7 +80,7 @@ export function deleteTag(id) {
     return apiWrapper('tag/' + id, getState(), 'tagItems', {id}, ['id', 'items', 'total', 'offset', 'limit', 'isDeleting', 'isFetching'], {method: 'DELETE'})
       .then(() => {
         dispatch(deleteTagSuccess());
-        fetchTagItems()(dispatch, getState);
+        fetchTags()(dispatch, getState);
       })
       .catch(data => {
         dispatch(deleteTagFailure(data.error));

@@ -1,19 +1,19 @@
 import {apiWrapper} from '../../api';
 
-export const FETCHING_ITEMS = 'FETCHING_ITEMS';
-export const RECEIVE_ITEMS = 'RECEIVE_ITEMS';
-export const RECEIVE_ITEMS_ERROR = 'RECEIVE_ITEMS_ERROR';
+export const FETCH_FEEDITEMS_REQUEST = 'FETCH_FEEDITEMS_REQUEST';
+export const FETCH_FEEDITEMS_SUCCESS = 'FETCH_FEEDITEMS_SUCCESS';
+export const FETCH_FEEDITEMS_FAILURE = 'FETCH_FEEDITEMS_FAILURE';
 
-export function fetchingFeedItems() {
+export function fetchFeedItemsRequest() {
   return {
-    type: FETCHING_ITEMS,
+    type: FETCH_FEEDITEMS_REQUEST,
     isFetching: true
   };
 }
 
-export function receiveFeedItems(items, total, startDate, endDate, offset, approved, tags) {
+export function fetchFeedItemsSuccess(items, total, startDate, endDate, offset, approved, tags) {
   return {
-    type: RECEIVE_ITEMS,
+    type: FETCH_FEEDITEMS_SUCCESS,
     items,
     total,
     startDate,
@@ -25,9 +25,9 @@ export function receiveFeedItems(items, total, startDate, endDate, offset, appro
   };
 }
 
-export function receiveFeedItemsError(error) {
+export function fetchFeedItemsFailure(error) {
   return {
-    type: RECEIVE_ITEMS_ERROR,
+    type: FETCH_FEEDITEMS_FAILURE,
     error
   };
 }
@@ -36,15 +36,15 @@ export function fetchFeedItems(args = {}) {
   return (dispatch, getState) => {
     args.lazy = false;
 
-    dispatch(fetchingFeedItems());
+    dispatch(fetchFeedItemsRequest());
     return apiWrapper('feed-item', getState(), 'feedItems', args, ['items', 'total'])
       .then(element => {
         const {data, total, qs} = element;
         const {startDate, endDate, offset, approved, tags} = qs;
-        dispatch(receiveFeedItems(data, total, startDate, endDate, offset, approved, tags));
+        dispatch(fetchFeedItemsSuccess(data, total, startDate, endDate, offset, approved, tags));
       })
       .catch(data => {
-        dispatch(receiveFeedItemsError(data.error));
+        dispatch(fetchFeedItemsFailure(data.error));
       });
   };
 }

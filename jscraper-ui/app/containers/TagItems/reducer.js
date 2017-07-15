@@ -1,5 +1,5 @@
 import {
-  FETCHING_TAGS, RECEIVE_TAGS, RECEIVE_TAGS_ERROR,
+  FETCH_TAGS_REQUEST, FETCH_TAGS_SUCCESS, FETCH_TAGS_FAILURE,
   DELETE_TAG_REQUEST, DELETE_TAG_SUCCESS, DELETE_TAG_FAILURE
 } from './action';
 
@@ -15,13 +15,13 @@ const initialState = {
 export default function itemReducer(state = initialState, action) {
   const {items, total, offset, isFetching, isDeleting, error} = action;
   switch (action.type) {
-    case FETCHING_TAGS: {
+    case FETCH_TAGS_REQUEST: {
       return {
         ...state,
         isFetching
       };
     }
-    case RECEIVE_TAGS: {
+    case FETCH_TAGS_SUCCESS: {
       return {
         ...state,
         items,
@@ -30,7 +30,7 @@ export default function itemReducer(state = initialState, action) {
         isFetching
       };
     }
-    case RECEIVE_TAGS_ERROR: {
+    case FETCH_TAGS_FAILURE: {
       return {
         ...state,
         error
