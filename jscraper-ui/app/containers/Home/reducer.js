@@ -6,7 +6,7 @@ const initialState = {
   token: localStorage.getItem('token')
 };
 
-export default function itemReducer(state = initialState, action) {
+export default function reducer(state = initialState, action) {
   const {isAuthenticated, isFetching, creds} = action;
   switch (action.type) {
     case LOGIN_REQUEST: {

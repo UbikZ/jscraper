@@ -13,7 +13,7 @@ const initialState = {
   endDate: moment()
 };
 
-export default function itemReducer(state = initialState, action) {
+export default function reducer(state = initialState, action) {
   const {items, total, startDate, endDate, offset, tags, isFetching, approved, error} = action;
   switch (action.type) {
     case FETCH_FEEDITEMS_REQUEST: {

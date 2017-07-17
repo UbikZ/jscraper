@@ -2,26 +2,26 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {loginUser} from './action';
+import {login} from './action';
 
 import Main from '../../components/Main';
 import Login from '../../components/Form/Login';
 
 class Home extends Component {
   static propTypes = {
-    loginUser: PropTypes.func.isRequired,
+    login: PropTypes.func.isRequired,
     isAuthenticated: PropTypes.bool.isRequired,
     isFetching: PropTypes.bool.isRequired,
     errorMessage: PropTypes.string
   };
 
   render() {
-    const {loginUser, isAuthenticated, isFetching} = this.props;
+    const {login, isAuthenticated, isFetching} = this.props;
 
     return (
       <Main title={'Home Stuff'}>
         {!isAuthenticated
-          ? (<Login loginUser={loginUser} isFetching={isFetching}/>)
+          ? (<Login login={login} isFetching={isFetching}/>)
           : (<span></span>)}
       </Main>
     );
@@ -35,7 +35,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    loginUser
+    login
   }, dispatch);
 }
 

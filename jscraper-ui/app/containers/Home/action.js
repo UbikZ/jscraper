@@ -1,10 +1,11 @@
 import {api} from '../../api/index';
+import {toastr, TYPE_ERROR, TYPE_SUCCESS} from '../Toastr/action';
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
 
-function requestLogin(creds) {
+function loginRequest(creds) {
   return {
     type: LOGIN_REQUEST,
     isFetching: true,
@@ -13,7 +14,7 @@ function requestLogin(creds) {
   };
 }
 
-function receiveLogin(token, roles) {
+function loginSuccess(token, roles) {
   return {
     type: LOGIN_SUCCESS,
     isFetching: false,
@@ -23,16 +24,15 @@ function receiveLogin(token, roles) {
   };
 }
 
-function loginError(message) {
+function loginFailure() {
   return {
     type: LOGIN_FAILURE,
     isFetching: false,
-    isAuthenticated: false,
-    message
+    isAuthenticated: false
   };
 }
 
-export function loginUser(creds = {}) {
+export function login(creds = {}) {
   const config = {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -40,14 +40,16 @@ export function loginUser(creds = {}) {
   };
 
   return (dispatch, getState) => {
-    dispatch(requestLogin(creds));
+    dispatch(loginRequest(creds));
     return api('authenticate', getState(), config)
       .then(json => {
         const {token, roles} = json.data;
-        dispatch(receiveLogin(token, roles.map(role => role.authority)));
+        dispatch(loginSuccess(token, roles.map(role => role.authority)));
+        toastr(TYPE_SUCCESS, 'Authentication granted.')(dispatch, getState);
       })
-      .catch(json => {
-        dispatch(loginError(json.error));
+      .catch(() => {
+        dispatch(loginFailure());
+        toastr(TYPE_ERROR, 'Wrong username or password.', 'Authentication failed')(dispatch, getState);
       });
   };
 }

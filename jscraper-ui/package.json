@@ -33,7 +33,6 @@
     "spectre.css": "^0.2.14",
     "spinkit": "^1.2.5",
     "styled-components": "^2.1.0",
-    "toastr": "^2.1.2",
     "webpack-md5-hash": "^0.0.5"
   },
   "devDependencies": {

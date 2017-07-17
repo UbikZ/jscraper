@@ -12,7 +12,7 @@ const initialState = {
   isDeleting: false
 };
 
-export default function itemReducer(state = initialState, action) {
+export default function reducer(state = initialState, action) {
   const {items, total, offset, isFetching, isDeleting, error} = action;
   switch (action.type) {
     case FETCH_TAGS_REQUEST: {

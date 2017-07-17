@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 
 export default class Login extends Component {
   static propTypes = {
-    loginUser: PropTypes.func.isRequired
+    login: PropTypes.func.isRequired
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.loginUser({username: this.refs.username.value, password: this.refs.password.value});
+    this.props.login({username: this.refs.username.value, password: this.refs.password.value});
   };
 
   render() {

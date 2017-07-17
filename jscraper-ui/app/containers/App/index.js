@@ -4,6 +4,7 @@ import {Redirect, Route} from 'react-router-dom';
 import Home from '../../containers/Home';
 import FeedItems from '../../containers/FeedItems';
 import TagItems from '../../containers/TagItems';
+import Toastr from '../../containers/Toastr';
 
 import Footer from "../../components/Footer";
 import Header from '../../components/Header';
@@ -14,6 +15,7 @@ export default class App extends Component {
     return (
       <div>
         <Header/>
+        <Toastr/>
         <div>
           <Redirect from='/' to='/'/>
           <Route exact path='/' component={Home}/>
