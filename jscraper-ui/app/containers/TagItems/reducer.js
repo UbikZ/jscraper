@@ -33,7 +33,7 @@ export default function reducer(state = initialState, action) {
     case FETCH_TAGS_FAILURE: {
       return {
         ...state,
-        error
+        isFetching
       };
     }
     case DELETE_TAG_REQUEST: {
@@ -51,8 +51,7 @@ export default function reducer(state = initialState, action) {
     case DELETE_TAG_FAILURE: {
       return {
         ...state,
-        isDeleting,
-        error
+        isDeleting
       };
     }
     default:

@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import moment from 'moment';
 
 import Paginate from './Paginate';
+import EmptyList from "../List/empty";
 
 const ColumnHead = styled.div`
   font-weight: bold;
@@ -56,21 +57,24 @@ class List extends Component {
               <Paginate loadList={this.props.loadList}/>
             </ColumnHeadPaginate>
           </div>
-          {items.map(item => (
-            <div key={item.id} className="container-body columns col-gapless">
-              <ColumnBody className="col-1">{item.id}</ColumnBody>
-              <ColumnBody className="col-3">{item.label}</ColumnBody>
-              <ColumnBody className="col-2">{moment(item.date).format('DD MMMM YYYY')}</ColumnBody>
-              <ColumnBody className="col-6 text-right">
-                <button onClick={() => this.editTag(item.id)} className="btn btn-sm mr-5 mb-5">
-                  <i className="icon icon-edit"></i>
-                </button>
-                <button onClick={() => this.deleteTag(item.id)} className="btn btn-sm mr-5 mb-5">
-                  <i className="icon icon-delete"></i>
-                </button>
-              </ColumnBody>
-            </div>
-          ))}
+          {items.length === 0
+            ? (<EmptyList title="Not Found" subtitle="0 tag found here." icon="cross"/>)
+            : items.map(item => (
+              <div key={item.id} className="container-body columns col-gapless">
+                <ColumnBody className="col-1">{item.id}</ColumnBody>
+                <ColumnBody className="col-3">{item.label}</ColumnBody>
+                <ColumnBody className="col-2">{moment(item.date).format('DD MMMM YYYY')}</ColumnBody>
+                <ColumnBody className="col-6 text-right">
+                  <button onClick={() => this.editTag(item.id)} className="btn btn-sm mr-5 mb-5">
+                    <i className="icon icon-edit"></i>
+                  </button>
+                  <button onClick={() => this.deleteTag(item.id)} className="btn btn-sm mr-5 mb-5">
+                    <i className="icon icon-delete"></i>
+                  </button>
+                </ColumnBody>
+              </div>
+            ))
+          }
         </ContainerStriped>
       </div>
     );

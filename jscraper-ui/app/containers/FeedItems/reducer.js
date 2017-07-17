@@ -38,7 +38,7 @@ export default function reducer(state = initialState, action) {
     case FETCH_FEEDITEMS_FAILURE: {
       return {
         ...state,
-        error
+        isFetching
       };
     }
     default:

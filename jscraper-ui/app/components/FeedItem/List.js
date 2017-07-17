@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import styled from 'styled-components';
 
 import Paginate from './Paginate';
+import EmptyList from "../List/empty";
 
 const ColumnHead = styled.div`
   font-weight: bold;
@@ -51,20 +52,23 @@ class List extends Component {
               <Paginate loadList={this.props.loadList}/>
             </ColumnHeadPaginate>
           </div>
-          {items.map(item => (
-            <div key={item.checksum} className="container-body columns col-gapless">
-              <ColumnBody className="col-1">{item.id}</ColumnBody>
-              <ColumnBody className="col-5"><a href={item.url} target="_blank">{item.url}</a></ColumnBody>
-              <ColumnBody className="col-6 text-right">
-                {item.tags.map((tag, i) => (
-                  <button onClick={() => this.searchTag(tag.label)} key={i}
-                          className="btn btn-primary btn-sm mr-5 mb-5">
-                    {tag.label}
-                  </button>
-                ))}
-              </ColumnBody>
-            </div>
-          ))}
+          {items.length === 0
+            ? (<EmptyList title="Not Found" subtitle="0 feed item found here." icon="cross"/>)
+            : items.map(item => (
+              <div key={item.checksum} className="container-body columns col-gapless">
+                <ColumnBody className="col-1">{item.id}</ColumnBody>
+                <ColumnBody className="col-5"><a href={item.url} target="_blank">{item.url}</a></ColumnBody>
+                <ColumnBody className="col-6 text-right">
+                  {item.tags && item.tags.map((tag, i) => (
+                    <button onClick={() => this.searchTag(tag.label)} key={i}
+                            className="btn btn-primary btn-sm mr-5 mb-5">
+                      {tag.label}
+                    </button>
+                  ))}
+                </ColumnBody>
+              </div>
+            ))
+          }
         </ContainerStriped>
       </div>
     );

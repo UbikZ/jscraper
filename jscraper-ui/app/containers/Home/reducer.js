@@ -30,8 +30,7 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         isAuthenticated,
-        isFetching,
-        errorMessage: action.message
+        isFetching
       };
     }
     case LOGOUT_SUCCESS: {

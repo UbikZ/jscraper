@@ -1,5 +1,5 @@
 import {apiWrapper} from '../../api';
-import {toastr, TYPE_ERROR} from "../Toastr/action";
+import {toastr, TYPE_ERROR, TYPE_SUCCESS} from "../Toastr/action";
 
 export const FETCH_TAGS_REQUEST = 'FETCH_TAGS_REQUEST';
 export const FETCH_TAGS_SUCCESS = 'FETCH_TAGS_SUCCESS';
@@ -89,6 +89,7 @@ export function deleteTag(id) {
     ).then(() => {
       dispatch(deleteTagSuccess());
       fetchTags()(dispatch, getState);
+      toastr(TYPE_SUCCESS, `Tag '${id}' has been deleted.`)(dispatch, getState);
     }).catch(data => {
       console.error(data);
       dispatch(deleteTagFailure());

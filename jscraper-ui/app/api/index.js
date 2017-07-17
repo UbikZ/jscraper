@@ -16,7 +16,7 @@ export const api = (url, globalState, config = {}, additional = {}) => new Promi
         reject(json);
       }
     })
-    .catch(err => console.error("Error :", err));
+    .catch(err => console.error("Internal Error :", err));
 });
 
 export const apiWrapper = (url, globalState, stateName, args, forbiden = [], config = {method: 'GET'}) => {
