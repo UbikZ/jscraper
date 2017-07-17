@@ -1,4 +1,5 @@
 import {apiWrapper} from '../../api';
+import {toastr, TYPE_ERROR} from "../Toastr/action";
 
 export const FETCH_FEEDITEMS_REQUEST = 'FETCH_FEEDITEMS_REQUEST';
 export const FETCH_FEEDITEMS_SUCCESS = 'FETCH_FEEDITEMS_SUCCESS';
@@ -25,10 +26,10 @@ export function fetchFeedItemsSuccess(items, total, startDate, endDate, offset, 
   };
 }
 
-export function fetchFeedItemsFailure(error) {
+export function fetchFeedItemsFailure() {
   return {
     type: FETCH_FEEDITEMS_FAILURE,
-    error
+    isFetching: false
   };
 }
 
@@ -44,7 +45,9 @@ export function fetchFeedItems(args = {}) {
         dispatch(fetchFeedItemsSuccess(data, total, startDate, endDate, offset, approved, tags));
       })
       .catch(data => {
-        dispatch(fetchFeedItemsFailure(data.error));
+        console.error(data);
+        dispatch(fetchFeedItemsFailure());
+        toastr(TYPE_ERROR, 'Cannot fetch feed items data right now.', 'Fetch data failed')(dispatch, getState);
       });
   };
 }

@@ -47,7 +47,8 @@ export function login(creds = {}) {
         dispatch(loginSuccess(token, roles.map(role => role.authority)));
         toastr(TYPE_SUCCESS, 'Authentication granted.')(dispatch, getState);
       })
-      .catch(() => {
+      .catch(data => {
+        console.error(data);
         dispatch(loginFailure());
         toastr(TYPE_ERROR, 'Wrong username or password.', 'Authentication failed')(dispatch, getState);
       });

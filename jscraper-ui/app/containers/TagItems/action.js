@@ -1,4 +1,5 @@
 import {apiWrapper} from '../../api';
+import {toastr, TYPE_ERROR} from "../Toastr/action";
 
 export const FETCH_TAGS_REQUEST = 'FETCH_TAGS_REQUEST';
 export const FETCH_TAGS_SUCCESS = 'FETCH_TAGS_SUCCESS';
@@ -24,10 +25,10 @@ export function fetchTagsSuccess(items, total, offset) {
   };
 }
 
-export function fetchTagsFailure(error) {
+export function fetchTagsFailure() {
   return {
     type: FETCH_TAGS_FAILURE,
-    error
+    isFetching: false
   };
 }
 
@@ -45,11 +46,10 @@ function deleteTagSuccess() {
   };
 }
 
-function deleteTagFailure(message) {
+function deleteTagFailure() {
   return {
     type: DELETE_TAG_FAILURE,
-    isDeleting: false,
-    message
+    isDeleting: false
   };
 }
 
@@ -61,15 +61,19 @@ export function fetchTags(args = {}) {
     }
 
     dispatch(fetchTagsRequest());
-    return apiWrapper('tag', getState(), 'tagItems', args, ['items', 'total'])
-      .then(element => {
-        const {data, total, qs} = element;
-        const {offset} = qs;
-        dispatch(fetchTagsSuccess(data, total, offset));
-      })
-      .catch(data => {
-        dispatch(fetchTagsFailure(data.error));
-      });
+    return apiWrapper(
+      'tag', getState(), 'tagItems',
+      args,
+      ['items', 'total']
+    ).then(element => {
+      const {data, total, qs} = element;
+      const {offset} = qs;
+      dispatch(fetchTagsSuccess(data, total, offset));
+    }).catch(data => {
+      console.error(data);
+      dispatch(fetchTagsFailure());
+      toastr(TYPE_ERROR, 'Cannot fetch tags data right now.', 'Fetch data failed')(dispatch, getState);
+    });
   };
 }
 
@@ -77,13 +81,18 @@ export function deleteTag(id) {
   return (dispatch, getState) => {
     dispatch(deleteTagRequest());
 
-    return apiWrapper('tag/' + id, getState(), 'tagItems', {id}, ['id', 'items', 'total', 'offset', 'limit', 'isDeleting', 'isFetching'], {method: 'DELETE'})
-      .then(() => {
-        dispatch(deleteTagSuccess());
-        fetchTags()(dispatch, getState);
-      })
-      .catch(data => {
-        dispatch(deleteTagFailure(data.error));
-      });
+    return apiWrapper(
+      'tag/' + id, getState(), 'tagItems',
+      {id},
+      ['id', 'items', 'total', 'offset', 'limit', 'isDeleting', 'isFetching'],
+      {method: 'DELETE'}
+    ).then(() => {
+      dispatch(deleteTagSuccess());
+      fetchTags()(dispatch, getState);
+    }).catch(data => {
+      console.error(data);
+      dispatch(deleteTagFailure());
+      toastr(TYPE_ERROR, `Cannot delete tag '${id}'.`, 'Delete failed')(dispatch, getState);
+    });
   };
 }
