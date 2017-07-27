@@ -2,16 +2,18 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
-class CheckAuthentication extends Component {
+class Check extends Component {
   static propTypes = {
     role: PropTypes.string.isRequired,
     isAuthenticated: PropTypes.bool.isRequired,
+    reverse: PropTypes.bool,
     token: PropTypes.string,
     roles: PropTypes.array
   };
 
   authenticated = () => {
-    return this.props.isAuthenticated && !!this.props.token && !!~this.props.roles.indexOf(this.props.role);
+    const result = this.props.isAuthenticated && !!this.props.token && !!~this.props.roles.indexOf(this.props.role);
+    return !this.props.reverse ? result : !result;
   }
 
   render() {
@@ -24,4 +26,4 @@ function mapStateToProps(state) {
   return {isAuthenticated, token, roles};
 }
 
-export default connect(mapStateToProps)(CheckAuthentication);
+export default connect(mapStateToProps)(Check);

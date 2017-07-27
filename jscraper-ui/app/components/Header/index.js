@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import CheckAuthentication from '../../components/Main/CheckAuthentication';
+import CheckAuthentication from '../Auth/Check';
 
 export default class Header extends Component {
   render() {
@@ -9,8 +9,10 @@ export default class Header extends Component {
         <section className="grid-header container grid-960">
           <nav className="navbar">
             <section className="navbar-section">
-              <strong className="navbar-brand mr-10">JScraper</strong>
-              <Link to='/' className="btn btn-link">Home</Link>
+              <strong className="navbar-brand mr-10"><Link to='/' className="btn btn-link">JScraper</Link></strong>
+              <CheckAuthentication role="ROLE_USER" reverse={true}>
+                <Link to='/authentication' className="btn btn-link">Auth</Link>
+              </CheckAuthentication>
               <CheckAuthentication role="ROLE_USER">
                 <Link to='/feed-items' className="btn btn-link">Feed Items</Link>
               </CheckAuthentication>

@@ -1,5 +1,5 @@
 import {apiWrapper} from '../../api';
-import {toastr, TYPE_ERROR} from "../Toastr/action";
+import {handlesErrors} from "../../api/index";
 
 export const FETCH_FEEDITEMS_REQUEST = 'FETCH_FEEDITEMS_REQUEST';
 export const FETCH_FEEDITEMS_SUCCESS = 'FETCH_FEEDITEMS_SUCCESS';
@@ -44,10 +44,13 @@ export function fetchFeedItems(args = {}) {
         const {startDate, endDate, offset, approved, tags} = qs;
         dispatch(fetchFeedItemsSuccess(data, total, startDate, endDate, offset, approved, tags));
       })
-      .catch(data => {
-        console.error(data);
-        dispatch(fetchFeedItemsFailure());
-        toastr(TYPE_ERROR, 'Cannot fetch feed items data right now.', 'Fetch data failed')(dispatch, getState);
-      });
+      .catch(data => handlesErrors(
+        dispatch,
+        getState,
+        data,
+        fetchFeedItemsFailure,
+        'Cannot fetch feed items data right now.',
+        'Fetch data failed'
+      ));
   };
 }

@@ -1,6 +1,8 @@
 import 'isomorphic-fetch';
 import queryString from 'query-string';
 import moment from 'moment';
+import {signOut} from "../containers/Authentication/action";
+import {toastr, TYPE_ERROR} from "../containers/Toastr/action";
 
 const URL_PREFIX = `${process.env.API_HOST || ''}/api`;
 
@@ -8,16 +10,36 @@ export const api = (url, globalState, config = {}, additional = {}) => new Promi
   config.headers = {'Authorization': `Bearer ${globalState.authentication.token}`};
 
   return fetch(`${URL_PREFIX}/${url}`, config)
-    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+      return res.json();
+    })
     .then(json => {
       if (json.success) {
         resolve({...json, ...additional});
       } else {
-        reject(json);
+        reject({...json, signOut: json.status === 500 && json.exception === 'io.jsonwebtoken.ExpiredJwtException'});
       }
     })
-    .catch(err => console.error("Internal Error :", err));
+    .catch(err => {
+      console.error("Internal Error :", err);
+    });
 });
+
+export const handlesErrors = (dispatch, getState, data, action, message, title, cb) => {
+  console.error(data);
+  dispatch(action());
+
+  if (data.signOut) {
+    dispatch(signOut());
+    title = 'Session expired.';
+    message = 'You have been logged out. Please try to sign-in.';
+  }
+
+  toastr(TYPE_ERROR, message, title)(dispatch, getState);
+
+  cb(dispatch, getState);
+};
 
 export const apiWrapper = (url, globalState, stateName, args, forbiden = [], config = {method: 'GET'}) => {
   const finalQs = Object.assign({}, globalState[stateName], args);

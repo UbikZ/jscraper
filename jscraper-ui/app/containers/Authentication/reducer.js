@@ -1,15 +1,19 @@
-import {LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT_SUCCESS} from './action';
+import {SIGNIN_FAILURE, SIGNIN_REQUEST, SIGNIN_SUCCESS, SIGNOUT_SUCCESS} from './action';
+
+const lsToken = localStorage.getItem('token') || '';
+const lsRoles = localStorage.getItem('roles') || '';
 
 const initialState = {
-  isAuthenticated: !!localStorage.getItem('token'),
+  isAuthenticated: !!lsToken,
   isFetching: false,
-  token: localStorage.getItem('token')
+  token: lsToken,
+  roles: lsRoles.split(',')
 };
 
 export default function reducer(state = initialState, action) {
   const {isAuthenticated, isFetching, creds} = action;
   switch (action.type) {
-    case LOGIN_REQUEST: {
+    case SIGNIN_REQUEST: {
       return {
         ...state,
         isAuthenticated,
@@ -17,7 +21,7 @@ export default function reducer(state = initialState, action) {
         user: creds
       };
     }
-    case LOGIN_SUCCESS: {
+    case SIGNIN_SUCCESS: {
       return {
         ...state,
         isAuthenticated,
@@ -26,14 +30,14 @@ export default function reducer(state = initialState, action) {
         roles: action.roles
       };
     }
-    case LOGIN_FAILURE: {
+    case SIGNIN_FAILURE: {
       return {
         ...state,
         isAuthenticated,
         isFetching
       };
     }
-    case LOGOUT_SUCCESS: {
+    case SIGNOUT_SUCCESS: {
       return {
         ...state,
         isAuthenticated,
