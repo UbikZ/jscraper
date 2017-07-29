@@ -1,8 +1,8 @@
 import 'isomorphic-fetch';
 import queryString from 'query-string';
 import moment from 'moment';
-import {signOut} from "../containers/Authentication/action";
-import {toastr, TYPE_ERROR} from "../containers/Toastr/action";
+import {signOut} from "../reducers/modules/authentication";
+import {toastr, TYPE_ERROR} from "../reducers";
 
 const URL_PREFIX = `${process.env.API_HOST || ''}/api`;
 

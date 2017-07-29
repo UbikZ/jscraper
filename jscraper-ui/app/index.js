@@ -1,13 +1,12 @@
 /*global require, process*/
+
 import React from 'react';
 import {render} from 'react-dom';
 import {BrowserRouter} from 'react-router-dom';
-import {applyMiddleware, createStore, compose} from 'redux';
-import thunkMiddleware from 'redux-thunk';
 import {Provider} from 'react-redux';
 
-import reducer from './reducers';
-import App from './containers/App';
+import {App} from './containers';
+import createStore from './reducers/create';
 
 import 'normalize.css/normalize.css';
 import 'spectre.css/dist/spectre.min.css';
@@ -15,16 +14,10 @@ import 'spectre.css/dist/spectre-icons.min.css';
 import 'spectre.css/dist/spectre-exp.min.css';
 import 'react-datepicker/dist/react-datepicker.min.css';
 import 'spinkit/css/spinkit.css';
-import './styles';
-
-const middlewares = [thunkMiddleware];
-let composeEnhancers = compose;
-if (process.env.NODE_ENV !== 'production') {
-  composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || composeEnhancers;
-}
+import './theme';
 
 const markup = (
-  <Provider store={createStore(reducer, composeEnhancers(applyMiddleware(...middlewares)))}>
+  <Provider store={createStore()}>
     <BrowserRouter>
       <App/>
     </BrowserRouter>

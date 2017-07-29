@@ -40,7 +40,7 @@ class Paginate extends Component {
 }
 
 function mapStateToProps(state) {
-  const {total, limit, offset} = state.tagItems;
+  const {total, limit, offset} = state.tags;
   return {total, limit, offset};
 }
 

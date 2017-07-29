@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 
-import Main from '../../components/Main';
+import {PartialPanel} from '../../components';
 
 export default class Home extends Component {
   render() {
     return (
-      <Main title={'Welcome'}>
-
-      </Main>
+      <PartialPanel title={'Welcome'}>
+      </PartialPanel>
     );
   }
 }

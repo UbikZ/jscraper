@@ -1,13 +1,61 @@
-import {api} from '../../api/index';
-import {toastr, TYPE_ERROR, TYPE_SUCCESS} from '../Toastr/action';
+import {api} from '../../utils/api';
+import {toastr, TYPE_ERROR, TYPE_SUCCESS} from '../';
 
-export const SIGNIN_REQUEST = 'SIGNIN_REQUEST';
-export const SIGNIN_SUCCESS = 'SIGNIN_SUCCESS';
-export const SIGNIN_FAILURE = 'SIGNIN_FAILURE';
-export const SIGNOUT_REQUEST = 'SIGNOUT_REQUEST';
-export const SIGNOUT_SUCCESS = 'SIGNOUT_SUCCESS';
-export const SIGNOUT_FAILURE = 'SIGNOUT_FAILURE';
+export const SIGNIN_REQUEST = 'jscraper/authentication/signInRequest';
+export const SIGNIN_SUCCESS = 'jscraper/authentication/signInSuccess';
+export const SIGNIN_FAILURE = 'jscraper/authentication/signInFailure';
+export const SIGNOUT_REQUEST = 'jscraper/authentication/signOutRequest';
+export const SIGNOUT_SUCCESS = 'jscraper/authentication/signOutSuccess';
+export const SIGNOUT_FAILURE = 'jscraper/authentication/signOutFailure';
 
+const lsToken = localStorage.getItem('token') || '';
+const lsRoles = localStorage.getItem('roles') || '';
+
+const initialState = {
+  isAuthenticated: !!lsToken,
+  isFetching: false,
+  token: lsToken,
+  roles: lsRoles.split(',')
+};
+
+export default function reducer(state = initialState, action) {
+  const {isAuthenticated, isFetching, creds} = action;
+  switch (action.type) {
+    case SIGNIN_REQUEST: {
+      return {
+        ...state,
+        isAuthenticated,
+        isFetching,
+        user: creds
+      };
+    }
+    case SIGNIN_SUCCESS: {
+      return {
+        ...state,
+        isAuthenticated,
+        isFetching,
+        token: action.token,
+        roles: action.roles
+      };
+    }
+    case SIGNIN_FAILURE: {
+      return {
+        ...state,
+        isAuthenticated,
+        isFetching
+      };
+    }
+    case SIGNOUT_SUCCESS: {
+      return {
+        ...state,
+        isAuthenticated,
+        isFetching
+      };
+    }
+    default:
+      return state;
+  }
+}
 
 function signInRequest(creds) {
   return {

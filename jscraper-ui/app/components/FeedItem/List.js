@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import styled from 'styled-components';
 
-import Paginate from './Paginate';
-import EmptyList from "../List/empty";
+import {FeedItemPaginate, PartialEmptyList} from "..";
 
 const ColumnHead = styled.div`
   font-weight: bold;
@@ -49,11 +48,11 @@ class List extends Component {
             <ColumnHead className="col-3">Url</ColumnHead>
             <ColumnHead className="col-2">Size : {items.length} / {total}</ColumnHead>
             <ColumnHeadPaginate className="col-6">
-              <Paginate loadList={this.props.loadList}/>
+              <FeedItemPaginate loadList={this.props.loadList}/>
             </ColumnHeadPaginate>
           </div>
           {items.length === 0
-            ? (<EmptyList title="Not Found" subtitle="0 feed item found here." icon="cross"/>)
+            ? (<PartialEmptyList title="Not Found" subtitle="0 feed item found here." icon="cross"/>)
             : items.map(item => (
               <div key={item.checksum} className="container-body columns col-gapless">
                 <ColumnBody className="col-1">{item.id}</ColumnBody>

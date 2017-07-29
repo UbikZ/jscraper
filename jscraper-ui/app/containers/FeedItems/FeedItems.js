@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
-import {fetchFeedItems} from './action';
-import Main from '../../components/Main';
-import Filter from '../../components/FeedItem/Filter';
-import List from '../../components/FeedItem/List';
+import {fetchFeedItems} from '../../reducers';
+import {FeedItemFilter, FeedItemList, PartialPanel} from './../../components';
 
 class FeedItems extends Component {
   static propTypes = {
@@ -22,10 +20,10 @@ class FeedItems extends Component {
     const {isFetching} = this.props;
 
     return (
-      <Main title={'Feed Items'} isFetching={isFetching}>
-        <Filter loadList={this.loadList} />
-        <List loadList={this.loadList} />
-      </Main>
+      <PartialPanel title={'Feed Items'} isFetching={isFetching}>
+        <FeedItemFilter loadList={this.loadList}/>
+        <FeedItemList loadList={this.loadList}/>
+      </PartialPanel>
     );
   }
 }

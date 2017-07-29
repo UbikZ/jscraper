@@ -1,9 +1,56 @@
-import {apiWrapper} from '../../api';
-import {handlesErrors} from "../../api/index";
+import moment from 'moment';
 
-export const FETCH_FEEDITEMS_REQUEST = 'FETCH_FEEDITEMS_REQUEST';
-export const FETCH_FEEDITEMS_SUCCESS = 'FETCH_FEEDITEMS_SUCCESS';
-export const FETCH_FEEDITEMS_FAILURE = 'FETCH_FEEDITEMS_FAILURE';
+import {apiWrapper, handlesErrors} from '../../utils/api';
+
+export const FETCH_FEEDITEMS_REQUEST = 'jscraper/feedItems/fetchRequest';
+export const FETCH_FEEDITEMS_SUCCESS = 'jscraper/feedItems/fetchSuccess';
+export const FETCH_FEEDITEMS_FAILURE = 'jscraper/feedItems/fetchFailure';
+
+const initialState = {
+  items: [],
+  total: 0,
+  offset: 0,
+  limit: 20,
+  approved: true,
+  isFetching: false,
+  tags: [],
+  startDate: moment(),
+  endDate: moment()
+};
+
+export default function reducer(state = initialState, action) {
+  const {items, total, startDate, endDate, offset, tags, isFetching, approved, error} = action;
+  switch (action.type) {
+    case FETCH_FEEDITEMS_REQUEST: {
+      return {
+        ...state,
+        isFetching
+      };
+    }
+    case FETCH_FEEDITEMS_SUCCESS: {
+      return {
+        ...state,
+        items,
+        total,
+        startDate,
+        endDate,
+        offset,
+        tags,
+        isFetching,
+        approved
+      };
+    }
+    case FETCH_FEEDITEMS_FAILURE: {
+      return {
+        ...state,
+        isFetching
+      };
+    }
+    default:
+      return state;
+  }
+}
+
 
 export function fetchFeedItemsRequest() {
   return {

@@ -1,12 +1,68 @@
-import {apiWrapper} from '../../api';
-import {toastr, TYPE_ERROR, TYPE_SUCCESS} from "../Toastr/action";
+import {apiWrapper} from '../../utils/api';
+import {toastr, TYPE_ERROR, TYPE_SUCCESS} from '../';
 
-export const FETCH_TAGS_REQUEST = 'FETCH_TAGS_REQUEST';
-export const FETCH_TAGS_SUCCESS = 'FETCH_TAGS_SUCCESS';
-export const FETCH_TAGS_FAILURE = 'FETCH_TAGS_FAILURE';
-export const DELETE_TAG_REQUEST = 'DELETE_TAG_REQUEST';
-export const DELETE_TAG_SUCCESS = 'DELETE_TAG_SUCCESS';
-export const DELETE_TAG_FAILURE = 'DELETE_TAG_FAILURE';
+export const FETCH_TAGS_REQUEST = 'jscraper/tags/fetchRequest';
+export const FETCH_TAGS_SUCCESS = 'jscraper/tags/fetchSuccess';
+export const FETCH_TAGS_FAILURE = 'jscraper/tags/fetchFailure';
+export const DELETE_TAG_REQUEST = 'jscraper/tags/deleteRequest';
+export const DELETE_TAG_SUCCESS = 'jscraper/tags/deleteSuccess';
+export const DELETE_TAG_FAILURE = 'jscraper/tags/deleteFailure';
+
+const initialState = {
+  items: [],
+  total: 0,
+  offset: 0,
+  limit: 20,
+  isFetching: false,
+  isDeleting: false
+};
+
+export default function reducer(state = initialState, action) {
+  const {items, total, offset, isFetching, isDeleting, error} = action;
+  switch (action.type) {
+    case FETCH_TAGS_REQUEST: {
+      return {
+        ...state,
+        isFetching
+      };
+    }
+    case FETCH_TAGS_SUCCESS: {
+      return {
+        ...state,
+        items,
+        total,
+        offset,
+        isFetching
+      };
+    }
+    case FETCH_TAGS_FAILURE: {
+      return {
+        ...state,
+        isFetching
+      };
+    }
+    case DELETE_TAG_REQUEST: {
+      return {
+        ...state,
+        isDeleting
+      };
+    }
+    case DELETE_TAG_SUCCESS: {
+      return {
+        ...state,
+        isDeleting
+      };
+    }
+    case DELETE_TAG_FAILURE: {
+      return {
+        ...state,
+        isDeleting
+      };
+    }
+    default:
+      return state;
+  }
+}
 
 export function fetchTagsRequest() {
   return {
@@ -62,7 +118,7 @@ export function fetchTags(args = {}) {
 
     dispatch(fetchTagsRequest());
     return apiWrapper(
-      'tag', getState(), 'tagItems',
+      'tag', getState(), 'tags',
       args,
       ['items', 'total']
     ).then(element => {
@@ -82,7 +138,7 @@ export function deleteTag(id) {
     dispatch(deleteTagRequest());
 
     return apiWrapper(
-      'tag/' + id, getState(), 'tagItems',
+      'tag/' + id, getState(), 'tags',
       {id},
       ['id', 'items', 'total', 'offset', 'limit', 'isDeleting', 'isFetching'],
       {method: 'DELETE'}

@@ -4,8 +4,7 @@ import {connect} from 'react-redux';
 import styled from 'styled-components';
 import moment from 'moment';
 
-import Paginate from './Paginate';
-import EmptyList from "../List/empty";
+import {PartialEmptyList, TagPaginate} from "..";
 
 const ColumnHead = styled.div`
   font-weight: bold;
@@ -54,11 +53,11 @@ class List extends Component {
             <ColumnHead className="col-2">Date</ColumnHead>
             <ColumnHead className="col-2">Size : {items.length} / {total}</ColumnHead>
             <ColumnHeadPaginate className="col-4">
-              <Paginate loadList={this.props.loadList}/>
+              <TagPaginate loadList={this.props.loadList}/>
             </ColumnHeadPaginate>
           </div>
           {items.length === 0
-            ? (<EmptyList title="Not Found" subtitle="0 tag found here." icon="cross"/>)
+            ? (<PartialEmptyList title="Not Found" subtitle="0 tag found here." icon="cross"/>)
             : items.map(item => (
               <div key={item.id} className="container-body columns col-gapless">
                 <ColumnBody className="col-1">{item.id}</ColumnBody>
@@ -82,7 +81,7 @@ class List extends Component {
 }
 
 function mapStateToProps(state) {
-  const {items, total} = state.tagItems;
+  const {items, total} = state.tags;
   return {items, total};
 }
 

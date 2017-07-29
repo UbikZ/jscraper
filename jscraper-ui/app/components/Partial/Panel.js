@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-import Loader from './../Loader';
+import {PartialLoader} from '..';
 
-export default class Main extends Component {
+export default class Panel extends Component {
   static propTypes = {
     title: PropTypes.string,
     content: PropTypes.any,
@@ -19,7 +19,7 @@ export default class Main extends Component {
           <div className="docs-content column col-12">
             <section className="container">
               <header className="text-center">
-                <h3>{isFetching ? (<Loader/>) : title}</h3>
+                <h3>{isFetching ? (<PartialLoader/>) : title}</h3>
               </header>
               <section className="notes">{children}</section>
             </section>
