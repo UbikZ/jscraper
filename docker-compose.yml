@@ -1,15 +1,6 @@
-nginx:
-  build: nginx
-  ports:
-    - "80:80"
-  links:
-    - jscraper
-  volumes:
-    - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    - ./docker/nginx/log:/var/log/nginx
-  env_file: .env
 jscraper:
-  build: jscraper
+  build: .
+  container_name: jscraper-api
   links:
     - pgsql
   ports:
@@ -17,10 +8,13 @@ jscraper:
       - "5005:5005"
   volumes:
       - ./docker/scraper/log:/var/log
-      - ./docker/scraper/gradle:/jscraper/cache
+      - ./docker/scraper/.m2:/root/.m2
+  environment:
+    - VIRTUAL_HOST=jscraper.localhost
   env_file: .env
 pgsql:
-  image: postgres:9.6.2-alpine
+  image: postgres:9-alpine
+  container_name: jscraper-pgsql
   ports:
     - "5432:5432"
   volumes:

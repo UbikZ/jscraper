@@ -13,14 +13,6 @@ stages:
   - deploy-back
   - deploy-front
 
-#tests:node-6:
-#  <<: *test_front_definition
-#  image: node:6-alpine
-#
-#tests:node-7:
-#  <<: *test_front_definition
-#  image: node:7-alpine
-
 tests:node-8:
   <<: *test_front_definition
   image: node:8-alpine

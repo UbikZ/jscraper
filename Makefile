@@ -11,12 +11,6 @@ usage:
 	@echo "  * make dev"
 	@echo "  * make prod"
 
-nginx-stop:
-	@/etc/init.d/nginx stop
-
-nginx-start:
-	@/etc/init.d/nginx start
-
 pull:
 	@docker pull $(imageBackId)
 
@@ -26,9 +20,6 @@ clean-docker:
 
 clean-db:
 	@rm -rf $(volDir)/pgsql
-
-clean-cache:
-	@rm -rf $(volDir)/gradle
 
 clean-logs:
 	@rm -rf $(volDir)/log

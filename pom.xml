@@ -1,0 +1,115 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.ubikz.jscraper</groupId>
+  <artifactId>jscraper-core</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+
+    <guava.version>18.0</guava.version>
+    <junit.version>4.12</junit.version>
+    <pgsql.version>9.4.1212.jre6</pgsql.version>
+    <mokito.version>2.8.47</mokito.version>
+    <checkstyle-plugin.version>2.17</checkstyle-plugin.version>
+    <checkstyle.version>8.1</checkstyle.version>
+  </properties>
+
+  <dependencies>
+    <!-- Common libs -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${pgsql.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${guava.version}</version>
+    </dependency>
+
+    <!-- Test -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mokito.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <modules>
+    <module>jscraper-api</module>
+    <module>jscraper-console</module>
+  </modules>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+              <overWriteReleases>false</overWriteReleases>
+              <overWriteSnapshots>false</overWriteSnapshots>
+              <overWriteIfNewer>true</overWriteIfNewer>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+    
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>${checkstyle-plugin.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>com.puppycrawl.tools</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>${checkstyle.version}</version>
+            </dependency>
+          </dependencies>
+          <executions>
+            <execution>
+              <id>validate</id>
+              <phase>validate</phase>
+              <configuration>
+                <encoding>UTF-8</encoding>
+                <consoleOutput>true</consoleOutput>
+                <failsOnError>true</failsOnError>
+                <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                <configLocation>jlintrc.xml</configLocation>
+                <sourceDirectories>
+                  <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+                  <sourceDirectory>${project.build.testSourceDirectory}</sourceDirectory>
+                </sourceDirectories>
+              </configuration>
+              <goals>
+                <goal>check</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>

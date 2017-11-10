@@ -11,7 +11,12 @@ const MODE_SIGNIN = 'signin';
 const MODE_SIGNUP = 'signup';
 
 const A = styled.a`
-  cursor: pointor;
+  cursor: pointer;
+`;
+
+const Sub = styled.div`
+    color: #bbc1cd;
+    line-height: 2rem;
 `;
 
 class Authentication extends Component {
@@ -36,7 +41,7 @@ class Authentication extends Component {
       <PartialPanel title={'Authentication'}>
         <div className="panel">
           <div className="panel-header">
-            <div className="panel-title">
+            <div className="panel-title text-center">
               <h1><i className="icon icon-people"></i></h1>
             </div>
           </div>
@@ -55,7 +60,7 @@ class Authentication extends Component {
             {this.isSignUp() && (<AuthSignUp signIn={signIn}/>)}
           </div>
           <div className="panel-footer">
-            <div className="tile-subtitle">Enjoy the application.</div>
+            <Sub>If you already have an account, you can sign-in otherwise sign-up.</Sub>
           </div>
         </div>
       </PartialPanel>
