@@ -74,7 +74,7 @@
             <manifest>
               <addClasspath>true</addClasspath>
               <classpathPrefix>lib/</classpathPrefix>
-              <mainClass>org.ubikz.jscraper.api.Application</mainClass>
+              <mainClass>org.ubikz.jscraper.Application</mainClass>
             </manifest>
           </archive>
         </configuration>

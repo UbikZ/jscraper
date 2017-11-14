@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.ubikz.jscraper.api.core.app.service.message.BaseMessage;
+import org.ubikz.jscraper.api.service.model.message.BaseMessage;
 
 @RestController
 @RequestMapping(value = "/api")
