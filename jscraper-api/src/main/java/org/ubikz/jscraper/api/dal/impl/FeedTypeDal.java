@@ -1,7 +1,7 @@
 package org.ubikz.jscraper.api.dal.impl;
 
 import org.springframework.stereotype.Repository;
-import org.ubikz.jscraper.api.dal.AbstractDal;
+import org.ubikz.jscraper.api.dal.BaseDal;
 import org.ubikz.jscraper.api.dal.model.filter.AbstractDalFilter;
 import org.ubikz.jscraper.api.dal.model.filter.impl.FeedTypeDalFilter;
 import org.ubikz.jscraper.api.dal.model.request.AbstractDalRequest;
@@ -12,7 +12,7 @@ import org.ubikz.jscraper.database.querybuilder.AbstractQuery;
 import java.util.Map;
 
 @Repository
-public class FeedTypeDal extends AbstractDal {
+public class FeedTypeDal extends BaseDal {
     /**
      * @param databaseService
      */

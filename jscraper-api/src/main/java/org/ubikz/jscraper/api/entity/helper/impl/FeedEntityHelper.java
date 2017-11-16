@@ -2,11 +2,11 @@ package org.ubikz.jscraper.api.entity.helper.impl;
 
 import org.ubikz.jscraper.api.dto.impl.FeedDto;
 import org.ubikz.jscraper.api.dto.impl.FeedTypeDto;
-import org.ubikz.jscraper.api.entity.helper.AbstractEntityHelper;
+import org.ubikz.jscraper.api.entity.helper.BaseEntityHelper;
 
 import java.util.Map;
 
-public class FeedEntityHelper extends AbstractEntityHelper {
+public class FeedEntityHelper extends BaseEntityHelper {
 
     public static final String COLUMN_URL = "url";
     public static final String COLUMN_FEED_TYPE_ID = "feed_type_id";

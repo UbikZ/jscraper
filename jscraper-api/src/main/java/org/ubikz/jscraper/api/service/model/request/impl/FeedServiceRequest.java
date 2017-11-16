@@ -1,8 +1,8 @@
 package org.ubikz.jscraper.api.service.model.request.impl;
 
-import org.ubikz.jscraper.api.service.model.request.AbstractServiceRequest;
+import org.ubikz.jscraper.api.service.model.request.BaseServiceRequest;
 
-public class FeedServiceRequest extends AbstractServiceRequest {
+public class FeedServiceRequest extends BaseServiceRequest {
     private String url;
     private Integer feedTypeId;
 

@@ -19,18 +19,18 @@ import java.util.Map;
 /**
  *
  */
-public abstract class AbstractDal {
+public abstract class BaseDal {
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_LABEL = "label";
     private static final String COLUMN_ENABLED = "enabled";
     private static final String COLUMN_DATE = "date";
-    protected final Logger logger = LoggerFactory.getLogger(AbstractDal.class);
+    protected final Logger logger = LoggerFactory.getLogger(BaseDal.class);
     protected DatabaseService databaseService;
     protected String tableName;
     protected String tableIdentifier = "id";
 
     @Autowired
-    public AbstractDal(DatabaseService databaseService) {
+    public BaseDal(DatabaseService databaseService) {
         this.databaseService = databaseService;
     }
 

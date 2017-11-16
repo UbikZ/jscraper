@@ -2,26 +2,26 @@ package org.ubikz.jscraper.api.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ubikz.jscraper.api.entity.FeedTypeEntity;
+import org.ubikz.jscraper.api.entity.impl.FeedTypeEntity;
 import org.ubikz.jscraper.api.entity.model.filter.AbstractEntityFilter;
 import org.ubikz.jscraper.api.entity.model.filter.impl.FeedTypeEntityFilter;
 import org.ubikz.jscraper.api.entity.model.request.AbstractEntityRequest;
 import org.ubikz.jscraper.api.entity.model.request.impl.FeedTypeEntityRequest;
-import org.ubikz.jscraper.api.service.AbstractService;
-import org.ubikz.jscraper.api.service.model.filter.AbstractServiceFilter;
+import org.ubikz.jscraper.api.service.BaseService;
+import org.ubikz.jscraper.api.service.model.filter.BaseServiceFilter;
 import org.ubikz.jscraper.api.service.model.filter.impl.FeedTypeServiceFilter;
-import org.ubikz.jscraper.api.service.model.request.AbstractServiceRequest;
+import org.ubikz.jscraper.api.service.model.request.BaseServiceRequest;
 import org.ubikz.jscraper.api.service.model.request.impl.FeedTypeServiceRequest;
 
 @Component
-public class FeedTypeService extends AbstractService {
+public class FeedTypeService extends BaseService {
     @Autowired
     public FeedTypeService(FeedTypeEntity feedTypeEntity) {
         this.entity = feedTypeEntity;
     }
 
     @Override
-    protected AbstractEntityRequest parseServiceToEntityRequest(AbstractServiceRequest request) {
+    protected AbstractEntityRequest parseServiceToEntityRequest(BaseServiceRequest request) {
         FeedTypeEntityRequest feedTypeEntityRequest = new FeedTypeEntityRequest();
         FeedTypeServiceRequest feedTypeServiceRequest = (FeedTypeServiceRequest) request;
 
@@ -33,7 +33,7 @@ public class FeedTypeService extends AbstractService {
     }
 
     @Override
-    protected AbstractEntityFilter parseServiceToEntityFilter(AbstractServiceFilter filter) {
+    protected AbstractEntityFilter parseServiceToEntityFilter(BaseServiceFilter filter) {
         FeedTypeEntityFilter feedTypeEntityFilter = new FeedTypeEntityFilter();
         FeedTypeServiceFilter feedTypeServiceFilter = (FeedTypeServiceFilter) filter;
 

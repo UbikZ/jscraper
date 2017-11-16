@@ -1,4 +1,4 @@
-package org.ubikz.jscraper.api.entity;
+package org.ubikz.jscraper.api.entity.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -7,7 +7,8 @@ import org.ubikz.jscraper.api.dal.model.filter.AbstractDalFilter;
 import org.ubikz.jscraper.api.dal.model.filter.impl.FeedTypeDalFilter;
 import org.ubikz.jscraper.api.dal.model.request.AbstractDalRequest;
 import org.ubikz.jscraper.api.dal.model.request.impl.FeedTypeDalRequest;
-import org.ubikz.jscraper.api.dto.AbstractDto;
+import org.ubikz.jscraper.api.dto.BaseDto;
+import org.ubikz.jscraper.api.entity.BaseEntity;
 import org.ubikz.jscraper.api.entity.model.filter.AbstractEntityFilter;
 import org.ubikz.jscraper.api.entity.model.filter.impl.FeedTypeEntityFilter;
 import org.ubikz.jscraper.api.entity.helper.impl.FeedTypeEntityHelper;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class FeedTypeEntity extends AbstractEntity {
+public class FeedTypeEntity extends BaseEntity {
     @Autowired
     public FeedTypeEntity(FeedTypeDal feedTypeDal) {
         this.dal = feedTypeDal;
@@ -26,12 +27,12 @@ public class FeedTypeEntity extends AbstractEntity {
     }
 
     @Override
-    protected void computeLoading(List<AbstractDto> dtoList) {
+    protected void computeLoading(List<BaseDto> dtoList) {
 
     }
 
     @Override
-    protected void computeLoading(Map<Object, AbstractDto> dtoList) throws Exception {
+    protected void computeLoading(Map<Object, BaseDto> dtoList) throws Exception {
     }
 
     /**

@@ -2,19 +2,19 @@ package org.ubikz.jscraper.api.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ubikz.jscraper.api.entity.UserEntity;
+import org.ubikz.jscraper.api.entity.impl.UserEntity;
 import org.ubikz.jscraper.api.entity.model.filter.AbstractEntityFilter;
 import org.ubikz.jscraper.api.entity.model.filter.impl.UserEntityFilter;
 import org.ubikz.jscraper.api.entity.model.request.AbstractEntityRequest;
 import org.ubikz.jscraper.api.entity.model.request.impl.UserEntityRequest;
-import org.ubikz.jscraper.api.service.AbstractService;
-import org.ubikz.jscraper.api.service.model.filter.AbstractServiceFilter;
+import org.ubikz.jscraper.api.service.BaseService;
+import org.ubikz.jscraper.api.service.model.filter.BaseServiceFilter;
 import org.ubikz.jscraper.api.service.model.filter.impl.UserServiceFilter;
-import org.ubikz.jscraper.api.service.model.request.AbstractServiceRequest;
+import org.ubikz.jscraper.api.service.model.request.BaseServiceRequest;
 import org.ubikz.jscraper.api.service.model.request.impl.UserServiceRequest;
 
 @Component
-public class UserService extends AbstractService {
+public class UserService extends BaseService {
     @Autowired
     public UserService(UserEntity userEntity) {
         this.entity = userEntity;
@@ -25,7 +25,7 @@ public class UserService extends AbstractService {
      * @return
      */
     @Override
-    protected AbstractEntityRequest parseServiceToEntityRequest(AbstractServiceRequest request) {
+    protected AbstractEntityRequest parseServiceToEntityRequest(BaseServiceRequest request) {
         UserEntityRequest userEntityRequest = new UserEntityRequest();
         UserServiceRequest userServiceRequest = (UserServiceRequest) request;
 
@@ -44,7 +44,7 @@ public class UserService extends AbstractService {
      * @return
      */
     @Override
-    protected AbstractEntityFilter parseServiceToEntityFilter(AbstractServiceFilter filter) {
+    protected AbstractEntityFilter parseServiceToEntityFilter(BaseServiceFilter filter) {
         UserEntityFilter userEntityFilter = new UserEntityFilter();
         UserServiceFilter userServiceFilter = (UserServiceFilter) filter;
 

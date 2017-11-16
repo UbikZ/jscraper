@@ -1,8 +1,8 @@
 package org.ubikz.jscraper.api.dto.impl;
 
-import org.ubikz.jscraper.api.dto.AbstractDto;
+import org.ubikz.jscraper.api.dto.BaseDto;
 
-public class FeedDto extends AbstractDto {
+public class FeedDto extends BaseDto {
     private String url;
     private FeedTypeDto feedTypeDto;
 

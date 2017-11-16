@@ -1,6 +1,6 @@
 package org.ubikz.jscraper.api.service.model.filter.impl;
 
-import org.ubikz.jscraper.api.service.model.filter.AbstractServiceFilter;
+import org.ubikz.jscraper.api.service.model.filter.BaseServiceFilter;
 
-public class TagServiceFilter extends AbstractServiceFilter {
+public class TagServiceFilter extends BaseServiceFilter {
 }

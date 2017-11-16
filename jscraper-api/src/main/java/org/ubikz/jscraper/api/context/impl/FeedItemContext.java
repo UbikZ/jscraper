@@ -3,19 +3,19 @@ package org.ubikz.jscraper.api.context.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.ubikz.jscraper.api.context.AbstractContext;
-import org.ubikz.jscraper.api.controller.model.filter.AbstractFilterBody;
+import org.ubikz.jscraper.api.context.BaseContext;
+import org.ubikz.jscraper.api.controller.model.filter.BaseFilterBody;
 import org.ubikz.jscraper.api.controller.model.filter.impl.FeedItemFilterBody;
-import org.ubikz.jscraper.api.controller.model.request.AbstractRequestBody;
+import org.ubikz.jscraper.api.controller.model.request.BaseRequestBody;
 import org.ubikz.jscraper.api.controller.model.request.impl.FeedItemRequestBody;
 import org.ubikz.jscraper.api.dto.impl.FeedDto;
 import org.ubikz.jscraper.api.service.impl.FeedItemService;
 import org.ubikz.jscraper.api.service.impl.FeedService;
-import org.ubikz.jscraper.api.service.model.filter.AbstractServiceFilter;
+import org.ubikz.jscraper.api.service.model.filter.BaseServiceFilter;
 import org.ubikz.jscraper.api.service.model.filter.impl.FeedItemServiceFilter;
 import org.ubikz.jscraper.api.service.model.filter.impl.FeedServiceFilter;
 import org.ubikz.jscraper.api.service.model.message.BaseMessage;
-import org.ubikz.jscraper.api.service.model.request.AbstractServiceRequest;
+import org.ubikz.jscraper.api.service.model.request.BaseServiceRequest;
 import org.ubikz.jscraper.api.service.model.request.impl.FeedItemServiceRequest;
 import org.ubikz.jscraper.api.service.model.request.impl.FeedListServiceRequest;
 
@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @Component
-public class FeedItemContext extends AbstractContext {
+public class FeedItemContext extends BaseContext {
     private static final int FEED_ITEM_GENERATED = 44;
 
     private FeedService feedService;
@@ -50,7 +50,7 @@ public class FeedItemContext extends AbstractContext {
     public BaseMessage generate() throws Exception {
         return handle(() -> {
             FeedListServiceRequest request = new FeedListServiceRequest();
-            AbstractServiceFilter feedServiceFilter = new FeedServiceFilter();
+            BaseServiceFilter feedServiceFilter = new FeedServiceFilter();
             feedServiceFilter.setEnabled(true);
             request.setFeedList(feedService.getAll(feedServiceFilter).stream().map(FeedDto.class::cast).collect(Collectors.toList()));
 
@@ -59,7 +59,7 @@ public class FeedItemContext extends AbstractContext {
     }
 
     @Override
-    protected AbstractServiceRequest parseRequest(AbstractRequestBody data, AbstractServiceRequest request) {
+    protected BaseServiceRequest parseRequest(BaseRequestBody data, BaseServiceRequest request) {
         FeedItemRequestBody requestBody = (FeedItemRequestBody) data;
         FeedItemServiceRequest serviceRequest = (FeedItemServiceRequest) parseBaseRequest(requestBody, request);
 
@@ -77,7 +77,7 @@ public class FeedItemContext extends AbstractContext {
     }
 
     @Override
-    protected AbstractServiceFilter parseFilter(AbstractFilterBody data, AbstractServiceFilter filter) throws Exception {
+    protected BaseServiceFilter parseFilter(BaseFilterBody data, BaseServiceFilter filter) throws Exception {
         FeedItemFilterBody filterBody = (FeedItemFilterBody) data;
         FeedItemServiceFilter serviceFilter = (FeedItemServiceFilter) parseBaseFilter(filterBody, filter);
 

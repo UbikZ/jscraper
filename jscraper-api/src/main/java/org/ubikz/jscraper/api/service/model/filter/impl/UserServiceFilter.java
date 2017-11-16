@@ -1,8 +1,8 @@
 package org.ubikz.jscraper.api.service.model.filter.impl;
 
-import org.ubikz.jscraper.api.service.model.filter.AbstractServiceFilter;
+import org.ubikz.jscraper.api.service.model.filter.BaseServiceFilter;
 
-public class UserServiceFilter extends AbstractServiceFilter {
+public class UserServiceFilter extends BaseServiceFilter {
     private String username;
     private String email;
     private String password;

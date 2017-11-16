@@ -2,19 +2,19 @@ package org.ubikz.jscraper.api.context.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ubikz.jscraper.api.context.AbstractContext;
-import org.ubikz.jscraper.api.controller.model.filter.AbstractFilterBody;
+import org.ubikz.jscraper.api.context.BaseContext;
+import org.ubikz.jscraper.api.controller.model.filter.BaseFilterBody;
 import org.ubikz.jscraper.api.controller.model.filter.impl.FeedFilterBody;
-import org.ubikz.jscraper.api.controller.model.request.AbstractRequestBody;
+import org.ubikz.jscraper.api.controller.model.request.BaseRequestBody;
 import org.ubikz.jscraper.api.controller.model.request.impl.FeedRequestBody;
 import org.ubikz.jscraper.api.service.impl.FeedService;
-import org.ubikz.jscraper.api.service.model.filter.AbstractServiceFilter;
+import org.ubikz.jscraper.api.service.model.filter.BaseServiceFilter;
 import org.ubikz.jscraper.api.service.model.filter.impl.FeedServiceFilter;
-import org.ubikz.jscraper.api.service.model.request.AbstractServiceRequest;
+import org.ubikz.jscraper.api.service.model.request.BaseServiceRequest;
 import org.ubikz.jscraper.api.service.model.request.impl.FeedServiceRequest;
 
 @Component
-public class FeedContext extends AbstractContext {
+public class FeedContext extends BaseContext {
     @Autowired
     public FeedContext(FeedService feedService) {
         this.service = feedService;
@@ -30,7 +30,7 @@ public class FeedContext extends AbstractContext {
     }
 
     @Override
-    protected AbstractServiceRequest parseRequest(AbstractRequestBody data, AbstractServiceRequest request) {
+    protected BaseServiceRequest parseRequest(BaseRequestBody data, BaseServiceRequest request) {
         FeedRequestBody requestBody = (FeedRequestBody) data;
         FeedServiceRequest serviceRequest = (FeedServiceRequest) parseBaseRequest(requestBody, request);
         serviceRequest.setUrl(requestBody.getUrl());
@@ -40,7 +40,7 @@ public class FeedContext extends AbstractContext {
     }
 
     @Override
-    protected AbstractServiceFilter parseFilter(AbstractFilterBody data, AbstractServiceFilter filter) throws Exception {
+    protected BaseServiceFilter parseFilter(BaseFilterBody data, BaseServiceFilter filter) throws Exception {
         return parseBaseFilter(data, filter);
     }
 }

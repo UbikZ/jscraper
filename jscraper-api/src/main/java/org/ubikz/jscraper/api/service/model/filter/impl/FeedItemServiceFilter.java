@@ -1,10 +1,10 @@
 package org.ubikz.jscraper.api.service.model.filter.impl;
 
-import org.ubikz.jscraper.api.service.model.filter.AbstractServiceFilter;
+import org.ubikz.jscraper.api.service.model.filter.BaseServiceFilter;
 
 import java.util.List;
 
-public class FeedItemServiceFilter extends AbstractServiceFilter {
+public class FeedItemServiceFilter extends BaseServiceFilter {
     private Integer feedId;
     private String url;
     private String checksum;

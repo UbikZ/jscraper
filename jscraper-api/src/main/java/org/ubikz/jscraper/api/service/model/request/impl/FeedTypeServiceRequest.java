@@ -1,8 +1,8 @@
 package org.ubikz.jscraper.api.service.model.request.impl;
 
-import org.ubikz.jscraper.api.service.model.request.AbstractServiceRequest;
+import org.ubikz.jscraper.api.service.model.request.BaseServiceRequest;
 
-public class FeedTypeServiceRequest extends AbstractServiceRequest {
+public class FeedTypeServiceRequest extends BaseServiceRequest {
     private String urlRegex;
     private String contentRegex;
 

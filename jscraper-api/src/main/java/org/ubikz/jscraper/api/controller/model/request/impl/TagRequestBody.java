@@ -1,6 +1,6 @@
 package org.ubikz.jscraper.api.controller.model.request.impl;
 
-import org.ubikz.jscraper.api.controller.model.request.AbstractRequestBody;
+import org.ubikz.jscraper.api.controller.model.request.BaseRequestBody;
 
-public class TagRequestBody extends AbstractRequestBody {
+public class TagRequestBody extends BaseRequestBody {
 }

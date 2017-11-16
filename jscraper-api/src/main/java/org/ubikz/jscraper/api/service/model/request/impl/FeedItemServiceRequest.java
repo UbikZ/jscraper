@@ -1,10 +1,10 @@
 package org.ubikz.jscraper.api.service.model.request.impl;
 
-import org.ubikz.jscraper.api.service.model.request.AbstractServiceRequest;
+import org.ubikz.jscraper.api.service.model.request.BaseServiceRequest;
 
 import java.util.List;
 
-public class FeedItemServiceRequest extends AbstractServiceRequest {
+public class FeedItemServiceRequest extends BaseServiceRequest {
     private Integer feedId;
     private String url;
     private String comment;

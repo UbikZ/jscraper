@@ -3,7 +3,7 @@ package org.ubikz.jscraper.api.dal.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-import org.ubikz.jscraper.api.dal.AbstractDal;
+import org.ubikz.jscraper.api.dal.BaseDal;
 import org.ubikz.jscraper.api.dal.model.filter.AbstractDalFilter;
 import org.ubikz.jscraper.api.dal.model.filter.impl.UserDalFilter;
 import org.ubikz.jscraper.api.dal.model.request.AbstractDalRequest;
@@ -17,7 +17,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 @Repository
-public class UserDal extends AbstractDal {
+public class UserDal extends BaseDal {
     public static final String COLUMN_USERNAME = "username";
     public static final String COLUMN_EMAIL = "email";
     public static final String COLUMN_PASSWORD = "password";

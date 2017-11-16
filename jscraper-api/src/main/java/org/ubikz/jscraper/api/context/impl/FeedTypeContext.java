@@ -2,19 +2,19 @@ package org.ubikz.jscraper.api.context.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ubikz.jscraper.api.context.AbstractContext;
-import org.ubikz.jscraper.api.controller.model.filter.AbstractFilterBody;
+import org.ubikz.jscraper.api.context.BaseContext;
+import org.ubikz.jscraper.api.controller.model.filter.BaseFilterBody;
 import org.ubikz.jscraper.api.controller.model.filter.impl.FeedTypeFilterBody;
-import org.ubikz.jscraper.api.controller.model.request.AbstractRequestBody;
+import org.ubikz.jscraper.api.controller.model.request.BaseRequestBody;
 import org.ubikz.jscraper.api.controller.model.request.impl.FeedTypeRequestBody;
 import org.ubikz.jscraper.api.service.impl.FeedTypeService;
-import org.ubikz.jscraper.api.service.model.filter.AbstractServiceFilter;
+import org.ubikz.jscraper.api.service.model.filter.BaseServiceFilter;
 import org.ubikz.jscraper.api.service.model.filter.impl.FeedTypeServiceFilter;
-import org.ubikz.jscraper.api.service.model.request.AbstractServiceRequest;
+import org.ubikz.jscraper.api.service.model.request.BaseServiceRequest;
 import org.ubikz.jscraper.api.service.model.request.impl.FeedTypeServiceRequest;
 
 @Component
-public class FeedTypeContext extends AbstractContext {
+public class FeedTypeContext extends BaseContext {
     @Autowired
     public FeedTypeContext(FeedTypeService feedTypeService) {
         this.service = feedTypeService;
@@ -30,7 +30,7 @@ public class FeedTypeContext extends AbstractContext {
     }
 
     @Override
-    protected AbstractServiceRequest parseRequest(AbstractRequestBody data, AbstractServiceRequest request) {
+    protected BaseServiceRequest parseRequest(BaseRequestBody data, BaseServiceRequest request) {
         FeedTypeRequestBody requestBody = (FeedTypeRequestBody) data;
         FeedTypeServiceRequest serviceRequest = (FeedTypeServiceRequest) parseBaseRequest(requestBody, request);
         serviceRequest.setUrlRegex(requestBody.getUrlRegex());
@@ -40,7 +40,7 @@ public class FeedTypeContext extends AbstractContext {
     }
 
     @Override
-    protected AbstractServiceFilter parseFilter(AbstractFilterBody data, AbstractServiceFilter filter) throws Exception {
+    protected BaseServiceFilter parseFilter(BaseFilterBody data, BaseServiceFilter filter) throws Exception {
         return parseBaseFilter(data, filter);
     }
 }

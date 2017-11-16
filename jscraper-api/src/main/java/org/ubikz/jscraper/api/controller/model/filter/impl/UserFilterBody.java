@@ -1,9 +1,9 @@
 package org.ubikz.jscraper.api.controller.model.filter.impl;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.ubikz.jscraper.api.controller.model.filter.AbstractFilterBody;
+import org.ubikz.jscraper.api.controller.model.filter.BaseFilterBody;
 
-public class UserFilterBody extends AbstractFilterBody {
+public class UserFilterBody extends BaseFilterBody {
     private String username;
     private String email;
     private String password;

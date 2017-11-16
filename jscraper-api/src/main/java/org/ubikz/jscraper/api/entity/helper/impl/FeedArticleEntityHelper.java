@@ -1,13 +1,13 @@
 package org.ubikz.jscraper.api.entity.helper.impl;
 
 import org.ubikz.jscraper.api.dto.impl.FeedArticleDto;
-import org.ubikz.jscraper.api.entity.helper.AbstractEntityHelper;
+import org.ubikz.jscraper.api.entity.helper.BaseEntityHelper;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class FeedArticleEntityHelper extends AbstractEntityHelper {
+public class FeedArticleEntityHelper extends BaseEntityHelper {
 
     public static final String COLUMN_URL = "url";
     public static final String COLUMN_LABEL = "label";

@@ -2,7 +2,7 @@ package org.ubikz.jscraper.api.dal.impl;
 
 import com.rometools.rome.feed.synd.SyndEntry;
 import org.springframework.stereotype.Repository;
-import org.ubikz.jscraper.api.dal.AbstractDal;
+import org.ubikz.jscraper.api.dal.BaseDal;
 import org.ubikz.jscraper.api.dal.model.filter.AbstractDalFilter;
 import org.ubikz.jscraper.api.dal.model.filter.impl.FeedDalFilter;
 import org.ubikz.jscraper.api.dal.model.request.AbstractDalRequest;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class FeedDal extends AbstractDal {
+public class FeedDal extends BaseDal {
     /**
      * @param databaseService
      */

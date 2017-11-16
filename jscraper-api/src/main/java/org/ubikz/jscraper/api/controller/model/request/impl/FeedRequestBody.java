@@ -1,8 +1,8 @@
 package org.ubikz.jscraper.api.controller.model.request.impl;
 
-import org.ubikz.jscraper.api.controller.model.request.AbstractRequestBody;
+import org.ubikz.jscraper.api.controller.model.request.BaseRequestBody;
 
-public class FeedRequestBody extends AbstractRequestBody {
+public class FeedRequestBody extends BaseRequestBody {
     private String url;
     private Integer feedTypeId;
 

@@ -6,19 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
-import org.ubikz.jscraper.api.dto.AbstractDto;
+import org.ubikz.jscraper.api.dto.BaseDto;
 import org.ubikz.jscraper.api.dto.impl.FeedArticleDto;
 import org.ubikz.jscraper.api.dto.impl.FeedDto;
-import org.ubikz.jscraper.api.entity.*;
+import org.ubikz.jscraper.api.entity.impl.*;
 import org.ubikz.jscraper.api.entity.model.filter.*;
 import org.ubikz.jscraper.api.entity.model.filter.impl.*;
 import org.ubikz.jscraper.api.entity.model.request.AbstractEntityRequest;
 import org.ubikz.jscraper.api.entity.model.request.impl.FeedItemEntityRequest;
 import org.ubikz.jscraper.api.entity.model.request.impl.TagEntityRequest;
-import org.ubikz.jscraper.api.service.AbstractService;
-import org.ubikz.jscraper.api.service.model.filter.AbstractServiceFilter;
+import org.ubikz.jscraper.api.service.BaseService;
+import org.ubikz.jscraper.api.service.model.filter.BaseServiceFilter;
 import org.ubikz.jscraper.api.service.model.filter.impl.FeedItemServiceFilter;
-import org.ubikz.jscraper.api.service.model.request.AbstractServiceRequest;
+import org.ubikz.jscraper.api.service.model.request.BaseServiceRequest;
 import org.ubikz.jscraper.api.service.model.request.impl.FeedItemServiceRequest;
 import org.ubikz.jscraper.api.service.model.request.impl.FeedListServiceRequest;
 
@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-public class FeedItemService extends AbstractService {
+public class FeedItemService extends BaseService {
     private final String urlRegex =
             "^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\\\]@!\\$&''\\(\\)\\*\\+,;=.]+$";
     private FeedEntity feedEntity;
@@ -68,13 +68,13 @@ public class FeedItemService extends AbstractService {
                 .feedProhibitedEntity
                 .getAll(new FeedProhibitedEntityFilter())
                 .stream()
-                .map(AbstractDto::getLabel)
+                .map(BaseDto::getLabel)
                 .collect(Collectors.toList());
         List<String> tagProhibitedList = this
                 .tagProhibitedEntity
                 .getAll(new TagProhibitedEntityFilter())
                 .stream()
-                .map(AbstractDto::getLabel)
+                .map(BaseDto::getLabel)
                 .collect(Collectors.toList());
 
         for (FeedDto feed : request.getFeedList()) {
@@ -123,7 +123,7 @@ public class FeedItemService extends AbstractService {
      */
     private void populateEntityArticleListRequestWithTags(
             List<AbstractEntityRequest> requestList,
-            Map<Object, AbstractDto> tagList
+            Map<Object, BaseDto> tagList
     ) {
         for (AbstractEntityRequest request : requestList) {
             FeedItemEntityRequest fiRequest = (FeedItemEntityRequest) request;
@@ -178,7 +178,7 @@ public class FeedItemService extends AbstractService {
      * @return
      */
     @Override
-    protected AbstractEntityRequest parseServiceToEntityRequest(AbstractServiceRequest request) {
+    protected AbstractEntityRequest parseServiceToEntityRequest(BaseServiceRequest request) {
         FeedItemEntityRequest feedItemEntityRequest = new FeedItemEntityRequest();
         FeedItemServiceRequest feedItemServiceRequest = (FeedItemServiceRequest) request;
 
@@ -201,7 +201,7 @@ public class FeedItemService extends AbstractService {
      * @return
      */
     @Override
-    protected AbstractEntityFilter parseServiceToEntityFilter(AbstractServiceFilter filter) {
+    protected AbstractEntityFilter parseServiceToEntityFilter(BaseServiceFilter filter) {
         FeedItemEntityFilter feedItemEntityFilter = new FeedItemEntityFilter();
         FeedItemServiceFilter feedItemServiceFilter = (FeedItemServiceFilter) filter;
 

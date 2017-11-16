@@ -16,7 +16,7 @@ import org.ubikz.jscraper.security.jwt.model.JWTProperties;
 @Configuration
 @EnableWebSecurity
 public class SecurityService extends WebSecurityConfigurerAdapter {
-    public static final String API_AUTHENTICATE = "/api/authenticate";
+    public static final String API_AUTHENTICATE = "/authenticate";
     @Autowired
     private AuthProvider authProvider;
     @Autowired
@@ -27,8 +27,8 @@ public class SecurityService extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/api/user").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/api/feed-item").hasRole("USER")
+                .antMatchers("/user").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/feed-item").hasRole("USER")
                 .antMatchers(HttpMethod.POST, API_AUTHENTICATE).permitAll()
                 .anyRequest().authenticated()
                 .and()

@@ -2,19 +2,19 @@ package org.ubikz.jscraper.api.context.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ubikz.jscraper.api.context.AbstractContext;
-import org.ubikz.jscraper.api.controller.model.filter.AbstractFilterBody;
+import org.ubikz.jscraper.api.context.BaseContext;
+import org.ubikz.jscraper.api.controller.model.filter.BaseFilterBody;
 import org.ubikz.jscraper.api.controller.model.filter.impl.UserFilterBody;
-import org.ubikz.jscraper.api.controller.model.request.AbstractRequestBody;
+import org.ubikz.jscraper.api.controller.model.request.BaseRequestBody;
 import org.ubikz.jscraper.api.controller.model.request.impl.UserRequestBody;
 import org.ubikz.jscraper.api.service.impl.UserService;
-import org.ubikz.jscraper.api.service.model.filter.AbstractServiceFilter;
+import org.ubikz.jscraper.api.service.model.filter.BaseServiceFilter;
 import org.ubikz.jscraper.api.service.model.filter.impl.UserServiceFilter;
-import org.ubikz.jscraper.api.service.model.request.AbstractServiceRequest;
+import org.ubikz.jscraper.api.service.model.request.BaseServiceRequest;
 import org.ubikz.jscraper.api.service.model.request.impl.UserServiceRequest;
 
 @Component
-public class UserContext extends AbstractContext {
+public class UserContext extends BaseContext {
     @Autowired
     public UserContext(UserService userService) {
         this.service = userService;
@@ -30,7 +30,7 @@ public class UserContext extends AbstractContext {
     }
 
     @Override
-    protected AbstractServiceRequest parseRequest(AbstractRequestBody data, AbstractServiceRequest request) {
+    protected BaseServiceRequest parseRequest(BaseRequestBody data, BaseServiceRequest request) {
         UserRequestBody requestBody = (UserRequestBody) data;
         UserServiceRequest serviceRequest = (UserServiceRequest) parseBaseRequest(requestBody, request);
 
@@ -44,7 +44,7 @@ public class UserContext extends AbstractContext {
     }
 
     @Override
-    protected AbstractServiceFilter parseFilter(AbstractFilterBody data, AbstractServiceFilter filter) throws Exception {
+    protected BaseServiceFilter parseFilter(BaseFilterBody data, BaseServiceFilter filter) throws Exception {
         UserFilterBody filterBody = (UserFilterBody) data;
         UserServiceFilter serviceFilter = (UserServiceFilter) parseBaseFilter(filterBody, filter);
 

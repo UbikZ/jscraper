@@ -14,7 +14,7 @@
   </parent>
 
   <properties>
-    <flyway.version>4.0.3</flyway.version>
+    <flyway.version>4.2.0</flyway.version>
   </properties>
 
   <dependencies>

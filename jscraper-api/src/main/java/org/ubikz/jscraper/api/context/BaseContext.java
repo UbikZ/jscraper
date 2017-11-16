@@ -4,13 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
-import org.ubikz.jscraper.api.controller.model.filter.AbstractFilterBody;
-import org.ubikz.jscraper.api.controller.model.request.AbstractRequestBody;
-import org.ubikz.jscraper.api.service.AbstractService;
-import org.ubikz.jscraper.api.service.model.filter.AbstractServiceFilter;
+import org.springframework.stereotype.Component;
+import org.ubikz.jscraper.api.controller.model.filter.BaseFilterBody;
+import org.ubikz.jscraper.api.controller.model.request.BaseRequestBody;
+import org.ubikz.jscraper.api.service.BaseService;
+import org.ubikz.jscraper.api.service.model.filter.BaseServiceFilter;
 import org.ubikz.jscraper.api.service.model.message.BaseMessage;
 import org.ubikz.jscraper.api.service.model.message.ErrorMessage;
-import org.ubikz.jscraper.api.service.model.request.AbstractServiceRequest;
+import org.ubikz.jscraper.api.service.model.request.BaseServiceRequest;
 import org.ubikz.jscraper.exception.ApplicativeException;
 
 import java.text.SimpleDateFormat;
@@ -19,7 +20,8 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
-public abstract class AbstractContext {
+@Component
+public abstract class BaseContext {
     private static final int CODE_ERROR = -1;
     private static final int CODE_DATA_NOT_FOUND = -2;
     protected static int CREATED;
@@ -27,18 +29,18 @@ public abstract class AbstractContext {
     protected static int GET_ONE;
     protected static int GET_ALL;
     protected static int DELETE;
-    protected final Logger logger = LoggerFactory.getLogger(AbstractContext.class);
-    protected AbstractService service;
-    protected AbstractServiceRequest serviceRequest;
-    protected AbstractServiceFilter serviceFilter;
-    protected AbstractFilterBody filterBody;
+    protected final Logger logger = LoggerFactory.getLogger(BaseContext.class);
+    protected BaseService service;
+    protected BaseServiceRequest serviceRequest;
+    protected BaseServiceFilter serviceFilter;
+    protected BaseFilterBody filterBody;
 
     /**
      * @param request
      * @return
      * @throws Exception
      */
-    public BaseMessage create(AbstractRequestBody request) {
+    public BaseMessage create(BaseRequestBody request) {
         return handle(() -> service.create(parseRequest(request, serviceRequest)), HttpStatus.CREATED, CREATED);
     }
 
@@ -47,7 +49,7 @@ public abstract class AbstractContext {
      * @return
      * @throws Exception
      */
-    public BaseMessage update(Integer id, AbstractRequestBody request) {
+    public BaseMessage update(Integer id, BaseRequestBody request) {
         return handle(() -> {
             serviceRequest.setId(id);
 
@@ -65,7 +67,7 @@ public abstract class AbstractContext {
      * @throws Exception
      */
     public BaseMessage getById(int id) {
-        AbstractFilterBody filter = filterBody;
+        BaseFilterBody filter = filterBody;
         filter.setId(id);
 
         return handle(() -> service.get(parseFilter(filter, serviceFilter)), HttpStatus.OK, GET_ONE);
@@ -77,7 +79,7 @@ public abstract class AbstractContext {
      * @throws Exception
      */
     public BaseMessage deleteById(int id) {
-        AbstractFilterBody filter = filterBody;
+        BaseFilterBody filter = filterBody;
         filter.setId(id);
 
         return handle(() -> service.delete(parseFilter(filter, serviceFilter)), HttpStatus.OK, DELETE);
@@ -88,7 +90,7 @@ public abstract class AbstractContext {
      * @return
      * @throws Exception
      */
-    public BaseMessage getAll(AbstractFilterBody filter) {
+    public BaseMessage getAll(BaseFilterBody filter) {
         return handle(() -> service.getAll(parseFilter(filter, serviceFilter)), HttpStatus.OK, GET_ALL);
     }
 
@@ -97,7 +99,7 @@ public abstract class AbstractContext {
      * @return
      * @throws Exception
      */
-    public int count(AbstractFilterBody filter) throws Exception {
+    public int count(BaseFilterBody filter) throws Exception {
         return service.count(parseFilter(filter, serviceFilter));
     }
 
@@ -175,20 +177,20 @@ public abstract class AbstractContext {
      * @param request
      * @return
      */
-    protected abstract AbstractServiceRequest parseRequest(AbstractRequestBody data, AbstractServiceRequest request);
+    protected abstract BaseServiceRequest parseRequest(BaseRequestBody data, BaseServiceRequest request);
 
     /**
      * @param filter
      * @return
      */
-    protected abstract AbstractServiceFilter parseFilter(AbstractFilterBody data, AbstractServiceFilter filter) throws Exception;
+    protected abstract BaseServiceFilter parseFilter(BaseFilterBody data, BaseServiceFilter filter) throws Exception;
 
     /**
      * @param data
      * @param request
      * @return
      */
-    protected final AbstractServiceRequest parseBaseRequest(AbstractRequestBody data, AbstractServiceRequest request) {
+    protected final BaseServiceRequest parseBaseRequest(BaseRequestBody data, BaseServiceRequest request) {
         request.setLabel(data.getLabel());
         request.setEnabled(data.getEnabled());
 
@@ -200,7 +202,7 @@ public abstract class AbstractContext {
      * @param filter
      * @return
      */
-    protected final AbstractServiceFilter parseBaseFilter(AbstractFilterBody data, AbstractServiceFilter filter) throws Exception {
+    protected final BaseServiceFilter parseBaseFilter(BaseFilterBody data, BaseServiceFilter filter) throws Exception {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
         filter.setId(data.getId());

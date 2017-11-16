@@ -1,6 +1,6 @@
 package org.ubikz.jscraper.api.controller.model.filter.impl;
 
-import org.ubikz.jscraper.api.controller.model.filter.AbstractFilterBody;
+import org.ubikz.jscraper.api.controller.model.filter.BaseFilterBody;
 
-public class FeedProhibitedFilterBody extends AbstractFilterBody {
+public class FeedProhibitedFilterBody extends BaseFilterBody {
 }

@@ -1,11 +1,11 @@
 package org.ubikz.jscraper.api.dto.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.ubikz.jscraper.api.dto.AbstractDto;
+import org.ubikz.jscraper.api.dto.BaseDto;
 
 import java.util.List;
 
-public class FeedItemDto extends AbstractDto {
+public class FeedItemDto extends BaseDto {
     private FeedDto feed;
     private String url;
     private String comment;

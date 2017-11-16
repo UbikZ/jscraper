@@ -14,8 +14,8 @@
   </parent>
 
   <properties>
-    <spring-boot.core.version>1.5.6.RELEASE</spring-boot.core.version>
-    <spring-boot.jdbc.version>4.3.10.RELEASE</spring-boot.jdbc.version>
+    <spring-boot.core.version>1.5.8.RELEASE</spring-boot.core.version>
+    <spring-boot.jdbc.version>4.3.12.RELEASE</spring-boot.jdbc.version>
     <rome.version>1.7.4</rome.version>
     <jsoup.version>1.10.3</jsoup.version>
     <jwt.version>0.7.0</jwt.version>

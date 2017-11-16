@@ -1,11 +1,11 @@
 package org.ubikz.jscraper.api.dto.impl;
 
-import org.ubikz.jscraper.api.dto.AbstractDto;
+import org.ubikz.jscraper.api.dto.BaseDto;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FeedArticleDto extends AbstractDto {
+public class FeedArticleDto extends BaseDto {
     private String url;
     private String author;
     private List<String> tagList = new ArrayList<>();

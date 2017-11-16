@@ -1,11 +1,11 @@
 package org.ubikz.jscraper.api.entity.helper.impl;
 
 import org.ubikz.jscraper.api.dto.impl.FeedTypeDto;
-import org.ubikz.jscraper.api.entity.helper.AbstractEntityHelper;
+import org.ubikz.jscraper.api.entity.helper.BaseEntityHelper;
 
 import java.util.Map;
 
-public class FeedTypeEntityHelper extends AbstractEntityHelper {
+public class FeedTypeEntityHelper extends BaseEntityHelper {
 
     public static final String COLUMN_URL_REGEX = "url_regex";
     public static final String COLUMN_CONTENT_REGEX = "content_regex";

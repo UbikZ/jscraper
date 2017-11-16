@@ -1,8 +1,8 @@
 package org.ubikz.jscraper.api.service.model.filter.impl;
 
-import org.ubikz.jscraper.api.service.model.filter.AbstractServiceFilter;
+import org.ubikz.jscraper.api.service.model.filter.BaseServiceFilter;
 
-public class FeedServiceFilter extends AbstractServiceFilter {
+public class FeedServiceFilter extends BaseServiceFilter {
     private String url;
 
     public String getUrl() {

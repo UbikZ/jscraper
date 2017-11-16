@@ -1,9 +1,15 @@
-package org.ubikz.jscraper.api.service.model.request;
+package org.ubikz.jscraper.api.dto;
 
-public abstract class AbstractServiceRequest {
+import java.util.Date;
+
+public abstract class BaseDto {
     private Integer id;
     private String label;
     private Boolean isEnabled;
+    private Date date;
+
+    public BaseDto() {
+    }
 
     public Integer getId() {
         return id;
@@ -11,14 +17,6 @@ public abstract class AbstractServiceRequest {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
     }
 
     public Boolean getEnabled() {
@@ -29,12 +27,29 @@ public abstract class AbstractServiceRequest {
         isEnabled = enabled;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     @Override
     public String toString() {
-        return "AbstractServiceRequest{"
+        return "BaseDto{"
                 + "id=" + id
                 + ", label='" + label + '\''
                 + ", isEnabled=" + isEnabled
+                + ", date=" + date
                 + '}';
     }
 }

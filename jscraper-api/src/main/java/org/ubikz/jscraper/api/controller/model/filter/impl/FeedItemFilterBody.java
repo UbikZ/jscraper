@@ -1,11 +1,11 @@
 package org.ubikz.jscraper.api.controller.model.filter.impl;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.ubikz.jscraper.api.controller.model.filter.AbstractFilterBody;
+import org.ubikz.jscraper.api.controller.model.filter.BaseFilterBody;
 
 import java.util.Arrays;
 
-public class FeedItemFilterBody extends AbstractFilterBody {
+public class FeedItemFilterBody extends BaseFilterBody {
     private Integer feedId = null;
     private Integer feedTypeId = null;
     private String url = null;

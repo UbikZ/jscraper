@@ -1,7 +1,7 @@
 package org.ubikz.jscraper.api.dal.impl;
 
 import org.springframework.stereotype.Repository;
-import org.ubikz.jscraper.api.dal.AbstractDal;
+import org.ubikz.jscraper.api.dal.BaseDal;
 import org.ubikz.jscraper.api.dal.model.filter.AbstractDalFilter;
 import org.ubikz.jscraper.api.dal.model.filter.impl.FeedItemDalFilter;
 import org.ubikz.jscraper.api.dal.model.request.AbstractDalRequest;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class FeedItemDal extends AbstractDal {
+public class FeedItemDal extends BaseDal {
 
     public static final String COLUMN_FEED_ID = "feed_id";
     public static final String COLUMN_URL = "url";

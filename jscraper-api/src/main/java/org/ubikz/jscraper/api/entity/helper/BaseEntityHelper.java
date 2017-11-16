@@ -1,13 +1,13 @@
 package org.ubikz.jscraper.api.entity.helper;
 
-import org.ubikz.jscraper.api.dto.AbstractDto;
+import org.ubikz.jscraper.api.dto.BaseDto;
 
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class AbstractEntityHelper {
+public abstract class BaseEntityHelper {
 
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_DATE = "date";
@@ -19,7 +19,7 @@ public abstract class AbstractEntityHelper {
      * @param dto
      * @return
      */
-    public AbstractDto getBaseDtoFromDal(Map<String, Object> data, AbstractDto dto) {
+    public BaseDto getBaseDtoFromDal(Map<String, Object> data, BaseDto dto) {
         if (data.containsKey(COLUMN_ID)) {
             dto.setId((int) data.get(COLUMN_ID));
         }
@@ -49,23 +49,23 @@ public abstract class AbstractEntityHelper {
      * @param attr
      * @return
      */
-    public final List<AbstractDto> getDtoListFromReturnDal(List<Object> dataList, String attr) {
-        List<AbstractDto> abstractDtoList = new ArrayList<>();
+    public final List<BaseDto> getDtoListFromReturnDal(List<Object> dataList, String attr) {
+        List<BaseDto> baseDtoList = new ArrayList<>();
 
         for (Object element : dataList) {
-            abstractDtoList.add(this.getDtoFromDal(new HashMap<String, Object>() {{
+            baseDtoList.add(this.getDtoFromDal(new HashMap<String, Object>() {{
                 put(attr, element);
             }}));
         }
 
-        return abstractDtoList;
+        return baseDtoList;
     }
 
     /**
      * @param dataList
      * @return
      */
-    public final List<AbstractDto> getDtoListFromDal(List<Map<String, Object>> dataList) {
+    public final List<BaseDto> getDtoListFromDal(List<Map<String, Object>> dataList) {
         return dataList.stream().map(this::getDtoFromDal).collect(Collectors.toList());
     }
 
@@ -73,15 +73,15 @@ public abstract class AbstractEntityHelper {
      * @param dataList
      * @return
      */
-    public Map<Object, AbstractDto> getDtoMapFromDal(List<Map<String, Object>> dataList, String attr) throws Exception {
-        Map<Object, AbstractDto> map = new HashMap<>();
-        List<AbstractDto> list = this.getDtoListFromDal(dataList);
+    public Map<Object, BaseDto> getDtoMapFromDal(List<Map<String, Object>> dataList, String attr) throws Exception {
+        Map<Object, BaseDto> map = new HashMap<>();
+        List<BaseDto> list = this.getDtoListFromDal(dataList);
 
-        for (AbstractDto abstractDto : list) {
-            Method method = abstractDto
+        for (BaseDto baseDto : list) {
+            Method method = baseDto
                     .getClass()
                     .getMethod("get" + attr.substring(0, 1).toUpperCase() + attr.substring(1));
-            map.put(method.invoke(abstractDto), abstractDto);
+            map.put(method.invoke(baseDto), baseDto);
         }
 
         return map;
@@ -91,5 +91,5 @@ public abstract class AbstractEntityHelper {
      * @param data
      * @return
      */
-    public abstract AbstractDto getDtoFromDal(Map<String, Object> data);
+    public abstract BaseDto getDtoFromDal(Map<String, Object> data);
 }

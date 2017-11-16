@@ -1,9 +1,9 @@
 package org.ubikz.jscraper.api.dto.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.ubikz.jscraper.api.dto.AbstractDto;
+import org.ubikz.jscraper.api.dto.BaseDto;
 
-public class UserDto extends AbstractDto {
+public class UserDto extends BaseDto {
     private String username;
     private String email;
     private String firstname;

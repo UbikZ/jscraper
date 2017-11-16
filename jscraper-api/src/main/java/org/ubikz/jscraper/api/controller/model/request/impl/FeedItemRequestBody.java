@@ -1,10 +1,10 @@
 package org.ubikz.jscraper.api.controller.model.request.impl;
 
-import org.ubikz.jscraper.api.controller.model.request.AbstractRequestBody;
+import org.ubikz.jscraper.api.controller.model.request.BaseRequestBody;
 
 import java.util.List;
 
-public class FeedItemRequestBody extends AbstractRequestBody {
+public class FeedItemRequestBody extends BaseRequestBody {
     private Integer feedId;
     private String url;
     private String comment;

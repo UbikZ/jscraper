@@ -1,19 +1,17 @@
-package org.ubikz.jscraper.api.controller.model.filter;
+package org.ubikz.jscraper.api.service.model.filter;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Date;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public abstract class AbstractFilterBody {
-    private Integer id = null;
-    private Boolean isEnabled = null;
-    private String label = null;
-    private String search = null;
-    private String startDate = null;
-    private String endDate = null;
+public abstract class BaseServiceFilter {
+    private Integer id;
+    private String label;
+    private String search;
+    private Date startDate;
+    private Date endDate;
     private Integer limit = null;
     private Integer offset = null;
-    private boolean isLazy = true;
+    private Boolean isEnabled;
+    private boolean isLazy = false;
 
     public Integer getId() {
         return id;
@@ -27,48 +25,42 @@ public abstract class AbstractFilterBody {
         return label;
     }
 
-    @JsonProperty("label")
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     public Boolean getEnabled() {
         return isEnabled;
     }
 
-    @JsonProperty("enabled")
     public void setEnabled(Boolean enabled) {
         isEnabled = enabled;
-    }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    @JsonProperty("startDate")
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    @JsonProperty("endDate")
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
     }
 
     public boolean isLazy() {
         return isLazy;
     }
 
-    @JsonProperty("lazy")
     public void setLazy(boolean lazy) {
         isLazy = lazy;
     }
 
-    @JsonProperty("limit")
     public Integer getLimit() {
         return limit;
     }
@@ -77,7 +69,6 @@ public abstract class AbstractFilterBody {
         this.limit = limit;
     }
 
-    @JsonProperty("offset")
     public Integer getOffset() {
         return offset;
     }
@@ -86,7 +77,6 @@ public abstract class AbstractFilterBody {
         this.offset = offset;
     }
 
-    @JsonProperty("search")
     public String getSearch() {
         return search;
     }
@@ -97,16 +87,17 @@ public abstract class AbstractFilterBody {
 
     @Override
     public String toString() {
-        return "AbstractFilterBody{"
+        return "BaseServiceFilter{"
                 + "id=" + id
-                + ", isEnabled=" + isEnabled
                 + ", label='" + label + '\''
                 + ", search='" + search + '\''
-                + ", startDate='" + startDate + '\''
-                + ", endDate='" + endDate + '\''
+                + ", startDate=" + startDate
+                + ", endDate=" + endDate
                 + ", limit=" + limit
                 + ", offset=" + offset
+                + ", isEnabled=" + isEnabled
                 + ", isLazy=" + isLazy
                 + '}';
     }
 }
+

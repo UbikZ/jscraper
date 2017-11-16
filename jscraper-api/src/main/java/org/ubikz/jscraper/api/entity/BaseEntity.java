@@ -1,11 +1,11 @@
 package org.ubikz.jscraper.api.entity;
 
-import org.ubikz.jscraper.api.dal.AbstractDal;
+import org.ubikz.jscraper.api.dal.BaseDal;
 import org.ubikz.jscraper.api.dal.model.filter.AbstractDalFilter;
 import org.ubikz.jscraper.api.dal.model.request.AbstractDalRequest;
-import org.ubikz.jscraper.api.dto.AbstractDto;
+import org.ubikz.jscraper.api.dto.BaseDto;
 import org.ubikz.jscraper.api.entity.model.filter.AbstractEntityFilter;
-import org.ubikz.jscraper.api.entity.helper.AbstractEntityHelper;
+import org.ubikz.jscraper.api.entity.helper.BaseEntityHelper;
 import org.ubikz.jscraper.api.entity.model.request.AbstractEntityRequest;
 
 import java.util.ArrayList;
@@ -13,16 +13,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractEntity {
-    protected AbstractDal dal;
-    protected AbstractEntityHelper helper;
+public abstract class BaseEntity {
+    protected BaseDal dal;
+    protected BaseEntityHelper helper;
 
     /**
      * @param filter
      * @return
      */
-    public List<AbstractDto> getAll(AbstractEntityFilter filter) throws Exception {
-        List<AbstractDto> result = this.helper.getDtoListFromDal(this.dal.getAll(this.parseEntityToDalFilter(filter)));
+    public List<BaseDto> getAll(AbstractEntityFilter filter) throws Exception {
+        List<BaseDto> result = this.helper.getDtoListFromDal(this.dal.getAll(this.parseEntityToDalFilter(filter)));
 
         if (!filter.isLazy()) {
             this.computeLoading(result);
@@ -44,8 +44,8 @@ public abstract class AbstractEntity {
      * @param filter
      * @return
      */
-    public Map<Object, AbstractDto> getAllMappedBy(AbstractEntityFilter filter, String attr) throws Exception {
-        Map<Object, AbstractDto> result = this.helper.getDtoMapFromDal(
+    public Map<Object, BaseDto> getAllMappedBy(AbstractEntityFilter filter, String attr) throws Exception {
+        Map<Object, BaseDto> result = this.helper.getDtoMapFromDal(
                 this.dal.getAll(this.parseEntityToDalFilter(filter)),
                 attr
         );
@@ -61,8 +61,8 @@ public abstract class AbstractEntity {
      * @param filter
      * @return
      */
-    public AbstractDto get(AbstractEntityFilter filter) throws Exception {
-        AbstractDto result = this.helper.getDtoFromDal(
+    public BaseDto get(AbstractEntityFilter filter) throws Exception {
+        BaseDto result = this.helper.getDtoFromDal(
                 this.dal.getOne(this.parseEntityToDalFilter(filter))
         );
 
@@ -85,7 +85,7 @@ public abstract class AbstractEntity {
      * @param requestList
      * @return
      */
-    public List<AbstractDto> createAll(List<AbstractEntityRequest> requestList) throws Exception {
+    public List<BaseDto> createAll(List<AbstractEntityRequest> requestList) throws Exception {
         return this.helper.getDtoListFromReturnDal(
                 this.dal.createAll(this.parseListEntityToDalRequest(requestList)),
                 "id"
@@ -111,12 +111,12 @@ public abstract class AbstractEntity {
     /**
      * @param dtoList
      */
-    protected abstract void computeLoading(List<AbstractDto> dtoList) throws Exception;
+    protected abstract void computeLoading(List<BaseDto> dtoList) throws Exception;
 
     /**
      * @param dtoList
      */
-    protected abstract void computeLoading(Map<Object, AbstractDto> dtoList) throws Exception;
+    protected abstract void computeLoading(Map<Object, BaseDto> dtoList) throws Exception;
 
     /**
      * @param request

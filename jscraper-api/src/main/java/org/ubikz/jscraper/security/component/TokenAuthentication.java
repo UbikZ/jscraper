@@ -7,7 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
-import org.ubikz.jscraper.api.controller.ApiController;
+import org.ubikz.jscraper.api.controller.BaseController;
 import org.ubikz.jscraper.api.service.model.message.BaseMessage;
 import org.ubikz.jscraper.security.jwt.model.JWTProperties;
 
@@ -49,7 +49,7 @@ public class TokenAuthentication {
         }});
 
         res.addHeader(HEADER_CONTENT, "application/json");
-        res.getWriter().print(ApiController.buildMessage(message));
+        res.getWriter().print(BaseController.buildMessage(message));
     }
 
     public static Authentication getAuthentication(HttpServletRequest request, JWTProperties props) {

@@ -1,4 +1,4 @@
-package org.ubikz.jscraper.api.entity;
+package org.ubikz.jscraper.api.entity.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -9,10 +9,11 @@ import org.ubikz.jscraper.api.dal.model.filter.impl.FeedDalFilter;
 import org.ubikz.jscraper.api.dal.model.filter.impl.FeedTypeDalFilter;
 import org.ubikz.jscraper.api.dal.model.request.AbstractDalRequest;
 import org.ubikz.jscraper.api.dal.model.request.impl.FeedDalRequest;
-import org.ubikz.jscraper.api.dto.AbstractDto;
+import org.ubikz.jscraper.api.dto.BaseDto;
 import org.ubikz.jscraper.api.dto.impl.FeedArticleDto;
 import org.ubikz.jscraper.api.dto.impl.FeedDto;
 import org.ubikz.jscraper.api.dto.impl.FeedTypeDto;
+import org.ubikz.jscraper.api.entity.BaseEntity;
 import org.ubikz.jscraper.api.entity.model.filter.AbstractEntityFilter;
 import org.ubikz.jscraper.api.entity.model.filter.impl.FeedEntityFilter;
 import org.ubikz.jscraper.api.entity.helper.impl.FeedArticleEntityHelper;
@@ -26,7 +27,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-public class FeedEntity extends AbstractEntity {
+public class FeedEntity extends BaseEntity {
     private FeedTypeDal feedTypeDal;
     private FeedTypeEntityHelper feedTypeHelper;
     private FeedArticleEntityHelper feedArticleHelper;
@@ -46,7 +47,7 @@ public class FeedEntity extends AbstractEntity {
      * @throws Exception
      */
     public List<FeedArticleDto> getRssFeedArticleList(FeedEntityFilter filter) throws Exception {
-        List<AbstractDto> abstractList = this.feedArticleHelper.getDtoListFromDal(
+        List<BaseDto> abstractList = this.feedArticleHelper.getDtoListFromDal(
                 ((FeedDal) this.dal).getRssFeedList((FeedDalFilter) this.parseEntityToDalFilter(filter))
         );
 
@@ -57,7 +58,7 @@ public class FeedEntity extends AbstractEntity {
      * @param feeds
      */
     @Override
-    protected void computeLoading(List<AbstractDto> feeds) throws Exception {
+    protected void computeLoading(List<BaseDto> feeds) throws Exception {
         List<FeedDto> feedList = feeds.stream().map(FeedDto.class::cast).collect(Collectors.toList());
 
         FeedTypeDalFilter feedTypeDalFilter = new FeedTypeDalFilter();
@@ -76,7 +77,7 @@ public class FeedEntity extends AbstractEntity {
     }
 
     @Override
-    protected void computeLoading(Map<Object, AbstractDto> dtoList) throws Exception {
+    protected void computeLoading(Map<Object, BaseDto> dtoList) throws Exception {
     }
 
     /**

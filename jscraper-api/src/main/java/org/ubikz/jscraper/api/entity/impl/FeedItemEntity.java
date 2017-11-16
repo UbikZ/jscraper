@@ -1,4 +1,4 @@
-package org.ubikz.jscraper.api.entity;
+package org.ubikz.jscraper.api.entity.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,10 +13,11 @@ import org.ubikz.jscraper.api.dal.model.filter.impl.TagDalFilter;
 import org.ubikz.jscraper.api.dal.model.request.AbstractDalRequest;
 import org.ubikz.jscraper.api.dal.model.request.impl.FeedItemDalRequest;
 import org.ubikz.jscraper.api.dal.model.request.impl.FeedItemTagDalRequest;
-import org.ubikz.jscraper.api.dto.AbstractDto;
+import org.ubikz.jscraper.api.dto.BaseDto;
 import org.ubikz.jscraper.api.dto.impl.FeedDto;
 import org.ubikz.jscraper.api.dto.impl.FeedItemDto;
 import org.ubikz.jscraper.api.dto.impl.TagDto;
+import org.ubikz.jscraper.api.entity.BaseEntity;
 import org.ubikz.jscraper.api.entity.model.filter.AbstractEntityFilter;
 import org.ubikz.jscraper.api.entity.model.filter.impl.FeedItemEntityFilter;
 import org.ubikz.jscraper.api.entity.helper.impl.FeedEntityHelper;
@@ -31,7 +32,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-public class FeedItemEntity extends AbstractEntity {
+public class FeedItemEntity extends BaseEntity {
     private FeedDal feedDal;
     private TagDal tagDal;
     private FeedEntityHelper feedHelper;
@@ -51,7 +52,7 @@ public class FeedItemEntity extends AbstractEntity {
      * @param feedItems
      */
     @Override
-    protected void computeLoading(List<AbstractDto> feedItems) throws Exception {
+    protected void computeLoading(List<BaseDto> feedItems) throws Exception {
         FeedDalFilter feedDalFilter = new FeedDalFilter();
         TagDalFilter tagDalFilter = new TagDalFilter();
         Map<Integer, FeedDto> feedMap;
@@ -61,7 +62,7 @@ public class FeedItemEntity extends AbstractEntity {
         tagDalFilter.setIdList(new ArrayList<>());
 
         // Build queries
-        for (AbstractDto dto : feedItems) {
+        for (BaseDto dto : feedItems) {
             FeedItemDto feedItem = (FeedItemDto) dto;
 
             feedDalFilter.getIdList().add(feedItem.getFeed().getId());
@@ -81,7 +82,7 @@ public class FeedItemEntity extends AbstractEntity {
                 .entrySet().stream()
                 .collect(Collectors.toMap(p -> (int) p.getKey(), p -> (TagDto) p.getValue()));
 
-        for (AbstractDto dto : feedItems) {
+        for (BaseDto dto : feedItems) {
             FeedItemDto feedItem = (FeedItemDto) dto;
 
             if (feedMap != null && feedMap.containsKey(feedItem.getFeed().getId())) {
@@ -102,21 +103,21 @@ public class FeedItemEntity extends AbstractEntity {
     }
 
     @Override
-    protected void computeLoading(Map<Object, AbstractDto> dtoList) throws Exception {
+    protected void computeLoading(Map<Object, BaseDto> dtoList) throws Exception {
     }
 
     /**
      * @param requestList
      * @return
      */
-    public List<AbstractDto> createAll(List<AbstractEntityRequest> requestList) throws Exception {
-        List<AbstractDto> list = this.helper.getDtoListFromReturnDal(
+    public List<BaseDto> createAll(List<AbstractEntityRequest> requestList) throws Exception {
+        List<BaseDto> list = this.helper.getDtoListFromReturnDal(
                 this.dal.createAll(this.parseListEntityToDalRequest(requestList)),
                 "id"
         );
 
         FeedItemEntityFilter filter = new FeedItemEntityFilter();
-        filter.setIdList(list.stream().map(AbstractDto::getId).collect(Collectors.toList()));
+        filter.setIdList(list.stream().map(BaseDto::getId).collect(Collectors.toList()));
 
         if (filter.getIdList() != null && filter.getIdList().size() > 0) {
             ((FeedItemDal) this.dal).createTags(this.parseListEntityToTagDalRequest(
@@ -168,14 +169,14 @@ public class FeedItemEntity extends AbstractEntity {
      * @return
      */
     private List<FeedItemTagDalRequest> parseListEntityToTagDalRequest(
-            Map<Object, AbstractDto> abstractMap,
+            Map<Object, BaseDto> abstractMap,
             List<AbstractEntityRequest> requestList
     ) {
         List<FeedItemTagDalRequest> tagRequestList = new ArrayList<>();
 
         for (AbstractEntityRequest request : requestList) {
             FeedItemEntityRequest fiRequest = (FeedItemEntityRequest) request;
-            AbstractDto current = abstractMap.get(fiRequest.getUrl());
+            BaseDto current = abstractMap.get(fiRequest.getUrl());
 
             if (current != null) {
                 tagRequestList.addAll(this.parseEntityToTagDalRequest(current.getId(), fiRequest));

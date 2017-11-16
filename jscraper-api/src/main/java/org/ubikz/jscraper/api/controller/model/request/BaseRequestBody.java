@@ -2,7 +2,7 @@ package org.ubikz.jscraper.api.controller.model.request;
 
 import java.util.Date;
 
-public abstract class AbstractRequestBody {
+public abstract class BaseRequestBody {
     private Boolean isEnabled;
     private String label;
     private Date date;
@@ -33,7 +33,7 @@ public abstract class AbstractRequestBody {
 
     @Override
     public String toString() {
-        return "AbstractRequestBody{"
+        return "BaseRequestBody{"
                 + "isEnabled=" + isEnabled
                 + ", label='" + label + '\''
                 + ", date=" + date

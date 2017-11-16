@@ -2,26 +2,26 @@ package org.ubikz.jscraper.api.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ubikz.jscraper.api.entity.TagProhibitedEntity;
+import org.ubikz.jscraper.api.entity.impl.TagProhibitedEntity;
 import org.ubikz.jscraper.api.entity.model.filter.AbstractEntityFilter;
 import org.ubikz.jscraper.api.entity.model.filter.impl.TagProhibitedEntityFilter;
 import org.ubikz.jscraper.api.entity.model.request.AbstractEntityRequest;
 import org.ubikz.jscraper.api.entity.model.request.impl.TagProhibitedEntityRequest;
-import org.ubikz.jscraper.api.service.AbstractService;
-import org.ubikz.jscraper.api.service.model.filter.AbstractServiceFilter;
+import org.ubikz.jscraper.api.service.BaseService;
+import org.ubikz.jscraper.api.service.model.filter.BaseServiceFilter;
 import org.ubikz.jscraper.api.service.model.filter.impl.TagProhibitedServiceFilter;
-import org.ubikz.jscraper.api.service.model.request.AbstractServiceRequest;
+import org.ubikz.jscraper.api.service.model.request.BaseServiceRequest;
 import org.ubikz.jscraper.api.service.model.request.impl.TagProhibitedServiceRequest;
 
 @Component
-public class TagProhibitedService extends AbstractService {
+public class TagProhibitedService extends BaseService {
     @Autowired
     public TagProhibitedService(TagProhibitedEntity feedProhibitedEntity) {
         this.entity = feedProhibitedEntity;
     }
 
     @Override
-    protected AbstractEntityRequest parseServiceToEntityRequest(AbstractServiceRequest request) {
+    protected AbstractEntityRequest parseServiceToEntityRequest(BaseServiceRequest request) {
         TagProhibitedEntityRequest tagProhibitedEntityRequest = new TagProhibitedEntityRequest();
         TagProhibitedServiceRequest tagProhibitedServiceRequest = (TagProhibitedServiceRequest) request;
 
@@ -31,7 +31,7 @@ public class TagProhibitedService extends AbstractService {
     }
 
     @Override
-    protected AbstractEntityFilter parseServiceToEntityFilter(AbstractServiceFilter filter) {
+    protected AbstractEntityFilter parseServiceToEntityFilter(BaseServiceFilter filter) {
         TagProhibitedEntityFilter tagProhibitedEntityFilter = new TagProhibitedEntityFilter();
         TagProhibitedServiceFilter tagProhibitedServiceFilter = (TagProhibitedServiceFilter) filter;
 

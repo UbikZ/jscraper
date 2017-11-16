@@ -1,8 +1,8 @@
 package org.ubikz.jscraper.api.service.model.request.impl;
 
-import org.ubikz.jscraper.api.service.model.request.AbstractServiceRequest;
+import org.ubikz.jscraper.api.service.model.request.BaseServiceRequest;
 
-public class UserServiceRequest extends AbstractServiceRequest {
+public class UserServiceRequest extends BaseServiceRequest {
     private String username;
     private String email;
     private String firstname;
