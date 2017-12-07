@@ -1,178 +1,113 @@
 package org.ubikz.jscraper.api.entity;
 
 import org.ubikz.jscraper.api.dal.BaseDal;
-import org.ubikz.jscraper.api.dal.model.filter.AbstractDalFilter;
-import org.ubikz.jscraper.api.dal.model.request.AbstractDalRequest;
+import org.ubikz.jscraper.api.dal.model.filter.BaseDalFilter;
+import org.ubikz.jscraper.api.dal.model.request.BaseDalRequest;
 import org.ubikz.jscraper.api.dto.BaseDto;
-import org.ubikz.jscraper.api.entity.model.filter.AbstractEntityFilter;
 import org.ubikz.jscraper.api.entity.helper.BaseEntityHelper;
-import org.ubikz.jscraper.api.entity.model.request.AbstractEntityRequest;
+import org.ubikz.jscraper.api.entity.model.filter.BaseEntityFilter;
+import org.ubikz.jscraper.api.entity.model.request.BaseEntityRequest;
+import org.ubikz.jscraper.reference.table.field.CommonReference;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-public abstract class BaseEntity {
-    protected BaseDal dal;
-    protected BaseEntityHelper helper;
+public abstract class BaseEntity<V extends BaseDal, R extends BaseDalRequest, F extends BaseDalFilter, H extends BaseEntityHelper, D extends BaseDto> {
+    protected V dal;
+    protected R dalRequest;
+    protected F dalFilter;
+    protected H helper;
 
-    /**
-     * @param filter
-     * @return
-     */
-    public List<BaseDto> getAll(AbstractEntityFilter filter) throws Exception {
-        List<BaseDto> result = this.helper.getDtoListFromDal(this.dal.getAll(this.parseEntityToDalFilter(filter)));
+    @SuppressWarnings("unchecked")
+    public <T extends BaseEntityFilter> List<D> getAll(T filter) {
+        parseFilter(filter);
+        List<D> result = helper.getDtoListFromDal(dal.getAll(dalFilter));
 
         if (!filter.isLazy()) {
-            this.computeLoading(result);
+            computeLoading(result);
         }
 
         return result;
     }
 
-    /**
-     * @param filter
-     * @return
-     * @throws Exception
-     */
-    public int count(AbstractEntityFilter filter) throws Exception {
-        return this.dal.count(this.parseEntityToDalFilter(filter));
+    public <T extends BaseEntityFilter> int count(T filter) {
+        parseFilter(filter);
+        return dal.count(dalFilter);
     }
 
-    /**
-     * @param filter
-     * @return
-     */
-    public Map<Object, BaseDto> getAllMappedBy(AbstractEntityFilter filter, String attr) throws Exception {
-        Map<Object, BaseDto> result = this.helper.getDtoMapFromDal(
-                this.dal.getAll(this.parseEntityToDalFilter(filter)),
-                attr
-        );
+    @SuppressWarnings("unchecked")
+    public <T extends BaseEntityFilter> Map<Object, D> getAllMappedBy(T filter, String attr) {
+        parseFilter(filter);
+        Map<Object, D> result = helper.getDtoMapFromDal(dal.getAll(dalFilter), attr);
 
         if (!filter.isLazy()) {
-            this.computeLoading(result);
+            computeLoading(result);
         }
 
         return result;
     }
 
-    /**
-     * @param filter
-     * @return
-     */
-    public BaseDto get(AbstractEntityFilter filter) throws Exception {
-        BaseDto result = this.helper.getDtoFromDal(
-                this.dal.getOne(this.parseEntityToDalFilter(filter))
-        );
+    public <T extends BaseEntityFilter> D get(T filter) {
+        parseFilter(filter);
+        D result = helper.getDtoFromDal(dal.getOne(dalFilter));
 
         if (!filter.isLazy()) {
-            this.computeLoading(Collections.singletonList(result));
+            computeLoading(Collections.singletonList(result));
         }
 
         return result;
     }
 
-    /**
-     * @param request
-     * @return
-     */
-    public int create(AbstractEntityRequest request) {
-        return this.dal.create(this.parseEntityToDalRequest(request));
+    public <T extends BaseEntityRequest> int create(T request) {
+        parseRequest(request);
+        return dal.create(dalRequest);
     }
 
-    /**
-     * @param requestList
-     * @return
-     */
-    public List<BaseDto> createAll(List<AbstractEntityRequest> requestList) throws Exception {
-        return this.helper.getDtoListFromReturnDal(
-                this.dal.createAll(this.parseListEntityToDalRequest(requestList)),
-                "id"
-        );
+    @SuppressWarnings("unchecked")
+    public <T extends BaseEntityRequest> List<D> createAll(List<T> requestList) {
+        return helper.getDtoListFromDal(dal.createAll(parseListRequest(requestList)), CommonReference.ID.get());
     }
 
-    /**
-     * @param request
-     * @return
-     */
-    public int update(AbstractEntityRequest request) {
-        return this.dal.edit(this.parseEntityToDalRequest(request));
+    public <T extends BaseEntityRequest> int update(T request) {
+        parseRequest(request);
+        return dal.edit(dalRequest);
     }
 
-    /**
-     * @param filter
-     * @return
-     */
-    public int delete(AbstractEntityFilter filter) {
-        return this.dal.delete(this.parseEntityToDalFilter(filter));
+    public <T extends BaseEntityFilter> int delete(T filter) {
+        parseFilter(filter);
+        return dal.delete(dalFilter);
     }
 
-    /**
-     * @param dtoList
-     */
-    protected abstract void computeLoading(List<BaseDto> dtoList) throws Exception;
+    protected abstract void computeLoading(List<D> dtoList);
 
-    /**
-     * @param dtoList
-     */
-    protected abstract void computeLoading(Map<Object, BaseDto> dtoList) throws Exception;
+    protected abstract void computeLoading(Map<Object, D> dtoList);
 
-    /**
-     * @param request
-     * @return
-     */
-    protected abstract AbstractDalRequest parseEntityToDalRequest(AbstractEntityRequest request);
-
-    /**
-     * @param filter
-     * @return
-     */
-    protected abstract AbstractDalFilter parseEntityToDalFilter(AbstractEntityFilter filter);
-
-    /**
-     * @param requestList
-     * @return
-     */
-    protected List<AbstractDalRequest> parseListEntityToDalRequest(List<AbstractEntityRequest> requestList) {
-        List<AbstractDalRequest> dalRequestList = new ArrayList<>();
-
-        for (AbstractEntityRequest entityRequest : requestList) {
-            dalRequestList.add(this.parseEntityToDalRequest(entityRequest));
-        }
-
-        return dalRequestList;
+    protected <T extends BaseEntityRequest> List<R> parseListRequest(List<T> requestList) {
+        return requestList.stream().map(this::parseRequestR).collect(Collectors.toList());
     }
 
-    /**
-     * @param eRequest
-     * @param dRequest
-     * @return
-     */
-    protected final AbstractDalRequest parseBaseEntityToDalRequest(AbstractEntityRequest eRequest, AbstractDalRequest dRequest) {
-        dRequest.setId(eRequest.getId());
-        dRequest.setLabel(eRequest.getLabel());
-        dRequest.setEnabled(eRequest.getEnabled());
-
-        return dRequest;
+    private <T extends BaseEntityRequest> R parseRequestR(T request) {
+        parseRequest(request);
+        return dalRequest;
     }
 
-    /**
-     * @param eFilter
-     * @param dFilter
-     * @return
-     */
-    protected final AbstractDalFilter parseBaseEntityToDalFilter(AbstractEntityFilter eFilter, AbstractDalFilter dFilter) {
-        dFilter.setId(eFilter.getId());
-        dFilter.setIdList(eFilter.getIdList());
-        dFilter.setLabel(eFilter.getLabel());
-        dFilter.setSearch(eFilter.getSearch());
-        dFilter.setEnabled(eFilter.getEnabled());
-        dFilter.setStartDate(eFilter.getStartDate());
-        dFilter.setEndDate(eFilter.getEndDate());
-        dFilter.setLimit(eFilter.getLimit());
-        dFilter.setOffset(eFilter.getOffset());
+    protected <T extends BaseEntityRequest> void parseRequest(T request) {
+        dalRequest.setId(request.getId());
+        dalRequest.setLabel(request.getLabel());
+        dalRequest.setEnabled(request.getEnabled());
+    }
 
-        return dFilter;
+    protected <T extends BaseEntityFilter> void parseFilter(T filter) {
+        dalFilter.setId(filter.getId());
+        dalFilter.setIdList(filter.getIdList());
+        dalFilter.setLabel(filter.getLabel());
+        dalFilter.setSearch(filter.getSearch());
+        dalFilter.setEnabled(filter.getEnabled());
+        dalFilter.setStartDate(filter.getStartDate());
+        dalFilter.setEndDate(filter.getEndDate());
+        dalFilter.setLimit(filter.getLimit());
+        dalFilter.setOffset(filter.getOffset());
     }
 }

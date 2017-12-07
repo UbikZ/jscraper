@@ -1,8 +1,8 @@
 package org.ubikz.jscraper.api.dal.model.request.impl;
 
-import org.ubikz.jscraper.api.dal.model.request.AbstractDalRequest;
+import org.ubikz.jscraper.api.dal.model.request.BaseDalRequest;
 
-public class FeedTypeDalRequest extends AbstractDalRequest {
+public class FeedTypeDalRequest extends BaseDalRequest {
     private String urlRegex;
     private String contentRegex;
 

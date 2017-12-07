@@ -1,8 +1,8 @@
 package org.ubikz.jscraper.api.entity.model.filter.impl;
 
-import org.ubikz.jscraper.api.entity.model.filter.AbstractEntityFilter;
+import org.ubikz.jscraper.api.entity.model.filter.BaseEntityFilter;
 
-public class UserEntityFilter extends AbstractEntityFilter {
+public class UserEntityFilter extends BaseEntityFilter {
     private String username;
     private String email;
     private String password;

@@ -3,7 +3,7 @@ package org.ubikz.jscraper.api.entity.model.filter;
 import java.util.Date;
 import java.util.List;
 
-public abstract class AbstractEntityFilter {
+public abstract class BaseEntityFilter {
     private Integer id;
     private List<Integer> idList;
     private String label;
@@ -97,7 +97,7 @@ public abstract class AbstractEntityFilter {
 
     @Override
     public String toString() {
-        return "AbstractEntityFilter{"
+        return "BaseEntityFilter{"
                 + "id=" + id
                 + ", idList=" + idList
                 + ", label='" + label + '\''

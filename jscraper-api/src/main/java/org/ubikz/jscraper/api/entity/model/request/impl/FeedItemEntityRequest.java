@@ -1,10 +1,10 @@
 package org.ubikz.jscraper.api.entity.model.request.impl;
 
-import org.ubikz.jscraper.api.entity.model.request.AbstractEntityRequest;
+import org.ubikz.jscraper.api.entity.model.request.BaseEntityRequest;
 
 import java.util.List;
 
-public class FeedItemEntityRequest extends AbstractEntityRequest {
+public class FeedItemEntityRequest extends BaseEntityRequest {
     private Integer feedId;
     private String url;
     private String comment;

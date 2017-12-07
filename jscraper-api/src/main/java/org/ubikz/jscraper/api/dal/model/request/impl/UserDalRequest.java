@@ -1,8 +1,8 @@
 package org.ubikz.jscraper.api.dal.model.request.impl;
 
-import org.ubikz.jscraper.api.dal.model.request.AbstractDalRequest;
+import org.ubikz.jscraper.api.dal.model.request.BaseDalRequest;
 
-public class UserDalRequest extends AbstractDalRequest {
+public class UserDalRequest extends BaseDalRequest {
     private String username;
     private String email;
     private String firstname;

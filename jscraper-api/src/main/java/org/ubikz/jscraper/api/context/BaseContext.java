@@ -1,220 +1,123 @@
 package org.ubikz.jscraper.api.context;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.ubikz.jscraper.api.controller.model.filter.BaseFilterBody;
 import org.ubikz.jscraper.api.controller.model.request.BaseRequestBody;
 import org.ubikz.jscraper.api.service.BaseService;
 import org.ubikz.jscraper.api.service.model.filter.BaseServiceFilter;
-import org.ubikz.jscraper.api.service.model.message.BaseMessage;
-import org.ubikz.jscraper.api.service.model.message.ErrorMessage;
+import org.ubikz.jscraper.api.service.model.message.impl.ListResultMessage;
+import org.ubikz.jscraper.api.service.model.message.impl.SingleResultMessage;
 import org.ubikz.jscraper.api.service.model.request.BaseServiceRequest;
 import org.ubikz.jscraper.exception.ApplicativeException;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 
 @Component
-public abstract class BaseContext {
-    private static final int CODE_ERROR = -1;
-    private static final int CODE_DATA_NOT_FOUND = -2;
-    protected static int CREATED;
-    protected static int UPDATED;
-    protected static int GET_ONE;
-    protected static int GET_ALL;
-    protected static int DELETE;
-    protected final Logger logger = LoggerFactory.getLogger(BaseContext.class);
-    protected BaseService service;
-    protected BaseServiceRequest serviceRequest;
-    protected BaseServiceFilter serviceFilter;
-    protected BaseFilterBody filterBody;
+public abstract class BaseContext<S extends BaseService, R extends BaseServiceRequest, F extends BaseServiceFilter> {
+    protected S service;
+    protected R serviceRequest;
+    protected F serviceFilter;
 
-    /**
-     * @param request
-     * @return
-     * @throws Exception
-     */
-    public BaseMessage create(BaseRequestBody request) {
-        return handle(() -> service.create(parseRequest(request, serviceRequest)), HttpStatus.CREATED, CREATED);
+    public <T extends BaseRequestBody> SingleResultMessage create(T request) {
+        parseRequest(request);
+
+        return toRequestResult(service::create, HttpStatus.CREATED);
     }
 
-    /**
-     * @param request
-     * @return
-     * @throws Exception
-     */
-    public BaseMessage update(Integer id, BaseRequestBody request) {
-        return handle(() -> {
-            serviceRequest.setId(id);
+    public <T extends BaseRequestBody> SingleResultMessage update(int id, T request) {
+        parseRequest(request);
+        serviceRequest.setId(id);
 
-            if (id == null) {
-                throw new ApplicativeException();
-            }
-
-            return service.update(parseRequest(request, serviceRequest));
-        }, HttpStatus.OK, UPDATED);
+        return toRequestResult(service::update);
     }
 
-    /**
-     * @param id
-     * @return
-     * @throws Exception
-     */
-    public BaseMessage getById(int id) {
-        BaseFilterBody filter = filterBody;
-        filter.setId(id);
+    public SingleResultMessage getById(int id) {
+        serviceFilter.setId(id);
 
-        return handle(() -> service.get(parseFilter(filter, serviceFilter)), HttpStatus.OK, GET_ONE);
+        return toFilterResult(service::get);
     }
 
-    /**
-     * @param id
-     * @return
-     * @throws Exception
-     */
-    public BaseMessage deleteById(int id) {
-        BaseFilterBody filter = filterBody;
-        filter.setId(id);
+    public SingleResultMessage deleteById(int id) {
+        serviceFilter.setId(id);
 
-        return handle(() -> service.delete(parseFilter(filter, serviceFilter)), HttpStatus.OK, DELETE);
+        return toFilterResult(service::delete);
     }
 
-    /**
-     * @param filter
-     * @return
-     * @throws Exception
-     */
-    public BaseMessage getAll(BaseFilterBody filter) {
-        return handle(() -> service.getAll(parseFilter(filter, serviceFilter)), HttpStatus.OK, GET_ALL);
+    public <T extends BaseFilterBody> ListResultMessage getAll(T filter) {
+        parseFilter(filter);
+        return toFilterListResult(service::getAll, count(filter));
     }
 
-    /**
-     * @param filter
-     * @return
-     * @throws Exception
-     */
-    public int count(BaseFilterBody filter) throws Exception {
-        return service.count(parseFilter(filter, serviceFilter));
+    public <T extends BaseFilterBody> int count(T filter) {
+        parseFilter(filter);
+        
+        return service.count(serviceFilter);
     }
 
-    /**
-     * @param callable
-     * @return
-     * @throws Exception
-     */
-    protected final BaseMessage handle(Callable callable) {
-        return handle(callable, HttpStatus.OK, 1);
+    protected <T extends BaseRequestBody> void parseRequest(T data) {
+        serviceRequest.setLabel(data.getLabel());
+        serviceRequest.setEnabled(data.getEnabled());
     }
 
-    /**
-     * @param callable
-     * @param defaultStatus
-     * @param defaultCode
-     * @return
-     * @throws Exception
-     */
-    protected final BaseMessage handle(Callable callable, HttpStatus defaultStatus, int defaultCode) {
-        BaseMessage result = new BaseMessage();
-        ErrorMessage errorMessage = new ErrorMessage();
-        Exception exception = null;
-
-        Object data = null;
-        boolean isSuccess = false;
-        int size = 1;
-        int code = defaultCode;
-        int status = defaultStatus.value();
-
-        try {
-            data = callable.call();
-            if (data instanceof List) {
-                size = ((List) data).size();
-            }
-            isSuccess = true;
-        } catch (EmptyResultDataAccessException e) {
-            exception = e;
-            code = CODE_DATA_NOT_FOUND;
-            status = HttpStatus.NOT_FOUND.value();
-            errorMessage.setTitle("Not found.");
-            errorMessage.setDetail("Bad query. No result returned.");
-            data = errorMessage;
-        } catch (Exception e) {
-            exception = e;
-            code = CODE_ERROR;
-            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
-            String detail = e.getMessage() + "\n";
-            for (StackTraceElement stackTraceElement : e.getStackTrace()) {
-                detail += stackTraceElement + "\n";
-            }
-            errorMessage.setTitle("An exception (" + e.getClass().getName() + ") occurred.");
-            errorMessage.setDetail(detail);
-            data = errorMessage;
-        } finally {
-            result.setSize(size);
-            result.setData(data);
-            result.setCode(code);
-            result.setStatus(status);
-            result.setSuccess(isSuccess);
-            if (exception != null) {
-                List<String> errorLog = new ArrayList<>();
-                errorLog.add(exception.getMessage());
-                for (StackTraceElement stackTraceElement : exception.getStackTrace()) {
-                    errorLog.add("      " + stackTraceElement);
-                }
-                logger.error("Exception : " + errorLog.stream().collect(Collectors.joining("\n")));
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * @param request
-     * @return
-     */
-    protected abstract BaseServiceRequest parseRequest(BaseRequestBody data, BaseServiceRequest request);
-
-    /**
-     * @param filter
-     * @return
-     */
-    protected abstract BaseServiceFilter parseFilter(BaseFilterBody data, BaseServiceFilter filter) throws Exception;
-
-    /**
-     * @param data
-     * @param request
-     * @return
-     */
-    protected final BaseServiceRequest parseBaseRequest(BaseRequestBody data, BaseServiceRequest request) {
-        request.setLabel(data.getLabel());
-        request.setEnabled(data.getEnabled());
-
-        return request;
-    }
-
-    /**
-     * @param data
-     * @param filter
-     * @return
-     */
-    protected final BaseServiceFilter parseBaseFilter(BaseFilterBody data, BaseServiceFilter filter) throws Exception {
+    protected <T extends BaseFilterBody> void parseFilter(T data) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-        filter.setId(data.getId());
-        filter.setLabel(data.getLabel());
-        filter.setSearch(data.getSearch());
-        filter.setEnabled(data.getEnabled());
-        filter.setLazy(data.isLazy());
-        filter.setStartDate(data.getStartDate() == null ? null : formatter.parse(data.getStartDate()));
-        filter.setEndDate(data.getEndDate() == null ? null : formatter.parse(data.getEndDate()));
-        filter.setLimit(data.getLimit());
-        filter.setOffset(data.getOffset());
+        serviceFilter.setId(data.getId());
+        serviceFilter.setLabel(data.getLabel());
+        serviceFilter.setSearch(data.getSearch());
+        serviceFilter.setEnabled(data.getEnabled());
+        serviceFilter.setLazy(data.isLazy());
+        serviceFilter.setLimit(data.getLimit());
+        serviceFilter.setOffset(data.getOffset());
 
-        return filter;
+        try {
+            serviceFilter.setStartDate(data.getStartDate() == null ? null : formatter.parse(data.getStartDate()));
+            serviceFilter.setEndDate(data.getEndDate() == null ? null : formatter.parse(data.getEndDate()));
+        } catch (ParseException e) {
+            throw new ApplicativeException(e);
+        }
+    }
+
+    protected final SingleResultMessage toFilterResult(Function<F, Object> function) {
+        return singleResult(function.apply(serviceFilter), HttpStatus.OK);
+    }
+
+    protected final SingleResultMessage toFilterResult(Function<F, Object> function, HttpStatus status) {
+        return singleResult(function.apply(serviceFilter), status);
+    }
+
+    protected final ListResultMessage toFilterListResult(Function<F, List<Object>> function, int total) {
+        return listResult(function.apply(serviceFilter), total, HttpStatus.OK);
+    }
+
+    protected final ListResultMessage toFilterListResult(Function<F, List<Object>> function, int total, HttpStatus status) {
+        return listResult(function.apply(serviceFilter), total, status);
+    }
+
+    protected final SingleResultMessage toRequestResult(Function<R, Object> function) {
+        return singleResult(function.apply(serviceRequest), HttpStatus.OK);
+    }
+
+    protected final SingleResultMessage toRequestResult(Function<R, Object> function, HttpStatus status) {
+        return singleResult(function.apply(serviceRequest), status);
+    }
+
+    private ListResultMessage listResult(List<Object> dataList, int total, HttpStatus status) {
+        return new ListResultMessage()
+                .setData(dataList)
+                .setTotal(total)
+                .setStatus(status.value())
+                .setSize(dataList.size());
+    }
+
+    private SingleResultMessage singleResult(Object data, HttpStatus status) {
+        return new SingleResultMessage()
+                .setData(data)
+                .setStatus(status.value())
+                .setType(data.getClass().getName());
     }
 }

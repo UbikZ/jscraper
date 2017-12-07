@@ -1,6 +1,6 @@
 package org.ubikz.jscraper.api.dal.model.request.impl;
 
-import org.ubikz.jscraper.api.dal.model.request.AbstractDalRequest;
+import org.ubikz.jscraper.api.dal.model.request.BaseDalRequest;
 
-public class TagDalRequest extends AbstractDalRequest {
+public class TagDalRequest extends BaseDalRequest {
 }

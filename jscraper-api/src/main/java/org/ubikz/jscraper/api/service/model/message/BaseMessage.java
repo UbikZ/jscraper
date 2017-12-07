@@ -1,28 +1,33 @@
 package org.ubikz.jscraper.api.service.model.message;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.springframework.http.HttpStatus;
 
-@JsonPropertyOrder({"code", "success", "total", "size", "data"})
-public class BaseMessage {
-    private Object data;
-    private int total = 0;
-    private int size = 0;
+public abstract class BaseMessage<T extends BaseMessage, D> {
+    protected D data;
     private int code = 0;
-    private int status = 0;
-    private boolean isSuccess = false;
+    private int status;
+    private boolean success;
 
     public BaseMessage() {
+        this(HttpStatus.OK.value(), true);
+    }
+
+    public BaseMessage(int status, boolean success) {
+        this.status = status;
+        this.success = success;
     }
 
     @JsonProperty("success")
     public boolean isSuccess() {
-        return isSuccess;
+        return success;
     }
 
-    public void setSuccess(boolean success) {
-        isSuccess = success;
+    @SuppressWarnings("unchecked")
+    public T setSuccess(boolean success) {
+        this.success = success;
+
+        return (T) this;
     }
 
     @JsonProperty("code")
@@ -30,55 +35,44 @@ public class BaseMessage {
         return code;
     }
 
-    public void setCode(int code) {
+    @SuppressWarnings("unchecked")
+    public T setCode(int code) {
         this.code = code;
+
+        return (T) this;
     }
 
-    @JsonIgnore
+    @JsonProperty("status")
     public int getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    @SuppressWarnings("unchecked")
+    public T setStatus(int status) {
         this.status = status;
+
+        return (T) this;
     }
 
     @JsonProperty("data")
-    public Object getData() {
+    public D getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    @SuppressWarnings("unchecked")
+    public T setData(D data) {
         this.data = data;
-    }
 
-    @JsonProperty("size")
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    @JsonProperty("total")
-    public int getTotal() {
-        return total;
-    }
-
-    public void setTotal(int total) {
-        this.total = total;
+        return (T) this;
     }
 
     @Override
     public String toString() {
         return "BaseMessage{"
                 + "data=" + data
-                + ", total=" + total
-                + ", size=" + size
                 + ", code=" + code
                 + ", status=" + status
-                + ", isSuccess=" + isSuccess
+                + ", success=" + success
                 + '}';
     }
 }

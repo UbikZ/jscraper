@@ -1,10 +1,10 @@
 package org.ubikz.jscraper.api.dal.model.filter.impl;
 
-import org.ubikz.jscraper.api.dal.model.filter.AbstractDalFilter;
+import org.ubikz.jscraper.api.dal.model.filter.BaseDalFilter;
 
 import java.util.List;
 
-public class FeedDalFilter extends AbstractDalFilter {
+public class FeedDalFilter extends BaseDalFilter {
     private String url;
     private List<String> prohibitedTagList;
     private List<String> prohibitedFeedList;

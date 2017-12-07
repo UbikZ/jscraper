@@ -3,70 +3,55 @@ package org.ubikz.jscraper.api.entity.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ubikz.jscraper.api.dal.impl.UserDal;
-import org.ubikz.jscraper.api.dal.model.filter.AbstractDalFilter;
 import org.ubikz.jscraper.api.dal.model.filter.impl.UserDalFilter;
-import org.ubikz.jscraper.api.dal.model.request.AbstractDalRequest;
 import org.ubikz.jscraper.api.dal.model.request.impl.UserDalRequest;
-import org.ubikz.jscraper.api.dto.BaseDto;
+import org.ubikz.jscraper.api.dto.impl.UserDto;
 import org.ubikz.jscraper.api.entity.BaseEntity;
-import org.ubikz.jscraper.api.entity.model.filter.AbstractEntityFilter;
-import org.ubikz.jscraper.api.entity.model.filter.impl.UserEntityFilter;
 import org.ubikz.jscraper.api.entity.helper.impl.UserEntityHelper;
-import org.ubikz.jscraper.api.entity.model.request.AbstractEntityRequest;
+import org.ubikz.jscraper.api.entity.model.filter.BaseEntityFilter;
+import org.ubikz.jscraper.api.entity.model.filter.impl.UserEntityFilter;
+import org.ubikz.jscraper.api.entity.model.request.BaseEntityRequest;
 import org.ubikz.jscraper.api.entity.model.request.impl.UserEntityRequest;
 
 import java.util.List;
 import java.util.Map;
 
 @Component
-public class UserEntity extends BaseEntity {
+public class UserEntity extends BaseEntity<UserDal, UserDalRequest, UserDalFilter, UserEntityHelper, UserDto> {
     @Autowired
     public UserEntity(UserDal userDal) {
         this.dal = userDal;
         this.helper = new UserEntityHelper();
+        this.dalRequest = new UserDalRequest();
+        this.dalFilter = new UserDalFilter();
     }
 
     @Override
-    protected void computeLoading(List<BaseDto> dtoList) throws Exception {
+    protected void computeLoading(List<UserDto> dtoList) {
     }
 
     @Override
-    protected void computeLoading(Map<Object, BaseDto> dtoList) throws Exception {
+    protected void computeLoading(Map<Object, UserDto> dtoList) {
     }
 
-    /**
-     * @param request
-     * @return
-     */
     @Override
-    protected AbstractDalRequest parseEntityToDalRequest(AbstractEntityRequest request) {
-        UserDalRequest userDalRequest = new UserDalRequest();
+    protected <T extends BaseEntityRequest> void parseRequest(T request) {
+        super.parseRequest(request);
         UserEntityRequest userEntityRequest = (UserEntityRequest) request;
 
-        userDalRequest = (UserDalRequest) this.parseBaseEntityToDalRequest(userEntityRequest, userDalRequest);
-        userDalRequest.setUsername(userEntityRequest.getUsername());
-        userDalRequest.setFirstname(userEntityRequest.getFirstname());
-        userDalRequest.setLastname(userEntityRequest.getLastname());
-        userDalRequest.setPassword(userEntityRequest.getPassword());
-        userDalRequest.setAdmin(userEntityRequest.getAdmin());
-
-        return userDalRequest;
+        dalRequest.setUsername(userEntityRequest.getUsername());
+        dalRequest.setFirstname(userEntityRequest.getFirstname());
+        dalRequest.setLastname(userEntityRequest.getLastname());
+        dalRequest.setPassword(userEntityRequest.getPassword());
+        dalRequest.setAdmin(userEntityRequest.getAdmin());
     }
 
-    /**
-     * @param filter
-     * @return
-     */
     @Override
-    protected AbstractDalFilter parseEntityToDalFilter(AbstractEntityFilter filter) {
-        UserDalFilter userDalFilter = new UserDalFilter();
+    protected <T extends BaseEntityFilter> void parseFilter(T filter) {
+        super.parseFilter(filter);
         UserEntityFilter userEntityFilter = (UserEntityFilter) filter;
 
-        userDalFilter = (UserDalFilter) this.parseBaseEntityToDalFilter(userEntityFilter, userDalFilter);
-
-        userDalFilter.setUsername(userEntityFilter.getUsername());
-        userDalFilter.setPassword(userEntityFilter.getPassword());
-
-        return userDalFilter;
+        dalFilter.setUsername(userEntityFilter.getUsername());
+        dalFilter.setPassword(userEntityFilter.getPassword());
     }
 }

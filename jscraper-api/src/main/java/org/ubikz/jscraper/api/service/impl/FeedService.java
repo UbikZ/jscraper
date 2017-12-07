@@ -2,10 +2,9 @@ package org.ubikz.jscraper.api.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ubikz.jscraper.api.dto.impl.FeedDto;
 import org.ubikz.jscraper.api.entity.impl.FeedEntity;
-import org.ubikz.jscraper.api.entity.model.filter.AbstractEntityFilter;
 import org.ubikz.jscraper.api.entity.model.filter.impl.FeedEntityFilter;
-import org.ubikz.jscraper.api.entity.model.request.AbstractEntityRequest;
 import org.ubikz.jscraper.api.entity.model.request.impl.FeedEntityRequest;
 import org.ubikz.jscraper.api.service.BaseService;
 import org.ubikz.jscraper.api.service.model.filter.BaseServiceFilter;
@@ -14,32 +13,26 @@ import org.ubikz.jscraper.api.service.model.request.BaseServiceRequest;
 import org.ubikz.jscraper.api.service.model.request.impl.FeedServiceRequest;
 
 @Component
-public class FeedService extends BaseService {
+public class FeedService extends BaseService<FeedEntity, FeedEntityRequest, FeedEntityFilter, FeedDto> {
     @Autowired
-    public FeedService(FeedEntity feedEntity) {
-        this.entity = feedEntity;
+    public FeedService(FeedEntity entity) {
+        this.entity = entity;
     }
 
     @Override
-    protected AbstractEntityRequest parseServiceToEntityRequest(BaseServiceRequest request) {
-        FeedEntityRequest feedEntityRequest = new FeedEntityRequest();
-        FeedServiceRequest feedServiceRequest = (FeedServiceRequest) request;
+    protected <T extends BaseServiceRequest> void parseRequest(T data) {
+        super.parseRequest(data);
+        FeedServiceRequest serviceRequest = (FeedServiceRequest) data;
 
-        this.parseBaseServiceToEntityRequest(feedServiceRequest, feedEntityRequest);
-        feedEntityRequest.setUrl(feedServiceRequest.getUrl());
-        feedEntityRequest.setFeedTypeId(feedServiceRequest.getFeedTypeId());
-
-        return feedEntityRequest;
+        entityRequest.setUrl(serviceRequest.getUrl());
+        entityRequest.setFeedTypeId(serviceRequest.getFeedTypeId());
     }
 
     @Override
-    protected AbstractEntityFilter parseServiceToEntityFilter(BaseServiceFilter filter) {
-        FeedEntityFilter feedEntityFilter = new FeedEntityFilter();
-        FeedServiceFilter feedServiceFilter = (FeedServiceFilter) filter;
+    protected <T extends BaseServiceFilter> void parseFilter(T data) {
+        super.parseFilter(data);
+        FeedServiceFilter feedServiceFilter = (FeedServiceFilter) data;
 
-        this.parseBaseServiceToEntityFilter(feedServiceFilter, feedEntityFilter);
-        feedEntityFilter.setUrl(feedServiceFilter.getUrl());
-
-        return feedEntityFilter;
+        entityFilter.setUrl(feedServiceFilter.getUrl());
     }
 }

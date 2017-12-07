@@ -1,6 +1,6 @@
-package org.ubikz.jscraper.api.entity.model.request;
+package org.ubikz.jscraper.api.dal.model.request;
 
-public class AbstractEntityRequest {
+public class BaseDalRequest {
     private Integer id;
     private String label;
     private Boolean isEnabled;
@@ -31,7 +31,7 @@ public class AbstractEntityRequest {
 
     @Override
     public String toString() {
-        return "AbstractEntityRequest{"
+        return "BaseDalRequest{"
                 + "id=" + id
                 + ", label='" + label + '\''
                 + ", isEnabled=" + isEnabled

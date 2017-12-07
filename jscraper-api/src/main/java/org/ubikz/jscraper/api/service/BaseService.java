@@ -2,106 +2,64 @@ package org.ubikz.jscraper.api.service;
 
 import org.ubikz.jscraper.api.dto.BaseDto;
 import org.ubikz.jscraper.api.entity.BaseEntity;
-import org.ubikz.jscraper.api.entity.model.filter.AbstractEntityFilter;
-import org.ubikz.jscraper.api.entity.model.request.AbstractEntityRequest;
+import org.ubikz.jscraper.api.entity.model.filter.BaseEntityFilter;
+import org.ubikz.jscraper.api.entity.model.request.BaseEntityRequest;
 import org.ubikz.jscraper.api.service.model.filter.BaseServiceFilter;
 import org.ubikz.jscraper.api.service.model.request.BaseServiceRequest;
 
 import java.util.List;
 
-public abstract class BaseService {
-    protected BaseEntity entity;
+public abstract class BaseService<E extends BaseEntity, R extends BaseEntityRequest, F extends BaseEntityFilter, D extends BaseDto> {
+    protected E entity;
+    protected R entityRequest;
+    protected F entityFilter;
 
-    /**
-     * @param request
-     * @return
-     */
-    protected abstract AbstractEntityRequest parseServiceToEntityRequest(BaseServiceRequest request);
-
-    /**
-     * @param filter
-     * @return
-     */
-    protected abstract AbstractEntityFilter parseServiceToEntityFilter(BaseServiceFilter filter);
-
-    /**
-     * @param filter
-     * @return
-     * @throws Exception
-     */
-    public List<BaseDto> getAll(BaseServiceFilter filter) throws Exception {
-        return this.entity.getAll(this.parseServiceToEntityFilter(filter));
+    public <T extends BaseServiceRequest> int create(T request) {
+        parseRequest(request);
+        return entity.create(entityRequest);
     }
 
-    /**
-     * @param filter
-     * @return
-     * @throws Exception
-     */
-    public int count(BaseServiceFilter filter) throws Exception {
-        return this.entity.count(this.parseServiceToEntityFilter(filter));
+    public <T extends BaseServiceRequest> int update(T request) {
+        parseRequest(request);
+        return entity.update(entityRequest);
     }
 
-    /**
-     * @param filter
-     * @return
-     * @throws Exception
-     */
-    public BaseDto get(BaseServiceFilter filter) throws Exception {
-        return this.entity.get(this.parseServiceToEntityFilter(filter));
+    @SuppressWarnings("unchecked")
+    public <T extends BaseServiceFilter> D get(T filter) {
+        parseFilter(filter);
+        return (D) entity.get(entityFilter);
     }
 
-    /**
-     * @param filter
-     * @return
-     * @throws Exception
-     */
-    public int delete(BaseServiceFilter filter) throws Exception {
-        return this.entity.delete(this.parseServiceToEntityFilter(filter));
+    @SuppressWarnings("unchecked")
+    public <T extends BaseServiceFilter> List<D> getAll(T filter) {
+        parseFilter(filter);
+        return entity.getAll(entityFilter);
     }
 
-    /**
-     * @param request
-     * @return
-     * @throws Exception
-     */
-    public int create(BaseServiceRequest request) throws Exception {
-        return this.entity.create(this.parseServiceToEntityRequest(request));
+    public <T extends BaseServiceFilter> int count(T filter) {
+        parseFilter(filter);
+        return entity.count(entityFilter);
     }
 
-    /**
-     * @param request
-     * @return
-     * @throws Exception
-     */
-    public int update(BaseServiceRequest request) throws Exception {
-        return this.entity.update(this.parseServiceToEntityRequest(request));
+    public <T extends BaseServiceFilter> int delete(T filter) {
+        parseFilter(filter);
+        return entity.delete(entityFilter);
     }
 
-    /**
-     * @param sRequest
-     * @param eRequest
-     * @return
-     */
-    protected final void parseBaseServiceToEntityRequest(BaseServiceRequest sRequest, AbstractEntityRequest eRequest) {
-        eRequest.setId(sRequest.getId());
-        eRequest.setLabel(sRequest.getLabel());
-        eRequest.setEnabled(sRequest.getEnabled());
+    protected <T extends BaseServiceRequest> void parseRequest(T request) {
+        entityRequest.setId(request.getId());
+        entityRequest.setLabel(request.getLabel());
+        entityRequest.setEnabled(request.getEnabled());
     }
 
-    /**
-     * @param sFilter
-     * @param eFilter
-     * @return
-     */
-    protected final void parseBaseServiceToEntityFilter(BaseServiceFilter sFilter, AbstractEntityFilter eFilter) {
-        eFilter.setId(sFilter.getId());
-        eFilter.setLabel(sFilter.getLabel());
-        eFilter.setSearch(sFilter.getSearch());
-        eFilter.setEnabled(sFilter.getEnabled());
-        eFilter.setLazy(sFilter.isLazy());
-        eFilter.setStartDate(sFilter.getStartDate());
-        eFilter.setOffset(sFilter.getOffset());
-        eFilter.setLimit(sFilter.getLimit());
+    protected <T extends BaseServiceFilter> void parseFilter(T filter) {
+        entityFilter.setId(filter.getId());
+        entityFilter.setLabel(filter.getLabel());
+        entityFilter.setSearch(filter.getSearch());
+        entityFilter.setEnabled(filter.getEnabled());
+        entityFilter.setLazy(filter.isLazy());
+        entityFilter.setStartDate(filter.getStartDate());
+        entityFilter.setOffset(filter.getOffset());
+        entityFilter.setLimit(filter.getLimit());
     }
 }

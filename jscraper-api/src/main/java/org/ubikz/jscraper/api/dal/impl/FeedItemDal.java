@@ -2,9 +2,9 @@ package org.ubikz.jscraper.api.dal.impl;
 
 import org.springframework.stereotype.Repository;
 import org.ubikz.jscraper.api.dal.BaseDal;
-import org.ubikz.jscraper.api.dal.model.filter.AbstractDalFilter;
+import org.ubikz.jscraper.api.dal.model.filter.BaseDalFilter;
 import org.ubikz.jscraper.api.dal.model.filter.impl.FeedItemDalFilter;
-import org.ubikz.jscraper.api.dal.model.request.AbstractDalRequest;
+import org.ubikz.jscraper.api.dal.model.request.BaseDalRequest;
 import org.ubikz.jscraper.api.dal.model.request.impl.FeedItemDalRequest;
 import org.ubikz.jscraper.api.dal.model.request.impl.FeedItemTagDalRequest;
 import org.ubikz.jscraper.database.DatabaseService;
@@ -45,7 +45,7 @@ public class FeedItemDal extends BaseDal {
      * @return
      */
     @Override
-    public List<Object> createAll(List<AbstractDalRequest> requestList) {
+    public List<Object> createAll(List<BaseDalRequest> requestList) {
         QueryBuilderService qb = new QueryBuilderService();
         AbstractQuery insert = qb
                 .insert(this.tableName)
@@ -58,7 +58,7 @@ public class FeedItemDal extends BaseDal {
     }
 
     @Override
-    protected Select getBaseSelect(AbstractDalFilter filter, boolean isCount) {
+    protected Select getBaseSelect(BaseDalFilter filter, boolean isCount) {
         QueryBuilderService qb = new QueryBuilderService();
         AbstractQuery select = qb
                 .select("fi.*")
@@ -118,14 +118,14 @@ public class FeedItemDal extends BaseDal {
      * @return
      */
     @Override
-    protected Map<String, Object> parseRequest(AbstractDalRequest request, boolean created) {
+    protected Map<String, Object> parseRequest(BaseDalRequest request, boolean created) {
         FeedItemDalRequest feedItemDalRequest = (FeedItemDalRequest) request;
         Map<String, Object> values = super.parseRequest(feedItemDalRequest, created);
 
         if (feedItemDalRequest.getFeedId() != null) {
             values.put(COLUMN_FEED_ID, feedItemDalRequest.getFeedId());
         }
-        
+
         if (feedItemDalRequest.getUrl() != null) {
             values.put(COLUMN_URL, feedItemDalRequest.getUrl());
         }
@@ -162,7 +162,7 @@ public class FeedItemDal extends BaseDal {
      * @return
      */
     @Override
-    protected void parseFilter(AbstractDalFilter filter, AbstractQuery aSelect, boolean isCount) {
+    protected void parseFilter(BaseDalFilter filter, AbstractQuery aSelect, boolean isCount) {
         Select select = (Select) aSelect;
         FeedItemDalFilter feedItemDalFilter = (FeedItemDalFilter) filter;
         super.parseFilter(feedItemDalFilter, select, isCount);

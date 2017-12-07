@@ -17,12 +17,8 @@ public class FeedItemController extends BaseController<FeedItemContext, FeedItem
         this.context = feedItemContext;
     }
 
-    /**
-     * @return
-     * @throws Exception
-     */
     @RequestMapping(value = "/generate", method = RequestMethod.GET, produces = "application/json")
     public String createItems() throws Exception {
-        return this.sendResponse(this.context.generate());
+        return send(() -> this.context.generate());
     }
 }

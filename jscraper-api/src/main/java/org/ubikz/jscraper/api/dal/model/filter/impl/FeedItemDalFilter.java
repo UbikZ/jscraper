@@ -1,10 +1,10 @@
 package org.ubikz.jscraper.api.dal.model.filter.impl;
 
-import org.ubikz.jscraper.api.dal.model.filter.AbstractDalFilter;
+import org.ubikz.jscraper.api.dal.model.filter.BaseDalFilter;
 
 import java.util.List;
 
-public class FeedItemDalFilter extends AbstractDalFilter {
+public class FeedItemDalFilter extends BaseDalFilter {
     private Integer feedId;
     private String url;
     private String checksum;

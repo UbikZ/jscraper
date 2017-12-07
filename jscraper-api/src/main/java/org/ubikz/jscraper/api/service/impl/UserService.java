@@ -2,10 +2,9 @@ package org.ubikz.jscraper.api.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ubikz.jscraper.api.dto.impl.UserDto;
 import org.ubikz.jscraper.api.entity.impl.UserEntity;
-import org.ubikz.jscraper.api.entity.model.filter.AbstractEntityFilter;
 import org.ubikz.jscraper.api.entity.model.filter.impl.UserEntityFilter;
-import org.ubikz.jscraper.api.entity.model.request.AbstractEntityRequest;
 import org.ubikz.jscraper.api.entity.model.request.impl.UserEntityRequest;
 import org.ubikz.jscraper.api.service.BaseService;
 import org.ubikz.jscraper.api.service.model.filter.BaseServiceFilter;
@@ -14,45 +13,28 @@ import org.ubikz.jscraper.api.service.model.request.BaseServiceRequest;
 import org.ubikz.jscraper.api.service.model.request.impl.UserServiceRequest;
 
 @Component
-public class UserService extends BaseService {
+public class UserService extends BaseService<UserEntity, UserEntityRequest, UserEntityFilter, UserDto> {
     @Autowired
     public UserService(UserEntity userEntity) {
         this.entity = userEntity;
     }
 
-    /**
-     * @param request
-     * @return
-     */
-    @Override
-    protected AbstractEntityRequest parseServiceToEntityRequest(BaseServiceRequest request) {
-        UserEntityRequest userEntityRequest = new UserEntityRequest();
-        UserServiceRequest userServiceRequest = (UserServiceRequest) request;
+    protected <T extends BaseServiceRequest> void parseRequest(T data) {
+        super.parseRequest(data);
+        UserServiceRequest serviceRequest = (UserServiceRequest) data;
 
-        this.parseBaseServiceToEntityRequest(userServiceRequest, userEntityRequest);
-        userEntityRequest.setUsername(userServiceRequest.getUsername());
-        userEntityRequest.setFirstname(userServiceRequest.getFirstname());
-        userEntityRequest.setLastname(userServiceRequest.getLastname());
-        userEntityRequest.setPassword(userServiceRequest.getPassword());
-        userEntityRequest.setAdmin(userServiceRequest.getAdmin());
-
-        return userEntityRequest;
+        entityRequest.setUsername(serviceRequest.getUsername());
+        entityRequest.setFirstname(serviceRequest.getFirstname());
+        entityRequest.setLastname(serviceRequest.getLastname());
+        entityRequest.setPassword(serviceRequest.getPassword());
+        entityRequest.setAdmin(serviceRequest.getAdmin());
     }
 
-    /**
-     * @param filter
-     * @return
-     */
-    @Override
-    protected AbstractEntityFilter parseServiceToEntityFilter(BaseServiceFilter filter) {
-        UserEntityFilter userEntityFilter = new UserEntityFilter();
-        UserServiceFilter userServiceFilter = (UserServiceFilter) filter;
+    protected <T extends BaseServiceFilter> void parseFilter(T data) {
+        super.parseFilter(data);
+        UserServiceFilter serviceFilter = (UserServiceFilter) data;
 
-        this.parseBaseServiceToEntityFilter(userServiceFilter, userEntityFilter);
-
-        userEntityFilter.setUsername(userServiceFilter.getUsername());
-        userEntityFilter.setPassword(userServiceFilter.getPassword());
-
-        return userEntityFilter;
+        entityFilter.setUsername(serviceFilter.getUsername());
+        entityFilter.setPassword(serviceFilter.getPassword());
     }
 }

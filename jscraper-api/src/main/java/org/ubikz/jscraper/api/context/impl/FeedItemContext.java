@@ -15,7 +15,6 @@ import org.ubikz.jscraper.api.service.model.filter.BaseServiceFilter;
 import org.ubikz.jscraper.api.service.model.filter.impl.FeedItemServiceFilter;
 import org.ubikz.jscraper.api.service.model.filter.impl.FeedServiceFilter;
 import org.ubikz.jscraper.api.service.model.message.BaseMessage;
-import org.ubikz.jscraper.api.service.model.request.BaseServiceRequest;
 import org.ubikz.jscraper.api.service.model.request.impl.FeedItemServiceRequest;
 import org.ubikz.jscraper.api.service.model.request.impl.FeedListServiceRequest;
 
@@ -23,45 +22,30 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @Component
-public class FeedItemContext extends BaseContext {
-    private static final int FEED_ITEM_GENERATED = 44;
-
+public class FeedItemContext extends BaseContext<FeedItemService, FeedItemServiceRequest, FeedItemServiceFilter> {
     private FeedService feedService;
 
     @Autowired
-    public FeedItemContext(FeedItemService feedItemService, FeedService feedService) {
-        this.service = feedItemService;
+    public FeedItemContext(FeedItemService service, FeedService feedService) {
+        this.service = service;
         this.serviceRequest = new FeedItemServiceRequest();
         this.serviceFilter = new FeedItemServiceFilter();
-        this.filterBody = new FeedItemFilterBody();
         this.feedService = feedService;
-
-        CREATED = 40;
-        UPDATED = 41;
-        GET_ONE = 42;
-        GET_ALL = 42;
-        DELETE = 43;
     }
 
-    /**
-     * @return
-     * @throws Exception
-     */
-    public BaseMessage generate() throws Exception {
-        return handle(() -> {
-            FeedListServiceRequest request = new FeedListServiceRequest();
-            BaseServiceFilter feedServiceFilter = new FeedServiceFilter();
-            feedServiceFilter.setEnabled(true);
-            request.setFeedList(feedService.getAll(feedServiceFilter).stream().map(FeedDto.class::cast).collect(Collectors.toList()));
+    public BaseMessage generate() {
+        FeedListServiceRequest request = new FeedListServiceRequest();
+        BaseServiceFilter feedServiceFilter = new FeedServiceFilter();
+        feedServiceFilter.setEnabled(true);
+        request.setFeedList(feedService.getAll(feedServiceFilter).stream().map(FeedDto.class::cast).collect(Collectors.toList()));
 
-            return ((FeedItemService) service).generate(request);
-        }, HttpStatus.CREATED, FEED_ITEM_GENERATED);
+        return toFilterResult(service::generate, HttpStatus.CREATED);
     }
 
     @Override
-    protected BaseServiceRequest parseRequest(BaseRequestBody data, BaseServiceRequest request) {
+    protected <T extends BaseRequestBody> void parseRequest(T data) {
+        super.parseRequest(data);
         FeedItemRequestBody requestBody = (FeedItemRequestBody) data;
-        FeedItemServiceRequest serviceRequest = (FeedItemServiceRequest) parseBaseRequest(requestBody, request);
 
         serviceRequest.setFeedId(requestBody.getFeedId());
         serviceRequest.setUrl(requestBody.getUrl());
@@ -72,25 +56,22 @@ public class FeedItemContext extends BaseContext {
         serviceRequest.setReposted(requestBody.getReposted());
         serviceRequest.setViewed(requestBody.getViewed());
         serviceRequest.setSent(requestBody.getReposted());
-
-        return serviceRequest;
     }
 
     @Override
-    protected BaseServiceFilter parseFilter(BaseFilterBody data, BaseServiceFilter filter) throws Exception {
+    protected <T extends BaseFilterBody> void parseFilter(T data) {
+        super.parseFilter(data);
         FeedItemFilterBody filterBody = (FeedItemFilterBody) data;
-        FeedItemServiceFilter serviceFilter = (FeedItemServiceFilter) parseBaseFilter(filterBody, filter);
 
         serviceFilter.setUrl(filterBody.getUrl());
-        if (filterBody.getTags() != null) {
-            serviceFilter.setTagNames(Arrays.asList(filterBody.getTags()));
-        }
         serviceFilter.setChecksum(filterBody.getChecksum());
         serviceFilter.setApproved(filterBody.getApproved());
         serviceFilter.setReposted(filterBody.getReposted());
         serviceFilter.setViewed(filterBody.getViewed());
         serviceFilter.setSent(filterBody.getReposted());
 
-        return serviceFilter;
+        if (filterBody.getTags() != null) {
+            serviceFilter.setTagNames(Arrays.asList(filterBody.getTags()));
+        }
     }
 }

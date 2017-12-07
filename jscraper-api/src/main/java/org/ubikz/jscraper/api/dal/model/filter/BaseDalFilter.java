@@ -3,7 +3,7 @@ package org.ubikz.jscraper.api.dal.model.filter;
 import java.util.Date;
 import java.util.List;
 
-public abstract class AbstractDalFilter {
+public abstract class BaseDalFilter {
     private Integer id;
     private List<Integer> idList;
     private String label;
@@ -88,7 +88,7 @@ public abstract class AbstractDalFilter {
 
     @Override
     public String toString() {
-        return "AbstractDalFilter{"
+        return "BaseDalFilter{"
                 + "id=" + id
                 + ", idList=" + idList
                 + ", label='" + label + '\''

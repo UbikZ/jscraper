@@ -4,9 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.ubikz.jscraper.api.dal.BaseDal;
-import org.ubikz.jscraper.api.dal.model.filter.AbstractDalFilter;
+import org.ubikz.jscraper.api.dal.model.filter.BaseDalFilter;
 import org.ubikz.jscraper.api.dal.model.filter.impl.UserDalFilter;
-import org.ubikz.jscraper.api.dal.model.request.AbstractDalRequest;
+import org.ubikz.jscraper.api.dal.model.request.BaseDalRequest;
 import org.ubikz.jscraper.api.dal.model.request.impl.UserDalRequest;
 import org.ubikz.jscraper.database.DatabaseService;
 import org.ubikz.jscraper.database.querybuilder.AbstractQuery;
@@ -40,7 +40,7 @@ public class UserDal extends BaseDal {
      * @return
      */
     @Override
-    protected Map<String, Object> parseRequest(AbstractDalRequest request, boolean created) {
+    protected Map<String, Object> parseRequest(BaseDalRequest request, boolean created) {
         UserDalRequest userDalRequest = (UserDalRequest) request;
         Map<String, Object> values = super.parseRequest(userDalRequest, created);
 
@@ -80,7 +80,7 @@ public class UserDal extends BaseDal {
      * @return
      */
     @Override
-    protected void parseFilter(AbstractDalFilter filter, AbstractQuery select, boolean isCount) {
+    protected void parseFilter(BaseDalFilter filter, AbstractQuery select, boolean isCount) {
         UserDalFilter userDalFilter = (UserDalFilter) filter;
         super.parseFilter(userDalFilter, select, isCount);
 

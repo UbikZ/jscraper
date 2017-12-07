@@ -2,9 +2,9 @@ package org.ubikz.jscraper.api.dal.impl;
 
 import org.springframework.stereotype.Repository;
 import org.ubikz.jscraper.api.dal.BaseDal;
-import org.ubikz.jscraper.api.dal.model.filter.AbstractDalFilter;
+import org.ubikz.jscraper.api.dal.model.filter.BaseDalFilter;
 import org.ubikz.jscraper.api.dal.model.filter.impl.FeedTypeDalFilter;
-import org.ubikz.jscraper.api.dal.model.request.AbstractDalRequest;
+import org.ubikz.jscraper.api.dal.model.request.BaseDalRequest;
 import org.ubikz.jscraper.api.dal.model.request.impl.FeedTypeDalRequest;
 import org.ubikz.jscraper.database.DatabaseService;
 import org.ubikz.jscraper.database.querybuilder.AbstractQuery;
@@ -27,7 +27,7 @@ public class FeedTypeDal extends BaseDal {
      * @return
      */
     @Override
-    protected Map<String, Object> parseRequest(AbstractDalRequest request, boolean created) {
+    protected Map<String, Object> parseRequest(BaseDalRequest request, boolean created) {
         FeedTypeDalRequest feedTypeDalRequest = (FeedTypeDalRequest) request;
         Map<String, Object> values = super.parseRequest(feedTypeDalRequest, created);
 
@@ -47,7 +47,7 @@ public class FeedTypeDal extends BaseDal {
      * @return
      */
     @Override
-    protected void parseFilter(AbstractDalFilter filter, AbstractQuery select, boolean isCount) {
+    protected void parseFilter(BaseDalFilter filter, AbstractQuery select, boolean isCount) {
         FeedTypeDalFilter feedTypeDalFilter = (FeedTypeDalFilter) filter;
         super.parseFilter(feedTypeDalFilter, select, isCount);
 

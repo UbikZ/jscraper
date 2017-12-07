@@ -1,31 +1,25 @@
 package org.ubikz.jscraper.api.entity.helper;
 
 import org.ubikz.jscraper.api.dto.BaseDto;
+import org.ubikz.jscraper.exception.ApplicativeException;
+import org.ubikz.jscraper.reference.table.field.CommonReference;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class BaseEntityHelper {
+public abstract class BaseEntityHelper<D extends BaseDto> {
+    protected D dto;
 
-    public static final String COLUMN_ID = "id";
-    public static final String COLUMN_DATE = "date";
-    public static final String COLUMN_LABEL = "label";
-    public static final String COLUMN_ENABLED = "enabled";
-
-    /**
-     * @param data
-     * @param dto
-     * @return
-     */
-    public BaseDto getBaseDtoFromDal(Map<String, Object> data, BaseDto dto) {
-        if (data.containsKey(COLUMN_ID)) {
-            dto.setId((int) data.get(COLUMN_ID));
+    public D getDtoFromDal(Map<String, Object> data) {
+        if (data.containsKey(CommonReference.ID.get())) {
+            dto.setId((int) data.get(CommonReference.ID.get()));
         }
 
-        if (data.containsKey(COLUMN_DATE)) {
-            Object date = data.get(COLUMN_DATE);
+        if (data.containsKey(CommonReference.DATE.get())) {
+            Object date = data.get(CommonReference.DATE.get());
             if (date != null) {
                 Timestamp timestamp = (Timestamp) date;
                 long milliseconds = timestamp.getTime() + (timestamp.getNanos() / 1000000);
@@ -33,63 +27,42 @@ public abstract class BaseEntityHelper {
             }
         }
 
-        if (data.containsKey(COLUMN_LABEL)) {
-            dto.setLabel((String) data.get(COLUMN_LABEL));
-        }
-
-        if (data.containsKey(COLUMN_ENABLED)) {
-            dto.setEnabled((Boolean) data.get(COLUMN_ENABLED));
+        if (data.containsKey(CommonReference.ENABLED.get())) {
+            dto.setEnabled((Boolean) data.get(CommonReference.ENABLED.get()));
         }
 
         return dto;
     }
 
-    /**
-     * @param dataList
-     * @param attr
-     * @return
-     */
-    public final List<BaseDto> getDtoListFromReturnDal(List<Object> dataList, String attr) {
-        List<BaseDto> baseDtoList = new ArrayList<>();
+    public final List<D> getDtoListFromDal(List<Object> dataList, String attr) {
+        List<D> baseDtoList = new ArrayList<>();
 
-        for (Object element : dataList) {
-            baseDtoList.add(this.getDtoFromDal(new HashMap<String, Object>() {{
-                put(attr, element);
-            }}));
-        }
+        dataList.forEach(element -> baseDtoList.add(getDtoFromDal(new HashMap<String, Object>() {{
+            put(attr, element);
+        }})));
 
         return baseDtoList;
     }
 
-    /**
-     * @param dataList
-     * @return
-     */
-    public final List<BaseDto> getDtoListFromDal(List<Map<String, Object>> dataList) {
+    public final List<D> getDtoListFromDal(List<Map<String, Object>> dataList) {
         return dataList.stream().map(this::getDtoFromDal).collect(Collectors.toList());
     }
 
-    /**
-     * @param dataList
-     * @return
-     */
-    public Map<Object, BaseDto> getDtoMapFromDal(List<Map<String, Object>> dataList, String attr) throws Exception {
-        Map<Object, BaseDto> map = new HashMap<>();
-        List<BaseDto> list = this.getDtoListFromDal(dataList);
+    public Map<Object, D> getDtoMapFromDal(List<Map<String, Object>> dataList, String attr) {
+        Map<Object, D> map = new HashMap<>();
 
-        for (BaseDto baseDto : list) {
-            Method method = baseDto
-                    .getClass()
-                    .getMethod("get" + attr.substring(0, 1).toUpperCase() + attr.substring(1));
-            map.put(method.invoke(baseDto), baseDto);
-        }
+        getDtoListFromDal(dataList).forEach(dto -> map.put(invokeDtoMethod(dto, attr), dto));
 
         return map;
     }
 
-    /**
-     * @param data
-     * @return
-     */
-    public abstract BaseDto getDtoFromDal(Map<String, Object> data);
+    private Object invokeDtoMethod(D dto, String attr) {
+        try {
+            Method method = dto.getClass().getMethod("get" + attr.substring(0, 1).toUpperCase() + attr.substring(1));
+
+            return method.invoke(dto);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new ApplicativeException(e);
+        }
+    }
 }

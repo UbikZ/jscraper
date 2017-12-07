@@ -1,10 +1,10 @@
 package org.ubikz.jscraper.api.dal.model.filter.impl;
 
-import org.ubikz.jscraper.api.dal.model.filter.AbstractDalFilter;
+import org.ubikz.jscraper.api.dal.model.filter.BaseDalFilter;
 
 import java.util.List;
 
-public class TagDalFilter extends AbstractDalFilter {
+public class TagDalFilter extends BaseDalFilter {
 
     private List<String> nameList;
 

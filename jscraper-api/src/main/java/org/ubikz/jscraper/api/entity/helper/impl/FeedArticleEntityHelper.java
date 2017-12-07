@@ -16,10 +16,6 @@ public class FeedArticleEntityHelper extends BaseEntityHelper {
     public static final String COLUMN_TAGS = "tags";
     public static final String COLUMN_PICTURES = "pictures";
 
-    /**
-     * @param data
-     * @return
-     */
     public FeedArticleDto getDtoFromDal(Map<String, Object> data) {
         FeedArticleDto dto = new FeedArticleDto();
 

@@ -6,11 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.ubikz.jscraper.api.dal.impl.FeedDal;
 import org.ubikz.jscraper.api.dal.impl.FeedItemDal;
 import org.ubikz.jscraper.api.dal.impl.TagDal;
-import org.ubikz.jscraper.api.dal.model.filter.AbstractDalFilter;
 import org.ubikz.jscraper.api.dal.model.filter.impl.FeedDalFilter;
 import org.ubikz.jscraper.api.dal.model.filter.impl.FeedItemDalFilter;
 import org.ubikz.jscraper.api.dal.model.filter.impl.TagDalFilter;
-import org.ubikz.jscraper.api.dal.model.request.AbstractDalRequest;
 import org.ubikz.jscraper.api.dal.model.request.impl.FeedItemDalRequest;
 import org.ubikz.jscraper.api.dal.model.request.impl.FeedItemTagDalRequest;
 import org.ubikz.jscraper.api.dto.BaseDto;
@@ -18,12 +16,12 @@ import org.ubikz.jscraper.api.dto.impl.FeedDto;
 import org.ubikz.jscraper.api.dto.impl.FeedItemDto;
 import org.ubikz.jscraper.api.dto.impl.TagDto;
 import org.ubikz.jscraper.api.entity.BaseEntity;
-import org.ubikz.jscraper.api.entity.model.filter.AbstractEntityFilter;
-import org.ubikz.jscraper.api.entity.model.filter.impl.FeedItemEntityFilter;
 import org.ubikz.jscraper.api.entity.helper.impl.FeedEntityHelper;
 import org.ubikz.jscraper.api.entity.helper.impl.FeedItemEntityHelper;
 import org.ubikz.jscraper.api.entity.helper.impl.TagEntityHelper;
-import org.ubikz.jscraper.api.entity.model.request.AbstractEntityRequest;
+import org.ubikz.jscraper.api.entity.model.filter.BaseEntityFilter;
+import org.ubikz.jscraper.api.entity.model.filter.impl.FeedItemEntityFilter;
+import org.ubikz.jscraper.api.entity.model.request.BaseEntityRequest;
 import org.ubikz.jscraper.api.entity.model.request.impl.FeedItemEntityRequest;
 
 import java.util.ArrayList;
@@ -32,27 +30,54 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-public class FeedItemEntity extends BaseEntity {
+public class FeedItemEntity extends BaseEntity<FeedItemDal, FeedItemDalRequest, FeedItemDalFilter, FeedItemEntityHelper, FeedItemDto> {
     private FeedDal feedDal;
     private TagDal tagDal;
     private FeedEntityHelper feedHelper;
     private TagEntityHelper tagHelper;
 
     @Autowired
-    public FeedItemEntity(FeedItemDal feedItemDal, FeedDal feedDal, TagDal tagDal) {
-        this.dal = feedItemDal;
+    public FeedItemEntity(FeedItemDal dal, FeedDal feedDal, TagDal tagDal) {
+        this.dal = dal;
         this.feedDal = feedDal;
         this.tagDal = tagDal;
+        this.dalRequest = new FeedItemDalRequest();
+        this.dalFilter = new FeedItemDalFilter();
         this.helper = new FeedItemEntityHelper();
         this.feedHelper = new FeedEntityHelper();
         this.tagHelper = new TagEntityHelper();
     }
 
-    /**
-     * @param feedItems
-     */
     @Override
-    protected void computeLoading(List<BaseDto> feedItems) throws Exception {
+    public <T extends BaseEntityRequest> List<FeedItemDto> createAll(List<T> requestList) {
+        parseListRequest(requestList);
+        List<FeedItemDto> list = helper.getDtoListFromDal(dal.createAll(dalRequest), "id");
+
+        FeedItemEntityFilter filter = new FeedItemEntityFilter();
+        filter.setIdList(list.stream().map(BaseDto::getId).collect(Collectors.toList()));
+
+        if (filter.getIdList() != null && filter.getIdList().size() > 0) {
+            dal.createTags(parseListEntityToTagDalRequest(getAllMappedBy(filter, "url"), requestList));
+        }
+
+        return list;
+    }
+
+    @Transactional
+    public <T extends BaseEntityRequest> int create(T request) {
+        FeedItemEntityRequest entityRequest = (FeedItemEntityRequest) request;
+        parseRequest(entityRequest);
+        int createdId = dal.create(dalRequest);
+
+        if (entityRequest.getTagIds() != null) {
+            dal.createTags(parseTagRequest(createdId, entityRequest));
+        }
+
+        return createdId;
+    }
+
+    @Override
+    protected void computeLoading(List<FeedItemDto> feedItems) {
         FeedDalFilter feedDalFilter = new FeedDalFilter();
         TagDalFilter tagDalFilter = new TagDalFilter();
         Map<Integer, FeedDto> feedMap;
@@ -62,9 +87,7 @@ public class FeedItemEntity extends BaseEntity {
         tagDalFilter.setIdList(new ArrayList<>());
 
         // Build queries
-        for (BaseDto dto : feedItems) {
-            FeedItemDto feedItem = (FeedItemDto) dto;
-
+        for (FeedItemDto feedItem : feedItems) {
             feedDalFilter.getIdList().add(feedItem.getFeed().getId());
             if (feedItem.getTags() != null) {
                 tagDalFilter.getIdList().addAll(feedItem.getTags().stream().map(TagDto::getId).collect(Collectors.toList()));
@@ -82,9 +105,7 @@ public class FeedItemEntity extends BaseEntity {
                 .entrySet().stream()
                 .collect(Collectors.toMap(p -> (int) p.getKey(), p -> (TagDto) p.getValue()));
 
-        for (BaseDto dto : feedItems) {
-            FeedItemDto feedItem = (FeedItemDto) dto;
-
+        for (FeedItemDto feedItem : feedItems) {
             if (feedMap != null && feedMap.containsKey(feedItem.getFeed().getId())) {
                 feedItem.setFeed(feedMap.get(feedItem.getFeed().getId()));
             }
@@ -103,54 +124,39 @@ public class FeedItemEntity extends BaseEntity {
     }
 
     @Override
-    protected void computeLoading(Map<Object, BaseDto> dtoList) throws Exception {
+    protected void computeLoading(Map<Object, FeedItemDto> dtoList) {}
+
+    @Override
+    protected <T extends BaseEntityRequest> void parseRequest(T request) {
+        super.parseRequest(request);
+        FeedItemEntityRequest feedItemEntityRequest = (FeedItemEntityRequest) request;
+
+        dalRequest.setFeedId(feedItemEntityRequest.getFeedId());
+        dalRequest.setUrl(feedItemEntityRequest.getUrl());
+        dalRequest.setComment(feedItemEntityRequest.getComment());
+        dalRequest.setChecksum(feedItemEntityRequest.getChecksum());
+        dalRequest.setApproved(feedItemEntityRequest.getApproved());
+        dalRequest.setReposted(feedItemEntityRequest.getReposted());
+        dalRequest.setViewed(feedItemEntityRequest.getViewed());
+        dalRequest.setSent(feedItemEntityRequest.getReposted());
     }
 
-    /**
-     * @param requestList
-     * @return
-     */
-    public List<BaseDto> createAll(List<AbstractEntityRequest> requestList) throws Exception {
-        List<BaseDto> list = this.helper.getDtoListFromReturnDal(
-                this.dal.createAll(this.parseListEntityToDalRequest(requestList)),
-                "id"
-        );
+    @Override
+    protected <T extends BaseEntityFilter> void parseFilter(T filter) {
+        super.parseFilter(filter);
+        FeedItemEntityFilter feedItemEntityFilter = (FeedItemEntityFilter) filter;
 
-        FeedItemEntityFilter filter = new FeedItemEntityFilter();
-        filter.setIdList(list.stream().map(BaseDto::getId).collect(Collectors.toList()));
-
-        if (filter.getIdList() != null && filter.getIdList().size() > 0) {
-            ((FeedItemDal) this.dal).createTags(this.parseListEntityToTagDalRequest(
-                    this.getAllMappedBy(filter, "url"),
-                    requestList
-            ));
-        }
-
-        return list;
+        dalFilter.setFeedId(feedItemEntityFilter.getFeedId());
+        dalFilter.setUrl(feedItemEntityFilter.getUrl());
+        dalFilter.setChecksum(feedItemEntityFilter.getChecksum());
+        dalFilter.setApproved(feedItemEntityFilter.getApproved());
+        dalFilter.setReposted(feedItemEntityFilter.getReposted());
+        dalFilter.setViewed(feedItemEntityFilter.getViewed());
+        dalFilter.setSent(feedItemEntityFilter.getReposted());
+        dalFilter.setTagNames(feedItemEntityFilter.getTagNames());
     }
 
-    /**
-     * @param request
-     * @return
-     */
-    @Transactional
-    public int create(AbstractEntityRequest request) {
-        FeedItemEntityRequest entityRequest = (FeedItemEntityRequest) request;
-        int createdId = this.dal.create(this.parseEntityToDalRequest(entityRequest));
-
-        if (entityRequest.getTagIds() != null) {
-            ((FeedItemDal) this.dal).createTags(this.parseEntityToTagDalRequest(createdId, entityRequest));
-        }
-
-        return createdId;
-    }
-
-    /**
-     * @param id
-     * @param request
-     * @return
-     */
-    private List<FeedItemTagDalRequest> parseEntityToTagDalRequest(int id, FeedItemEntityRequest request) {
+    private List<FeedItemTagDalRequest> parseTagRequest(int id, FeedItemEntityRequest request) {
         List<FeedItemTagDalRequest> tagRequestList = new ArrayList<>();
 
         for (Integer tagId : request.getTagIds()) {
@@ -163,71 +169,16 @@ public class FeedItemEntity extends BaseEntity {
         return tagRequestList;
     }
 
-    /**
-     * @param abstractMap
-     * @param requestList
-     * @return
-     */
-    private List<FeedItemTagDalRequest> parseListEntityToTagDalRequest(
-            Map<Object, BaseDto> abstractMap,
-            List<AbstractEntityRequest> requestList
-    ) {
+    private List<FeedItemTagDalRequest> parseListEntityToTagDalRequest(Map<Object, FeedItemDto> abstractMap, List<FeedItemEntityRequest> requestList) {
         List<FeedItemTagDalRequest> tagRequestList = new ArrayList<>();
 
-        for (AbstractEntityRequest request : requestList) {
-            FeedItemEntityRequest fiRequest = (FeedItemEntityRequest) request;
-            BaseDto current = abstractMap.get(fiRequest.getUrl());
-
-            if (current != null) {
-                tagRequestList.addAll(this.parseEntityToTagDalRequest(current.getId(), fiRequest));
+        requestList.forEach(r -> {
+            FeedItemDto dto = abstractMap.get(r.getUrl());
+            if (dto != null) {
+                tagRequestList.addAll(this.parseTagRequest(dto.getId(), r));
             }
-        }
+        });
 
         return tagRequestList;
-    }
-
-    /**
-     * @param request
-     * @return
-     */
-    @Override
-    protected AbstractDalRequest parseEntityToDalRequest(AbstractEntityRequest request) {
-        FeedItemDalRequest feedItemDalRequest = new FeedItemDalRequest();
-        FeedItemEntityRequest feedItemEntityRequest = (FeedItemEntityRequest) request;
-
-        feedItemDalRequest = (FeedItemDalRequest) this.parseBaseEntityToDalRequest(feedItemEntityRequest, feedItemDalRequest);
-        feedItemDalRequest.setFeedId(feedItemEntityRequest.getFeedId());
-        feedItemDalRequest.setUrl(feedItemEntityRequest.getUrl());
-        feedItemDalRequest.setComment(feedItemEntityRequest.getComment());
-        feedItemDalRequest.setChecksum(feedItemEntityRequest.getChecksum());
-        feedItemDalRequest.setApproved(feedItemEntityRequest.getApproved());
-        feedItemDalRequest.setReposted(feedItemEntityRequest.getReposted());
-        feedItemDalRequest.setViewed(feedItemEntityRequest.getViewed());
-        feedItemDalRequest.setSent(feedItemEntityRequest.getReposted());
-
-        return feedItemDalRequest;
-    }
-
-    /**
-     * @param filter
-     * @return
-     */
-    @Override
-    protected AbstractDalFilter parseEntityToDalFilter(AbstractEntityFilter filter) {
-        FeedItemDalFilter feedItemDalFilter = new FeedItemDalFilter();
-        FeedItemEntityFilter feedItemEntityFilter = (FeedItemEntityFilter) filter;
-
-        feedItemDalFilter = (FeedItemDalFilter) this.parseBaseEntityToDalFilter(feedItemEntityFilter, feedItemDalFilter);
-
-        feedItemDalFilter.setFeedId(feedItemEntityFilter.getFeedId());
-        feedItemDalFilter.setUrl(feedItemEntityFilter.getUrl());
-        feedItemDalFilter.setChecksum(feedItemEntityFilter.getChecksum());
-        feedItemDalFilter.setApproved(feedItemEntityFilter.getApproved());
-        feedItemDalFilter.setReposted(feedItemEntityFilter.getReposted());
-        feedItemDalFilter.setViewed(feedItemEntityFilter.getViewed());
-        feedItemDalFilter.setSent(feedItemEntityFilter.getReposted());
-        feedItemDalFilter.setTagNames(feedItemEntityFilter.getTagNames());
-
-        return feedItemDalFilter;
     }
 }

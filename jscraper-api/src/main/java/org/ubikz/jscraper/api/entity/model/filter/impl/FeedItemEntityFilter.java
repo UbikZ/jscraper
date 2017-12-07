@@ -1,10 +1,10 @@
 package org.ubikz.jscraper.api.entity.model.filter.impl;
 
-import org.ubikz.jscraper.api.entity.model.filter.AbstractEntityFilter;
+import org.ubikz.jscraper.api.entity.model.filter.BaseEntityFilter;
 
 import java.util.List;
 
-public class FeedItemEntityFilter extends AbstractEntityFilter {
+public class FeedItemEntityFilter extends BaseEntityFilter {
     private Integer feedId;
     private String url;
     private String checksum;

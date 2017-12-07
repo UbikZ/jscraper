@@ -1,8 +1,8 @@
 package org.ubikz.jscraper.api.dal.model.filter.impl;
 
-import org.ubikz.jscraper.api.dal.model.filter.AbstractDalFilter;
+import org.ubikz.jscraper.api.dal.model.filter.BaseDalFilter;
 
-public class UserDalFilter extends AbstractDalFilter {
+public class UserDalFilter extends BaseDalFilter {
     private String username;
     private String password;
     private String email;

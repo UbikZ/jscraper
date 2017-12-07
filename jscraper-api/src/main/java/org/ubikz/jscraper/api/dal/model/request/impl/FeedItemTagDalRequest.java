@@ -1,8 +1,8 @@
 package org.ubikz.jscraper.api.dal.model.request.impl;
 
-import org.ubikz.jscraper.api.dal.model.request.AbstractDalRequest;
+import org.ubikz.jscraper.api.dal.model.request.BaseDalRequest;
 
-public class FeedItemTagDalRequest extends AbstractDalRequest {
+public class FeedItemTagDalRequest extends BaseDalRequest {
     private Integer feedItemId;
     private Integer tagId;
 

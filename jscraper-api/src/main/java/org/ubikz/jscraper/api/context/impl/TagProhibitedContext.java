@@ -19,22 +19,5 @@ public class TagProhibitedContext extends BaseContext {
         this.service = tagProhibitedService;
         this.serviceRequest = new TagProhibitedServiceRequest();
         this.serviceFilter = new TagProhibitedServiceFilter();
-        this.filterBody = new TagProhibitedFilterBody();
-
-        CREATED = 60;
-        UPDATED = 61;
-        GET_ONE = 62;
-        GET_ALL = 63;
-        DELETE = 64;
-    }
-
-    @Override
-    protected BaseServiceRequest parseRequest(BaseRequestBody data, BaseServiceRequest request) {
-        return parseBaseRequest(data, request);
-    }
-
-    @Override
-    protected BaseServiceFilter parseFilter(BaseFilterBody data, BaseServiceFilter filter) throws Exception {
-        return parseBaseFilter(data, filter);
     }
 }
