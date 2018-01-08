@@ -1,9 +1,8 @@
 package org.ubikz.jscraper.reference.table.field;
 
-import org.ubikz.jscraper.reference.BaseReference;
-import org.ubikz.jscraper.reference.IReference;
+import org.ubikz.jscraper.database.reference.IFieldReference;
 
-public enum CommonReference implements IReference<CommonReference> {
+public enum CommonReference implements IFieldReference {
     ID("id"),
     DATE("date"),
     ENABLED("enabled");
@@ -16,10 +15,5 @@ public enum CommonReference implements IReference<CommonReference> {
 
     public String get() {
         return name;
-    }
-
-    @Override
-    public CommonReference getFromValue(String value) {
-        return new BaseReference<CommonReference>().getFromValue(values(), value);
     }
 }

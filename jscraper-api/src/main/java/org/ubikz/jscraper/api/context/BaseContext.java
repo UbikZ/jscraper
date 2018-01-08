@@ -49,12 +49,13 @@ public abstract class BaseContext<S extends BaseService, R extends BaseServiceRe
 
     public <T extends BaseFilterBody> ListResultMessage getAll(T filter) {
         parseFilter(filter);
+
         return toFilterListResult(service::getAll, count(filter));
     }
 
     public <T extends BaseFilterBody> int count(T filter) {
         parseFilter(filter);
-        
+
         return service.count(serviceFilter);
     }
 
@@ -106,7 +107,7 @@ public abstract class BaseContext<S extends BaseService, R extends BaseServiceRe
         return singleResult(function.apply(serviceRequest), status);
     }
 
-    private ListResultMessage listResult(List<Object> dataList, int total, HttpStatus status) {
+    protected ListResultMessage listResult(List<Object> dataList, int total, HttpStatus status) {
         return new ListResultMessage()
                 .setData(dataList)
                 .setTotal(total)
@@ -114,7 +115,7 @@ public abstract class BaseContext<S extends BaseService, R extends BaseServiceRe
                 .setSize(dataList.size());
     }
 
-    private SingleResultMessage singleResult(Object data, HttpStatus status) {
+    protected SingleResultMessage singleResult(Object data, HttpStatus status) {
         return new SingleResultMessage()
                 .setData(data)
                 .setStatus(status.value())

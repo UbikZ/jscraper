@@ -1,9 +1,8 @@
 package org.ubikz.jscraper.reference.table.field;
 
-import org.ubikz.jscraper.reference.BaseReference;
-import org.ubikz.jscraper.reference.IReference;
+import org.ubikz.jscraper.database.reference.IFieldReference;
 
-public enum TagReference implements IReference<TagReference> {
+public enum TagReference implements IFieldReference {
     LABEL("label"),
     URL("url");
 
@@ -15,10 +14,5 @@ public enum TagReference implements IReference<TagReference> {
 
     public String get() {
         return name;
-    }
-
-    @Override
-    public TagReference getFromValue(String value) {
-        return new BaseReference<TagReference>().getFromValue(values(), value);
     }
 }

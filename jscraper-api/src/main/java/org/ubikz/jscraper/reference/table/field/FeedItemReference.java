@@ -1,9 +1,8 @@
 package org.ubikz.jscraper.reference.table.field;
 
-import org.ubikz.jscraper.reference.BaseReference;
-import org.ubikz.jscraper.reference.IReference;
+import org.ubikz.jscraper.database.reference.IFieldReference;
 
-public enum FeedItemReference implements IReference<FeedItemReference> {
+public enum FeedItemReference implements IFieldReference {
     LABEL("label"),
     URL("url"),
     COMMENT("comment"),
@@ -23,10 +22,5 @@ public enum FeedItemReference implements IReference<FeedItemReference> {
 
     public String get() {
         return name;
-    }
-
-    @Override
-    public FeedItemReference getFromValue(String value) {
-        return new BaseReference<FeedItemReference>().getFromValue(values(), value);
     }
 }

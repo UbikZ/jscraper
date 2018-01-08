@@ -49,15 +49,18 @@ public class FeedItemEntity extends BaseEntity<FeedItemDal, FeedItemDalRequest, 
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends BaseEntityRequest> List<FeedItemDto> createAll(List<T> requestList) {
-        parseListRequest(requestList);
-        List<FeedItemDto> list = helper.getDtoListFromDal(dal.createAll(dalRequest), "id");
+        List<FeedItemDto> list = helper.getDtoListFromDal(dal.createAll(parseListRequest(requestList)), "id");
 
         FeedItemEntityFilter filter = new FeedItemEntityFilter();
         filter.setIdList(list.stream().map(BaseDto::getId).collect(Collectors.toList()));
 
         if (filter.getIdList() != null && filter.getIdList().size() > 0) {
-            dal.createTags(parseListEntityToTagDalRequest(getAllMappedBy(filter, "url"), requestList));
+            dal.createTags(parseListEntityToTagDalRequest(
+                    getAllMappedBy(filter, "url"),
+                    (List<FeedItemEntityRequest>) requestList)
+            );
         }
 
         return list;
@@ -124,7 +127,8 @@ public class FeedItemEntity extends BaseEntity<FeedItemDal, FeedItemDalRequest, 
     }
 
     @Override
-    protected void computeLoading(Map<Object, FeedItemDto> dtoList) {}
+    protected void computeLoading(Map<Object, FeedItemDto> dtoList) {
+    }
 
     @Override
     protected <T extends BaseEntityRequest> void parseRequest(T request) {

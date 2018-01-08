@@ -20,10 +20,6 @@ public class RssEntry {
         this.entry = entry;
     }
 
-    /**
-     * @param prohibitedTags
-     * @return
-     */
     public List<String> buildTagList(List<String> prohibitedTags) {
         List<String> titleTagList = new ArrayList<>();
         List<String> categoryTagList = new ArrayList<>();
@@ -51,11 +47,7 @@ public class RssEntry {
         return Stream.concat(titleTagList.stream(), categoryTagList.stream()).collect(Collectors.toList());
     }
 
-    /**
-     * @return
-     * @throws Exception
-     */
-    public List<String> getPictureLinks(String regex) throws Exception {
+    public List<String> getPictureLinks(String regex) {
         List<String> links = new ArrayList<>();
         for (SyndContent entryContent : this.entry.getContents()) {
             HtmlParser htmlParser = new HtmlParser(entryContent.getValue());

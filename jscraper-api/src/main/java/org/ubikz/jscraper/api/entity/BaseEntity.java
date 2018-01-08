@@ -32,8 +32,10 @@ public abstract class BaseEntity<V extends BaseDal, R extends BaseDalRequest, F 
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends BaseEntityFilter> int count(T filter) {
         parseFilter(filter);
+
         return dal.count(dalFilter);
     }
 
@@ -49,9 +51,10 @@ public abstract class BaseEntity<V extends BaseDal, R extends BaseDalRequest, F 
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends BaseEntityFilter> D get(T filter) {
         parseFilter(filter);
-        D result = helper.getDtoFromDal(dal.getOne(dalFilter));
+        D result = (D) helper.getDtoFromDal(dal.getOne(dalFilter));
 
         if (!filter.isLazy()) {
             computeLoading(Collections.singletonList(result));
@@ -62,6 +65,7 @@ public abstract class BaseEntity<V extends BaseDal, R extends BaseDalRequest, F 
 
     public <T extends BaseEntityRequest> int create(T request) {
         parseRequest(request);
+
         return dal.create(dalRequest);
     }
 
@@ -72,11 +76,13 @@ public abstract class BaseEntity<V extends BaseDal, R extends BaseDalRequest, F 
 
     public <T extends BaseEntityRequest> int update(T request) {
         parseRequest(request);
+
         return dal.edit(dalRequest);
     }
 
     public <T extends BaseEntityFilter> int delete(T filter) {
         parseFilter(filter);
+
         return dal.delete(dalFilter);
     }
 
@@ -90,6 +96,7 @@ public abstract class BaseEntity<V extends BaseDal, R extends BaseDalRequest, F 
 
     private <T extends BaseEntityRequest> R parseRequestR(T request) {
         parseRequest(request);
+
         return dalRequest;
     }
 

@@ -2,15 +2,17 @@ package org.ubikz.jscraper.api.dal.impl;
 
 import org.springframework.stereotype.Repository;
 import org.ubikz.jscraper.api.dal.BaseDal;
-import org.ubikz.jscraper.api.dal.model.filter.BaseDalFilter;
 import org.ubikz.jscraper.api.dal.model.filter.impl.FeedItemDalFilter;
-import org.ubikz.jscraper.api.dal.model.request.BaseDalRequest;
 import org.ubikz.jscraper.api.dal.model.request.impl.FeedItemDalRequest;
 import org.ubikz.jscraper.api.dal.model.request.impl.FeedItemTagDalRequest;
 import org.ubikz.jscraper.database.DatabaseService;
-import org.ubikz.jscraper.database.querybuilder.AbstractQuery;
-import org.ubikz.jscraper.database.querybuilder.QueryBuilderService;
 import org.ubikz.jscraper.database.querybuilder.impl.Select;
+import org.ubikz.jscraper.database.reference.IFieldReference;
+import org.ubikz.jscraper.database.reference.impl.OperatorReference;
+import org.ubikz.jscraper.reference.table.TableReference;
+import org.ubikz.jscraper.reference.table.field.CommonReference;
+import org.ubikz.jscraper.reference.table.field.FeedItemReference;
+import org.ubikz.jscraper.reference.table.field.FeedItemTagReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,92 +20,61 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class FeedItemDal extends BaseDal {
+public class FeedItemDal extends BaseDal<FeedItemDalRequest, FeedItemDalFilter> {
+    private static final String ALIAS_FI_ID = "fi.id";
+    private static final String ALIAS_FIT_FEED_ITEM_ID = "fit.feed_item_id";
 
-    public static final String COLUMN_FEED_ID = "feed_id";
-    public static final String COLUMN_URL = "url";
-    public static final String COLUMN_COMMENT = "comment";
-    public static final String COLUMN_CHECKSUM = "checksum";
-    public static final String COLUMN_VIEWED = "viewed";
-    public static final String COLUMN_APPROVED = "approved";
-    public static final String COLUMN_REPOSTED = "reposted";
-    public static final String COLUMN_SENT = "sent";
-    public static final String ON_FI_ID_FIT_FEED_ITEM_ID = "fi.id = fit.feed_item_id";
-    public static final String ALIAS_FI_ID = "fi.id";
-    public static final String TABLE_FEED_ITEM_TAG = "feed_item_tag";
-
-    /**
-     * @param databaseService
-     */
     public FeedItemDal(DatabaseService databaseService) {
         super(databaseService);
-        this.tableName = "feed_item";
+        this.table = TableReference.FEED_ITEM;
     }
 
-    /**
-     * @param requestList
-     * @return
-     */
     @Override
-    public List<Object> createAll(List<BaseDalRequest> requestList) {
-        QueryBuilderService qb = new QueryBuilderService();
-        AbstractQuery insert = qb
-                .insert(this.tableName)
-                .values(this.parseRequestList(requestList, true))
+    public List<Object> createAll(List<FeedItemDalRequest> requestList) {
+        return ds.insertMultiple(insert -> insert
+                .table(table)
+                .values(parseRequestList(requestList))
                 .onConflict()
                 .onDoNothing()
-                .returning("id");
-
-        return this.insertMultiple(insert);
+                .returning(CommonReference.ID)
+        );
     }
 
     @Override
-    protected Select getBaseSelect(BaseDalFilter filter, boolean isCount) {
-        QueryBuilderService qb = new QueryBuilderService();
-        AbstractQuery select = qb
-                .select("fi.*")
-                .from(this.tableName, "fi")
-                .aliases(new HashMap<String, String>() {{
-                    put("id", ALIAS_FI_ID);
-                    put("date", "fi.date");
-                }});
+    protected Select getBaseSelect(FeedItemDalFilter filter, boolean isCount) {
+        Select select = new Select()
+                .column("fi.*")
+                .from(table, "fi");
 
-        this.parseFilter(filter, select, isCount);
-        return (Select) select;
+//                .alias(CommonReference.ID, ALIAS_FI_ID)
+//                .alias(CommonReference.DATE, "fi.date");
+
+        parseFilter(filter, select, isCount);
+
+        return select;
     }
 
-    /**
-     * @param requestList
-     * @return
-     */
     public int createTags(List<FeedItemTagDalRequest> requestList) {
-        QueryBuilderService qb = new QueryBuilderService();
-
-        AbstractQuery insert = qb
-                .insert(TABLE_FEED_ITEM_TAG)
-                .values(this.parseFeedItemTagRequest(requestList))
+        return ds.insert(insert -> insert
+                .table(TableReference.FEED_ITEM_TAG)
+                .values(parseFeedItemTagRequest(requestList))
                 .onConflict()
-                .onDoNothing();
-
-        return this.update(insert);
+                .onDoNothing()
+        );
     }
 
-    /**
-     * @param requestList
-     * @return
-     */
-    private List<Map<String, Object>> parseFeedItemTagRequest(List<FeedItemTagDalRequest> requestList) {
-        List<Map<String, Object>> valuesList = new ArrayList<>();
+    private List<Map<IFieldReference, Object>> parseFeedItemTagRequest(List<FeedItemTagDalRequest> requestList) {
+        List<Map<IFieldReference, Object>> valuesList = new ArrayList<>();
 
         for (FeedItemTagDalRequest request : requestList) {
-            Map<String, Object> values = new HashMap<>();
+            Map<IFieldReference, Object> values = new HashMap<>();
 
             if (request.getFeedItemId() != null) {
-                values.put("feed_item_id", request.getFeedItemId());
+                values.put(FeedItemTagReference.FEED_ITEM_ID, request.getFeedItemId());
             }
 
             if (request.getTagId() != null) {
-                values.put("tag_id", request.getTagId());
+                values.put(FeedItemTagReference.TAG_ID, request.getTagId());
             }
 
             valuesList.add(values);
@@ -112,110 +83,94 @@ public class FeedItemDal extends BaseDal {
         return valuesList;
     }
 
-    /**
-     * @param request
-     * @param created
-     * @return
-     */
     @Override
-    protected Map<String, Object> parseRequest(BaseDalRequest request, boolean created) {
-        FeedItemDalRequest feedItemDalRequest = (FeedItemDalRequest) request;
-        Map<String, Object> values = super.parseRequest(feedItemDalRequest, created);
+    protected Map<IFieldReference, Object> parseRequest(FeedItemDalRequest request) {
+        Map<IFieldReference, Object> values = super.parseRequest(request);
 
-        if (feedItemDalRequest.getFeedId() != null) {
-            values.put(COLUMN_FEED_ID, feedItemDalRequest.getFeedId());
+        if (request.getFeedId() != null) {
+            values.put(FeedItemReference.FEED_ID, request.getFeedId());
         }
 
-        if (feedItemDalRequest.getUrl() != null) {
-            values.put(COLUMN_URL, feedItemDalRequest.getUrl());
+        if (request.getUrl() != null) {
+            values.put(FeedItemReference.URL, request.getUrl());
         }
 
-        if (feedItemDalRequest.getComment() != null) {
-            values.put(COLUMN_COMMENT, feedItemDalRequest.getComment());
+        if (request.getComment() != null) {
+            values.put(FeedItemReference.COMMENT, request.getComment());
         }
 
-        if (feedItemDalRequest.getChecksum() != null) {
-            values.put(COLUMN_CHECKSUM, feedItemDalRequest.getChecksum());
+        if (request.getChecksum() != null) {
+            values.put(FeedItemReference.CHECKSUM, request.getChecksum());
         }
 
-        if (feedItemDalRequest.getViewed() != null) {
-            values.put(COLUMN_VIEWED, feedItemDalRequest.getViewed());
+        if (request.getViewed() != null) {
+            values.put(FeedItemReference.VIEWED, request.getViewed());
         }
 
-        if (feedItemDalRequest.getApproved() != null) {
-            values.put(COLUMN_APPROVED, feedItemDalRequest.getApproved());
+        if (request.getApproved() != null) {
+            values.put(FeedItemReference.APPROVED, request.getApproved());
         }
 
-        if (feedItemDalRequest.getReposted() != null) {
-            values.put(COLUMN_REPOSTED, feedItemDalRequest.getReposted());
+        if (request.getReposted() != null) {
+            values.put(FeedItemReference.REPOSTED, request.getReposted());
         }
 
-        if (feedItemDalRequest.getSent() != null) {
-            values.put(COLUMN_SENT, feedItemDalRequest.getSent());
+        if (request.getSent() != null) {
+            values.put(FeedItemReference.SENT, request.getSent());
         }
 
         return values;
     }
 
-    /**
-     * @param filter
-     * @return
-     */
     @Override
-    protected void parseFilter(BaseDalFilter filter, AbstractQuery aSelect, boolean isCount) {
-        Select select = (Select) aSelect;
-        FeedItemDalFilter feedItemDalFilter = (FeedItemDalFilter) filter;
-        super.parseFilter(feedItemDalFilter, select, isCount);
+    protected void parseFilter(FeedItemDalFilter filter, Select select, boolean isCount) {
+        super.parseFilter(filter, select, isCount);
 
         if (!isCount) {
-            select.addColumn("string_agg(DISTINCT fit.tag_id::character varying, ',') AS tags")
+            select.column("string_agg(DISTINCT fit.tag_id::character varying, ',') AS tags")
                     .orderBy(ALIAS_FI_ID)
                     .groupBy(ALIAS_FI_ID);
         } else {
-            select.columns("COUNT(DISTINCT fi.id)");
+            select.column("COUNT(DISTINCT fi.id)");
         }
 
-        if (feedItemDalFilter.getTagNames() != null && feedItemDalFilter.getTagNames().size() > 0) {
-            select.join(TABLE_FEED_ITEM_TAG, "fit", ON_FI_ID_FIT_FEED_ITEM_ID)
-                    .join("tag", "t", "fit.tag_id = t.id");
+        if (filter.getTagNames() != null && filter.getTagNames().size() > 0) {
+            select.join(j -> j.set(TableReference.FEED_ITEM_TAG, "fit", ALIAS_FI_ID, ALIAS_FIT_FEED_ITEM_ID))
+                    .join(j -> j.set(TableReference.TAG, "t", "fit.tag_id", "t.id"));
 
-            for (String tag : feedItemDalFilter.getTagNames()) {
-                select.orWhere("t.label", "LIKE", "%" + tag + "%");
+            for (String tag : filter.getTagNames()) {
+                select.where(w -> w.or(p -> p.set("t.label", OperatorReference.LIKE, "%" + tag + "%")));
             }
         } else {
-            select.joinLeft(TABLE_FEED_ITEM_TAG, "fit", ON_FI_ID_FIT_FEED_ITEM_ID);
+            select.joinLeft(j -> j.set(TableReference.FEED_ITEM_TAG, "fit", ALIAS_FI_ID, ALIAS_FIT_FEED_ITEM_ID));
         }
 
-        if (feedItemDalFilter.getUrl() != null) {
-            select.where(COLUMN_URL, feedItemDalFilter.getUrl());
+        if (filter.getUrl() != null) {
+            select.where(w -> w.and(p -> p.set(FeedItemReference.URL, filter.getUrl())));
         }
 
-        if (feedItemDalFilter.getFeedId() != null) {
-            select.where(COLUMN_FEED_ID, feedItemDalFilter.getUrl());
+        if (filter.getFeedId() != null) {
+            select.where(w -> w.and(p -> p.set(FeedItemReference.FEED_ID, filter.getFeedId())));
         }
 
-        if (feedItemDalFilter.getUrl() != null) {
-            select.where(COLUMN_URL, feedItemDalFilter.getUrl());
+        if (filter.getChecksum() != null) {
+            select.where(w -> w.and(p -> p.set(FeedItemReference.CHECKSUM, filter.getChecksum())));
         }
 
-        if (feedItemDalFilter.getChecksum() != null) {
-            select.where(COLUMN_CHECKSUM, feedItemDalFilter.getChecksum());
+        if (filter.getViewed() != null) {
+            select.where(w -> w.and(p -> p.set(FeedItemReference.VIEWED, filter.getViewed())));
         }
 
-        if (feedItemDalFilter.getViewed() != null) {
-            select.where(COLUMN_VIEWED, feedItemDalFilter.getViewed());
+        if (filter.getApproved() != null) {
+            select.where(w -> w.and(p -> p.set(FeedItemReference.APPROVED, filter.getApproved())));
         }
 
-        if (feedItemDalFilter.getApproved() != null) {
-            select.where(COLUMN_APPROVED, feedItemDalFilter.getApproved());
+        if (filter.getReposted() != null) {
+            select.where(w -> w.and(p -> p.set(FeedItemReference.REPOSTED, filter.getReposted())));
         }
 
-        if (feedItemDalFilter.getReposted() != null) {
-            select.where(COLUMN_REPOSTED, feedItemDalFilter.getReposted());
-        }
-
-        if (feedItemDalFilter.getSent() != null) {
-            select.where(COLUMN_SENT, feedItemDalFilter.getSent());
+        if (filter.getSent() != null) {
+            select.where(w -> w.and(p -> p.set(FeedItemReference.SENT, filter.getSent())));
         }
     }
 }

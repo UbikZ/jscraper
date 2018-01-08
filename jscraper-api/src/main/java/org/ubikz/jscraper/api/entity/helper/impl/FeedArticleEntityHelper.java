@@ -7,15 +7,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class FeedArticleEntityHelper extends BaseEntityHelper {
+public class FeedArticleEntityHelper extends BaseEntityHelper<FeedArticleDto> {
+    private static final String COLUMN_URL = "url";
+    private static final String COLUMN_LABEL = "label";
+    private static final String COLUMN_AUTHOR = "author";
+    private static final String COLUMN_DATE = "date";
+    private static final String COLUMN_TAGS = "tags";
+    private static final String COLUMN_PICTURES = "pictures";
 
-    public static final String COLUMN_URL = "url";
-    public static final String COLUMN_LABEL = "label";
-    public static final String COLUMN_AUTHOR = "author";
-    public static final String COLUMN_DATE = "date";
-    public static final String COLUMN_TAGS = "tags";
-    public static final String COLUMN_PICTURES = "pictures";
-
+    @SuppressWarnings("unchecked")
     public FeedArticleDto getDtoFromDal(Map<String, Object> data) {
         FeedArticleDto dto = new FeedArticleDto();
 

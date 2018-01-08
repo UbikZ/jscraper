@@ -1,9 +1,8 @@
 package org.ubikz.jscraper.reference.table.field;
 
-import org.ubikz.jscraper.reference.BaseReference;
-import org.ubikz.jscraper.reference.IReference;
+import org.ubikz.jscraper.database.reference.IFieldReference;
 
-public enum UserReference implements IReference<UserReference> {
+public enum UserReference implements IFieldReference {
     USERNAME("username"),
     FIRSTNAME("firstname"),
     LASTNAME("lastname"),
@@ -19,10 +18,5 @@ public enum UserReference implements IReference<UserReference> {
 
     public String get() {
         return name;
-    }
-
-    @Override
-    public UserReference getFromValue(String value) {
-        return new BaseReference<UserReference>().getFromValue(values(), value);
     }
 }

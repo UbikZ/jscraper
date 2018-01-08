@@ -9,11 +9,18 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Component;
 import org.ubikz.jscraper.database.model.DatabaseProperties;
-import org.ubikz.jscraper.database.querybuilder.AbstractQuery;
+import org.ubikz.jscraper.database.querybuilder.Query;
+import org.ubikz.jscraper.database.querybuilder.impl.Delete;
+import org.ubikz.jscraper.database.querybuilder.impl.Insert;
+import org.ubikz.jscraper.database.querybuilder.impl.Select;
+import org.ubikz.jscraper.database.querybuilder.impl.Update;
+import org.ubikz.jscraper.exception.ApplicativeException;
 
 import javax.sql.DataSource;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 @Component
 public class DatabaseService {
@@ -44,66 +51,54 @@ public class DatabaseService {
         return dataSource;
     }
 
-    public int insert(AbstractQuery request) {
-        request.build();
+    @SuppressWarnings("unchecked")
+    private <T extends Query, R> R consume(Consumer<T> queryConsumer, BiFunction<String, Map<String, ?>, R> paramFunction, Class<T> clazz) {
+        T query;
 
-        logger.debug("# Insert SQL > " + request.getSQL());
-        logger.debug("# Insert Params > " + request.getParameters());
+        try {
+            query = clazz.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new ApplicativeException(e);
+        }
 
-        return jdbcTemplate.queryForObject(request.getSQL(), request.getParameters(), Integer.class);
+        queryConsumer.accept(query);
+
+        String sql = query.toSQL();
+        Map<String, ?> parameters = query.getParameters();
+
+        logger.debug(String.format("# %s SQL > %s", clazz.getName(), sql));
+        logger.debug(String.format("# %s Params > %s", clazz.getName(), parameters));
+
+        return paramFunction.apply(sql, parameters);
     }
 
-    public List<Object> insertMultiple(AbstractQuery request) {
-        request.build();
-
-        logger.debug("# Insert Multiple SQL > " + request.getSQL());
-        logger.debug("# Insert Multiple Params > " + request.getParameters());
-
-        return jdbcTemplate.queryForList(request.getSQL(), request.getParameters(), Object.class);
+    public int insert(Consumer<Insert> consumer) {
+        return consume(consumer, (sql, param) -> jdbcTemplate.queryForObject(sql, param, Integer.class), Insert.class);
     }
 
-    public int update(AbstractQuery request) {
-        request.build();
-
-        logger.debug("# Update SQL > " + request.getSQL());
-        logger.debug("# Update Params > " + request.getParameters());
-
-        return jdbcTemplate.update(request.getSQL(), request.getParameters());
+    public List<Object> insertMultiple(Consumer<Insert> consumer) {
+        return consume(consumer, (sql, param) -> jdbcTemplate.queryForList(sql, param, Object.class), Insert.class);
     }
 
-    public List<Map<String, Object>> find(AbstractQuery query) {
-        query.build();
-
-        logger.debug("# Select All SQL > " + query.getSQL());
-        logger.debug("# Select All Params > " + query.getParameters());
-
-        return jdbcTemplate.queryForList(query.getSQL(), query.getParameters());
+    public int update(Consumer<Update> consumer) {
+        return consume(consumer, (sql, param) -> jdbcTemplate.update(sql, param), Update.class);
     }
 
-    public Map<String, Object> findOne(AbstractQuery query) {
-        query.build();
+    public List<Map<String, Object>> find(Consumer<Select> consumer) {
+        return consume(consumer, (sql, param) -> jdbcTemplate.queryForList(sql, param), Select.class);
 
-        logger.debug("# Select SQL > " + query.getSQL());
-        logger.debug("# Select Params > " + query.getParameters());
-
-        return jdbcTemplate.queryForMap(query.getSQL(), query.getParameters());
     }
 
-    public int delete(AbstractQuery request) {
-        request.build();
+    public Map<String, Object> findOne(Consumer<Select> consumer) {
+        return consume(consumer, (sql, param) -> jdbcTemplate.queryForMap(sql, param), Select.class);
 
-        logger.debug("# Delete SQL > " + request.getSQL());
-        logger.debug("# Delete Params > " + request.getParameters());
-
-        return jdbcTemplate.update(request.getSQL(), request.getParameters());
     }
 
-    public int count(AbstractQuery query) {
-        query.build();
+    public int delete(Consumer<Delete> consumer) {
+        return consume(consumer, (sql, param) -> jdbcTemplate.update(sql, param), Delete.class);
+    }
 
-        logger.debug("# Count SQL > " + query.getSQL());
-        logger.debug("# Count Params > " + query.getParameters());
-
-        return jdbcTemplate.queryForObject(query.getSQL(), query.getParameters(), Integer.class);
+    public int count(Consumer<Select> consumer) {
+        return consume(consumer, (sql, param) -> jdbcTemplate.queryForObject(sql, param, Integer.class), Select.class);
     }
 }

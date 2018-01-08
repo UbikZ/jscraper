@@ -4,119 +4,92 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.ubikz.jscraper.api.dal.BaseDal;
-import org.ubikz.jscraper.api.dal.model.filter.BaseDalFilter;
 import org.ubikz.jscraper.api.dal.model.filter.impl.UserDalFilter;
-import org.ubikz.jscraper.api.dal.model.request.BaseDalRequest;
 import org.ubikz.jscraper.api.dal.model.request.impl.UserDalRequest;
 import org.ubikz.jscraper.database.DatabaseService;
-import org.ubikz.jscraper.database.querybuilder.AbstractQuery;
+import org.ubikz.jscraper.database.querybuilder.impl.Select;
+import org.ubikz.jscraper.database.reference.IFieldReference;
+import org.ubikz.jscraper.reference.table.TableReference;
+import org.ubikz.jscraper.reference.table.field.UserReference;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Repository
-public class UserDal extends BaseDal {
-    public static final String COLUMN_USERNAME = "username";
-    public static final String COLUMN_EMAIL = "email";
-    public static final String COLUMN_PASSWORD = "password";
-    public static final String COLUMN_FIRSTNAME = "firstname";
-    public static final String COLUMN_LASTNAME = "lastname";
-    public static final String COLUMN_IS_ADMIN = "is_admin";
-    protected final Logger logger = LoggerFactory.getLogger(UserDal.class);
+public class UserDal extends BaseDal<UserDalRequest, UserDalFilter> {
+    private final Logger logger = LoggerFactory.getLogger(UserDal.class);
 
-    /**
-     * @param databaseService
-     */
     public UserDal(DatabaseService databaseService) {
         super(databaseService);
-        this.tableName = "public.user";
+        this.table = TableReference.USER;
     }
 
-    /**
-     * @param request
-     * @param created
-     * @return
-     */
     @Override
-    protected Map<String, Object> parseRequest(BaseDalRequest request, boolean created) {
-        UserDalRequest userDalRequest = (UserDalRequest) request;
-        Map<String, Object> values = super.parseRequest(userDalRequest, created);
+    protected Map<IFieldReference, Object> parseRequest(UserDalRequest request) {
+        Map<IFieldReference, Object> values = super.parseRequest(request);
 
-        if (userDalRequest.getUsername() != null) {
-            values.put(COLUMN_USERNAME, userDalRequest.getUsername());
+        if (request.getUsername() != null) {
+            values.put(UserReference.USERNAME, request.getUsername());
         }
 
-        if (userDalRequest.getEmail() != null) {
-            values.put(COLUMN_EMAIL, userDalRequest.getEmail());
+        if (request.getEmail() != null) {
+            values.put(UserReference.EMAIL, request.getEmail());
         }
 
-        if (userDalRequest.getPassword() != null) {
+        if (request.getPassword() != null) {
             try {
-                values.put(COLUMN_PASSWORD, this.hashPassword(userDalRequest.getPassword()));
+                values.put(UserReference.PASSWORD, hashPassword(request.getPassword()));
             } catch (NoSuchAlgorithmException e) {
                 logger.error(String.format("Request : Hash of password failed : %s", e));
             }
         }
 
-        if (userDalRequest.getFirstname() != null) {
-            values.put(COLUMN_FIRSTNAME, userDalRequest.getFirstname());
+        if (request.getFirstname() != null) {
+            values.put(UserReference.FIRSTNAME, request.getFirstname());
         }
 
-        if (userDalRequest.getLastname() != null) {
-            values.put(COLUMN_LASTNAME, userDalRequest.getLastname());
+        if (request.getLastname() != null) {
+            values.put(UserReference.LASTNAME, request.getLastname());
         }
 
-        if (userDalRequest.getAdmin() != null) {
-            values.put(COLUMN_IS_ADMIN, userDalRequest.getAdmin());
+        if (request.getAdmin() != null) {
+            values.put(UserReference.IS_ADMIN, request.getAdmin());
         }
 
         return values;
     }
 
-    /**
-     * @param filter
-     * @return
-     */
     @Override
-    protected void parseFilter(BaseDalFilter filter, AbstractQuery select, boolean isCount) {
-        UserDalFilter userDalFilter = (UserDalFilter) filter;
-        super.parseFilter(userDalFilter, select, isCount);
+    protected void parseFilter(UserDalFilter filter, Select select, boolean isCount) {
+        super.parseFilter(filter, select, isCount);
 
-        if (userDalFilter.getUsername() != null) {
-            select.where(COLUMN_USERNAME, userDalFilter.getUsername());
+        if (filter.getUsername() != null) {
+            select.where(w -> w.and(p -> p.set(UserReference.USERNAME, filter.getUsername())));
         }
 
-        if (userDalFilter.getEmail() != null) {
-            select.where(COLUMN_EMAIL, userDalFilter.getEmail());
+        if (filter.getEmail() != null) {
+            select.where(w -> w.and(p -> p.set(UserReference.EMAIL, filter.getEmail())));
         }
 
-        if (userDalFilter.getPassword() != null) {
-            String password = null;
+        if (filter.getPassword() != null) {
+            AtomicReference<String> password = new AtomicReference<>();
             try {
-                password = this.hashPassword(userDalFilter.getPassword());
+                password.set(hashPassword(filter.getPassword()));
             } catch (NoSuchAlgorithmException e) {
                 logger.error(String.format("Filter : Hash of password failed : %s", e));
             } finally {
-                select.where(COLUMN_PASSWORD, password);
+                select.where(w -> w.and(p -> p.set(UserReference.PASSWORD, password.get())));
             }
         }
     }
 
-    /**
-     * @param password
-     * @return
-     * @throws NoSuchAlgorithmException
-     */
     private String hashPassword(String password) throws NoSuchAlgorithmException {
-        return this.bytesToHex(MessageDigest.getInstance("SHA-256").digest(password.getBytes(StandardCharsets.UTF_8)));
+        return bytesToHex(MessageDigest.getInstance("SHA-256").digest(password.getBytes(StandardCharsets.UTF_8)));
     }
 
-    /**
-     * @param hash
-     * @return
-     */
     private String bytesToHex(byte[] hash) {
         StringBuilder hexString = new StringBuilder();
         for (byte aHash : hash) {
@@ -126,6 +99,7 @@ public class UserDal extends BaseDal {
             }
             hexString.append(hex);
         }
+
         return hexString.toString();
     }
 }

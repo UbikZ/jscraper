@@ -1,5 +1,6 @@
 package org.ubikz.jscraper.parser.html;
 
+import com.google.common.base.Strings;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -19,7 +20,7 @@ public class HtmlParser {
         this.document = Jsoup.connect(url.toString()).get();
     }
 
-    public HtmlParser(String content) throws IOException {
+    public HtmlParser(String content) {
         this.content = content;
         this.document = Jsoup.parse(content);
     }
@@ -37,7 +38,8 @@ public class HtmlParser {
                 .stream()
                 .filter(element -> {
                     String attr = element.attr(ATTR_HREF);
-                    return attr != null && !attr.matches(regex);
+
+                    return !Strings.isNullOrEmpty(attr) && !attr.matches(regex);
                 })
                 .map(element -> element.attr(ATTR_HREF))
                 .collect(Collectors.toList());

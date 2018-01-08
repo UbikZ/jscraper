@@ -7,7 +7,6 @@ import org.ubikz.jscraper.api.dal.impl.FeedTypeDal;
 import org.ubikz.jscraper.api.dal.model.filter.impl.FeedDalFilter;
 import org.ubikz.jscraper.api.dal.model.filter.impl.FeedTypeDalFilter;
 import org.ubikz.jscraper.api.dal.model.request.impl.FeedDalRequest;
-import org.ubikz.jscraper.api.dto.BaseDto;
 import org.ubikz.jscraper.api.dto.impl.FeedArticleDto;
 import org.ubikz.jscraper.api.dto.impl.FeedDto;
 import org.ubikz.jscraper.api.dto.impl.FeedTypeDto;
@@ -41,11 +40,10 @@ public class FeedEntity extends BaseEntity<FeedDal, FeedDalRequest, FeedDalFilte
         this.feedArticleHelper = new FeedArticleEntityHelper();
     }
 
-    public List<FeedArticleDto> getRssFeedArticleList(FeedEntityFilter filter) {
+    public List<FeedArticleDto> getRssFeedArticleList(FeedEntityFilter filter) throws Exception {
         parseFilter(filter);
-        List<BaseDto> abstractList = feedArticleHelper.getDtoListFromDal(dal.getRssFeedList(dalFilter));
 
-        return abstractList.stream().map(FeedArticleDto.class::cast).collect(Collectors.toList());
+        return feedArticleHelper.getDtoListFromDal(dal.getRssFeedList(dalFilter));
     }
 
     @Override

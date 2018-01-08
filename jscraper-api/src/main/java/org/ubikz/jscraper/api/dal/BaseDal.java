@@ -1,19 +1,18 @@
 package org.ubikz.jscraper.api.dal;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ubikz.jscraper.api.dal.model.filter.BaseDalFilter;
 import org.ubikz.jscraper.api.dal.model.request.BaseDalRequest;
 import org.ubikz.jscraper.database.DatabaseService;
-import org.ubikz.jscraper.database.querybuilder.AbstractQuery;
-import org.ubikz.jscraper.database.querybuilder.QueryBuilderService;
+import org.ubikz.jscraper.database.DatabaseUtil;
 import org.ubikz.jscraper.database.querybuilder.impl.Select;
-import org.ubikz.jscraper.reference.IReference;
+import org.ubikz.jscraper.database.querybuilder.parts.impl.WhereChainPart;
+import org.ubikz.jscraper.database.reference.IFieldReference;
+import org.ubikz.jscraper.database.reference.impl.OperatorReference;
+import org.ubikz.jscraper.reference.table.TableReference;
 import org.ubikz.jscraper.reference.table.field.CommonReference;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,140 +20,127 @@ import java.util.stream.Collectors;
 /**
  *
  */
-public abstract class BaseDal {
-    protected final Logger logger = LoggerFactory.getLogger(BaseDal.class);
-    protected DatabaseService databaseService;
-    protected String tableName;
-    protected String tableIdentifier = "id";
+public abstract class BaseDal<R extends BaseDalRequest, F extends BaseDalFilter> {
+    protected DatabaseService ds;
+    protected DatabaseUtil.Request<IFieldReference> request;
+    protected TableReference table;
 
     @Autowired
-    public BaseDal(DatabaseService databaseService) {
-        this.databaseService = databaseService;
+    public BaseDal(DatabaseService ds) {
+        this.ds = ds;
+        this.request = new DatabaseUtil.Request<>();
     }
 
-
-    public <R extends BaseDalRequest> int create(R request) {
-        QueryBuilderService qb = new QueryBuilderService();
-        AbstractQuery insert = qb.insert(this.tableName).values(this.parseRequest(request)).returning(this.tableIdentifier);
-
-        return databaseService.insert(insert);
+    public int create(R request) {
+        return ds.insert(insert -> insert
+                .table(table)
+                .values(parseRequest(request))
+                .returning(CommonReference.ID)
+        );
     }
 
-    public <R extends BaseDalRequest> int edit(R request) {
-        QueryBuilderService qb = new QueryBuilderService();
-        AbstractQuery update = qb.update(this.tableName).set(this.parseRequest(request)).where(this.tableIdentifier, request.getId());
-
-        return databaseService.update(update);
+    public int edit(R request) {
+        return ds.update(update -> update
+                .table(table)
+                .values(parseRequest(request))
+                .where(w -> w.and(p -> p.set(CommonReference.ID, request.getId())))
+        );
     }
 
-    public int delete(BaseDalFilter filter) {
-        QueryBuilderService qb = new QueryBuilderService();
-        AbstractQuery delete = qb.delete().from(this.tableName).where(this.tableIdentifier, filter.getId());
-
-        return databaseService.delete(delete);
+    public List<Object> createAll(List<R> requestList) {
+        return ds.insertMultiple(insert -> insert
+                .table(table)
+                .values(parseRequestList(requestList))
+                .onConflict()
+                .onDoNothing()
+                .returning(CommonReference.ID)
+        );
     }
 
-    protected Select getBaseSelect(BaseDalFilter filter) {
-        return this.getBaseSelect(filter, false);
+    public int delete(F filter) {
+        return ds.delete(delete -> delete
+                .from(table)
+                .where(w -> w.and(p -> p.set(CommonReference.ID, filter.getId())))
+        );
     }
 
-    protected Select getBaseSelect(BaseDalFilter filter, boolean isCount) {
-        QueryBuilderService qb = new QueryBuilderService();
-        Select select = qb.select().from(this.tableName);
-
-        if (isCount) {
-            select.columns("COUNT(DISTINCT id)");
-        }
-
-        this.parseFilter(filter, select, isCount);
-
-        return select;
+    public int count(F filter) {
+        return ds.count(s -> s = getBaseSelect(filter, true));
     }
 
-    public List<Object> createAll(List<BaseDalRequest> requestList) {
-        QueryBuilderService qb = new QueryBuilderService();
-        AbstractQuery insert = qb.insert(this.tableName).values(this.parseRequestList(requestList, true)).onConflict().onDo("NOTHING").returning("id");
-
-        return this.insertMultiple(insert);
+    public List<Map<String, Object>> getAll(F filter) {
+        return ds.find(s -> s = getBaseSelect(filter));
     }
 
-    public List<Map<String, Object>> getAll(BaseDalFilter filter) {
-        return this.find(this.getBaseSelect(filter));
+    public Map<String, Object> getOne(F filter) {
+        return ds.findOne(s -> s = getBaseSelect(filter));
     }
 
-    public Map<String, Object> getOne(BaseDalFilter filter) {
-        return this.findOne(this.getBaseSelect(filter));
+    protected List<Map<IFieldReference, Object>> parseRequestList(List<R> requestList) {
+        return requestList.stream().map(this::parseRequest).collect(Collectors.toList());
     }
 
-    protected <T extends BaseDalRequest> List<Map<IReference, Object>> parseRequestList(List<T> requestList, boolean created) {
-        return requestList.stream().map(r -> parseRequest(r, created)).collect(Collectors.toList());
+    protected Map<IFieldReference, Object> parseRequest(R request) {
+        return this.request.setDefault()
+                .add(CommonReference.ID, request.getId())
+                .add(CommonReference.ENABLED, request.getEnabled())
+                .get();
     }
 
-    protected <T extends BaseDalRequest> Map<IReference, Object> parseRequest(T request) {
-        return parseRequest(request, true);
+    protected void parseFilter(F filter, Select select) {
+        parseFilter(filter, select, false);
     }
 
-    protected <T extends BaseDalRequest> Map<IReference, Object> parseRequest(T request, boolean created) {
-        Map<IReference, Object> values = new HashMap<>();
+    protected void parseFilter(F filter, Select select, boolean isCount) {
+        WhereChainPart whereClauses = new WhereChainPart();
 
-        if (!created && request.getId() != null) {
-            values.put(CommonReference.ID, request.getId());
-        }
-
-        if (request.getEnabled() != null) {
-            values.put(CommonReference.ENABLED, request.getEnabled());
-        }
-
-        return values;
-    }
-
-    protected <T extends BaseDalFilter> void parseFilter(T filter, AbstractQuery select) {
-        this.parseFilter(filter, select, false);
-    }
-
-    protected <T extends BaseDalFilter> void parseFilter(T filter, AbstractQuery select, boolean isCount) {
         if (filter.getId() != null) {
-            select.where(CommonReference.ID, filter.getId());
+            whereClauses.and(w -> w.set(CommonReference.ID, filter.getId()));
         }
 
         if (filter.getIdList() != null && filter.getIdList().size() > 0) {
-            select.where(COLUMN_ID, "in", filter.getIdList());
-        }
-
-        if (filter.getLabel() != null) {
-            select.where(COLUMN_LABEL, filter.getLabel());
-        }
-
-        if (filter.getSearch() != null) {
-            select.where(COLUMN_LABEL, "LIKE", filter.getSearch() + "%");
+            whereClauses.and(w -> w.set(CommonReference.ID, OperatorReference.IN, filter.getIdList()));
         }
 
         if (filter.getEnabled() != null) {
-            select.where(COLUMN_ENABLED, filter.getEnabled());
+            whereClauses.and(w -> w.set(CommonReference.ENABLED, filter.getEnabled()));
         }
 
         if (filter.getStartDate() != null) {
-            select.where(COLUMN_DATE, ">=", new Timestamp(filter.getStartDate().getTime()));
+            whereClauses.and(w -> w.set(CommonReference.DATE, OperatorReference.GTE, new Timestamp(filter.getStartDate().getTime())));
         }
 
         if (filter.getEndDate() != null) {
-            select.where(COLUMN_DATE, "<=", new Timestamp(
-                    filter.getEndDate().getTime() + (59 + 59 * 60 + 23 * 3600) * 1000
-            ));
+            whereClauses.and(w -> w.set(CommonReference.DATE, OperatorReference.LTE, new Timestamp(filter.getEndDate().getTime() + (59 + 59 * 60 + 23 * 3600) * 1000)));
         }
 
-        if (!isCount && select instanceof Select) {
+        if (!isCount) {
             if (filter.getLimit() != null) {
-                ((Select) select).limit(filter.getLimit());
+                select.limit(filter.getLimit());
             }
 
             if (filter.getOffset() != null) {
-                ((Select) select).offset(filter.getOffset());
+                select.offset(filter.getOffset());
             }
         }
+
+        select.where(w -> w = whereClauses);
     }
 
-    public int count(BaseDalFilter filter) {
-        return this.count(this.getBaseSelect(filter, true));
+    protected Select getBaseSelect(F filter) {
+        return this.getBaseSelect(filter, false);
+    }
+
+    protected Select getBaseSelect(F filter, boolean isCount) {
+        Select select = new Select();
+        select.from(table);
+
+        if (isCount) {
+            select.column("COUNT(DISTINCT id)");
+        }
+
+        parseFilter(filter, select, isCount);
+
+        return select;
     }
 }

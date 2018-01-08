@@ -1,309 +1,93 @@
 package org.ubikz.jscraper.database.querybuilder.impl;
 
-import org.ubikz.jscraper.database.querybuilder.AbstractQuery;
+import org.ubikz.jscraper.database.querybuilder.Query;
+import org.ubikz.jscraper.database.querybuilder.parts.impl.*;
+import org.ubikz.jscraper.database.reference.IFieldReference;
+import org.ubikz.jscraper.database.reference.ITableReference;
+import org.ubikz.jscraper.database.reference.impl.JoinReference;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.function.Consumer;
 
-@SuppressWarnings("unchecked")
-public class Select extends AbstractQuery {
-    protected static final String SQL_AS = "AS";
+public class Select extends Query<Select> {
 
-    // Key use within maps
-    private static final String KEY_DISTINCT = "distinct";
-    private static final String KEY_ORDER = "order";
-    private static final String KEY_DIRECTION = "direction";
-    private static final String KEY_GROUP = "group";
-    private static final String KEY_JOIN = "inner_join";
-    private static final String KEY_LIMIT = "limit";
-    private static final String KEY_OFFSET = "offset";
-
-    // SQL elements
-    private static final String SQL_WILDCARD = "*";
-    private static final String SQL_SELECT = "SELECT";
-    private static final String SQL_FROM = "FROM";
-    private static final String SQL_DISTINCT = "DISTINCT";
-    private static final String SQL_ORDER_BY = "ORDER BY";
-    private static final String SQL_GROUP_BY = "GROUP BY";
-    private static final String SQL_ON = "ON";
-    private static final String SQL_ASC = "ASC";
-    private static final String SQL_DESC = "DESC";
-    private static final String SQL_LIMIT = "LIMIT";
-    private static final String SQL_OFFSET = "OFFSET";
-
-    public Select(String... columns) {
+    public Select() {
         super();
-        this.parseColumns(columns);
+        this.parts.add(0, new WhereChainPart());
+        this.allowedParts.addAll(Arrays.asList(
+                TablePart.class,
+                ColumnPart.class,
+                JoinPart.class,
+                GroupByPart.class,
+                OrderByPart.class,
+                WhereChainPart.class,
+                PaginatePart.class
+        ));
     }
 
-    /**
-     * @param columns
-     * @return
-     */
-    public Select columns(String... columns) {
-        this.parseColumns(columns);
-        return this;
+    public Select from(Consumer<TablePart> consumer) {
+        return consumePart(consumer, TablePart.class);
     }
 
-    /**
-     * @param table
-     * @return
-     */
-    public Select from(String table) {
-        this.from(table, null);
-        return this;
+    public Select from(ITableReference table, String alias) {
+        return from(t -> t.set(table, alias));
     }
 
-    /**
-     * @param table
-     * @param alias
-     * @return
-     */
-    public Select from(String table, String alias) {
-        this.parts.put(KEY_FROM, this.buildAlias(table, alias));
-        return this;
+    public Select from(ITableReference table) {
+        return from(table, null);
     }
 
-    /**
-     * @param table
-     * @param on
-     * @return
-     */
-    public Select join(String table, String on) {
-        this.join(table, null, on);
-        return this;
-    }
-    
-    /**
-     * @param table
-     * @param alias
-     * @param on
-     * @return
-     */
-    public Select join(String table, String alias, String on) {
-        return this.join(table, alias, on, null);
+    public Select column(Consumer<ColumnPart> consumer) {
+        return consumePart(consumer, ColumnPart.class);
     }
 
-
-    /**
-     * @param table
-     * @param alias
-     * @param on
-     * @return
-     */
-    public Select join(String table, String alias, String on, String type) {
-        @SuppressWarnings("unchecked")
-        List<String> existingJoins = (List<String>) this.parts.get(KEY_JOIN);
-        existingJoins.add((type == null ? "" : type + " ") + "JOIN " + this.buildAlias(table, alias) + " " 
-                + SQL_ON + " " + on);
-        this.parts.put(KEY_JOIN, existingJoins);
-        return this;
+    public Select column(String column) {
+        return column(c -> c.addColumn(column));
     }
 
-    /**
-     * @param table
-     * @param alias
-     * @param on
-     * @return
-     */
-    public Select joinLeft(String table, String alias, String on) {
-        return this.join(table, alias, on, "LEFT");
+    public Select join(Consumer<JoinPart> consumer) {
+        return consumePart(consumer, JoinPart.class);
     }
 
-
-    /**
-     * @param table
-     * @param alias
-     * @return
-     */
-    private String buildAlias(String table, String alias) {
-        List<String> aliasedTable = new ArrayList<>();
-        aliasedTable.add(table);
-
-        if (alias != null) {
-            aliasedTable.add(SQL_AS);
-            aliasedTable.add(alias);
-        }
-
-        return aliasedTable.stream().collect(Collectors.joining(" "));
+    public Select joinLeft(Consumer<JoinPart> consumer) {
+        return consumePart(consumer, new JoinPart().setIdentifier(JoinReference.LEFT));
     }
 
-    /**
-     * @param columns
-     */
-    private void parseColumns(String... columns) {
-        this.parts.put(KEY_COLUMNS, new ArrayList<>(Arrays.asList(columns)));
+    public Select groupBy(Consumer<GroupByPart> consumer) {
+        return consumePart(consumer, GroupByPart.class);
     }
 
-    /**
-     * @param column
-     * @return
-     */
-    public Select addColumn(String column) {
-        List<String> columnList = (List<String>) this.parts.getOrDefault(KEY_COLUMNS, new ArrayList<>());
-        columnList.add(column);
-        return this;
-    }
-
-    /**
-     * @param columns
-     * @return
-     */
     public Select groupBy(String... columns) {
-        this.parts.put(KEY_GROUP, Arrays.asList(columns));
-        return this;
+        return groupBy(g -> g.setColumns(columns));
     }
 
-    /**
-     * @param column
-     * @return
-     */
+    public Select orderBy(Consumer<OrderByPart> consumer) {
+        return consumePart(consumer, OrderByPart.class);
+    }
+
     public Select orderBy(String column) {
-        return this.orderBy(column, true);
+        return orderBy(o -> o.set(column));
     }
 
-    /**
-     * @param column
-     * @param isAsc
-     * @return
-     */
-    public Select orderBy(String column, boolean isAsc) {
-        this.parts.put(KEY_ORDER, column);
-        this.parts.put(KEY_DIRECTION, isAsc ? SQL_ASC : SQL_DESC);
+    public Select orderBy(IFieldReference column) {
+        return orderBy(o -> o.set(column));
+    }
+
+    public Select where(Consumer<WhereChainPart> consumer) {
+        consumer.accept((WhereChainPart) parts.get(0));
+
         return this;
     }
 
-    @Override
-    public Select where(String where) {
-        return (Select) super.where(where);
+    public Select paginate(Consumer<PaginatePart> consumer) {
+        return consumePart(consumer, PaginatePart.class);
     }
 
-    @Override
-    public Select where(String column, Object value) {
-        return (Select) super.where(column, value);
+    public Select limit(Integer limit) {
+        return paginate(p -> p.setLimit(limit));
     }
 
-    @Override
-    public Select where(String column, String op, Object value) {
-        return (Select) super.where(column, op, value, null);
-    }
-
-    @Override
-    public Select where(String column, String op, Object value, String cast) {
-        return (Select) super.where(column, op, value, cast);
-    }
-
-    @Override
-    public Select orWhere(String where) {
-        return (Select) super.orWhere(where);
-    }
-
-    @Override
-    public Select orWhere(String column, Object value) {
-        return (Select) super.orWhere(column, value);
-    }
-
-    @Override
-    public Select orWhere(String column, String op, Object value) {
-        return (Select) super.orWhere(column, op, value, null);
-    }
-
-    @Override
-    public Select orWhere(String column, String op, Object value, String cast) {
-        return (Select) super.orWhere(column, op, value, cast);
-    }
-
-    /**
-     * @param number
-     * @return
-     */
-    public Select limit(int number) {
-        this.parts.put(KEY_LIMIT, number);
-        return this;
-    }
-
-    /**
-     * @param number
-     * @return
-     */
-    public Select offset(int number) {
-        this.parts.put(KEY_OFFSET, number);
-        return this;
-    }
-
-    @Override
-    public void build() {
-        super.build();
-
-        this.sql.add(SQL_SELECT);
-
-        boolean distinct = (boolean) this.parts.get(KEY_DISTINCT);
-        if (distinct) {
-            this.sql.add(SQL_DISTINCT);
-        }
-
-        List<String> columns = (List<String>) this.parts.get(KEY_COLUMNS);
-        if (columns.size() > 0) {
-            this.sql.add(columns.stream().collect(Collectors.joining(", ")));
-        } else {
-            this.sql.add(SQL_WILDCARD);
-        }
-
-        this.sql.add(SQL_FROM);
-        this.sql.add((String) this.parts.get(KEY_FROM));
-
-        List<String> joins = (List<String>) this.parts.get(KEY_JOIN);
-        if (joins.size() > 0) {
-            this.sql.add(joins.stream().collect(Collectors.joining(" ")));
-        }
-
-        this.handleWhereClauses();
-
-        List<String> groupBy = (List<String>) this.parts.get(KEY_GROUP);
-        if (groupBy.size() > 0) {
-            this.sql.add(SQL_GROUP_BY);
-            this.sql.add("(" + groupBy.stream().collect(Collectors.joining(",")) + ")");
-        }
-
-        String orderBy = (String) this.parts.get(KEY_ORDER);
-        if (orderBy != null) {
-            this.sql.add(SQL_ORDER_BY);
-            this.sql.add(orderBy);
-            this.sql.add((String) this.parts.get(KEY_DIRECTION));
-        }
-
-        Integer limit = (Integer) this.parts.get(KEY_LIMIT);
-        if (limit != null) {
-            this.sql.add(SQL_LIMIT);
-            this.sql.add(limit.toString());
-        }
-
-        Integer offset = (Integer) this.parts.get(KEY_OFFSET);
-        if (offset != null) {
-            this.sql.add(SQL_OFFSET);
-            this.sql.add(offset.toString());
-        }
-    }
-
-    @Override
-    protected void initParts() {
-        this.parts.put(KEY_DISTINCT, false);
-        this.parts.put(KEY_COLUMNS, new ArrayList<>());
-        this.parts.put(KEY_FROM, null);
-        this.parts.put(KEY_JOIN, new ArrayList<>());
-        this.parts.put(KEY_WHERE, new ArrayList<>());
-        this.parts.put(KEY_ORWHERE, new ArrayList<>());
-        this.parts.put(KEY_ORDER, null);
-        this.parts.put(KEY_DIRECTION, null);
-        this.parts.put(KEY_GROUP, new ArrayList<>());
-        this.parts.put(KEY_LIMIT, null);
-        this.parts.put(KEY_OFFSET, null);
-    }
-
-    @Override
-    public String toString() {
-        return this.getSQL();
+    public Select offset(Integer offset) {
+        return paginate(p -> p.setOffset(offset));
     }
 }

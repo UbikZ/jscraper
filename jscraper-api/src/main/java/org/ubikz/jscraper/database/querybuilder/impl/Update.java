@@ -1,51 +1,44 @@
 package org.ubikz.jscraper.database.querybuilder.impl;
 
 
-import org.ubikz.jscraper.database.querybuilder.Edit;
+import org.ubikz.jscraper.database.querybuilder.Query;
+import org.ubikz.jscraper.database.querybuilder.parts.impl.SetValuePart;
+import org.ubikz.jscraper.database.querybuilder.parts.impl.TablePart;
+import org.ubikz.jscraper.database.querybuilder.parts.impl.WhereChainPart;
+import org.ubikz.jscraper.database.reference.IFieldReference;
+import org.ubikz.jscraper.database.reference.ITableReference;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.function.Consumer;
 
-public class Update extends Edit {
-    protected static final String KEY_SET = "set";
-
-    private static final String SQL_UPDATE = "UPDATE";
-    private static final String SQL_SET = "SET";
-
-    public Update(String table) {
-        super(table);
-        this.table = table;
+public class Update extends Query<Update> {
+    public Update() {
+        super();
+        this.allowedParts.addAll(Arrays.asList(
+                TablePart.class,
+                SetValuePart.class,
+                WhereChainPart.class
+        ));
     }
 
-    public Update set(Map<String, Object> values) {
-        List<String> namedParameters = new ArrayList<>();
-        for (Map.Entry<String, Object> value : values.entrySet()) {
-            String column = value.getKey();
-            this.parameters.put(column, value.getValue());
-            namedParameters.add(column + "=:" + column);
-        }
-        this.parts.put(KEY_SET, namedParameters);
-
-        return this;
+    public Update table(Consumer<TablePart> consumer) {
+        return consumePart(consumer, TablePart.class);
     }
 
-    @Override
-    public void build() {
-        super.build();
-
-        this.sql.add(SQL_UPDATE);
-        this.sql.add(this.table);
-        this.sql.add(SQL_SET);
-        this.sql.add(((List<String>) this.parts.get(KEY_SET)).stream().collect(Collectors.joining(",")));
-
-        this.handleWhereClauses();
+    public Update table(ITableReference table) {
+        return table(t -> t.set(table));
     }
 
-    @Override
-    protected void initParts() {
-        super.initParts();
-        this.parts.put(KEY_SET, new ArrayList<>());
+    public Update values(Consumer<SetValuePart> consumer) {
+        return consumePart(consumer, SetValuePart.class);
+    }
+
+    public Update values(Map<IFieldReference, Object> values) {
+        return values(v -> v.setValues(values));
+    }
+
+    public Update where(Consumer<WhereChainPart> consumer) {
+        return consumePart(consumer, WhereChainPart.class);
     }
 }

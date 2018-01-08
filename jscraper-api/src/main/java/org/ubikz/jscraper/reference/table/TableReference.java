@@ -1,9 +1,8 @@
 package org.ubikz.jscraper.reference.table;
 
-import org.ubikz.jscraper.reference.BaseReference;
-import org.ubikz.jscraper.reference.IReference;
+import org.ubikz.jscraper.database.reference.ITableReference;
 
-public enum TableReference implements IReference<TableReference> {
+public enum TableReference implements ITableReference {
     FEED("feed"),
     FEED_PROHIBITED("feed_prohibited"),
     FEED_TYPE("feed_type"),
@@ -11,7 +10,7 @@ public enum TableReference implements IReference<TableReference> {
     FEED_ITEM_TAG("feed_item_tag"),
     TAG("tag"),
     TAG_PROHIBITED("tag_prohibited"),
-    USER("user");
+    USER("public.user");
 
     private String name;
 
@@ -21,10 +20,5 @@ public enum TableReference implements IReference<TableReference> {
 
     public String get() {
         return name;
-    }
-
-    @Override
-    public TableReference getFromValue(String value) {
-        return new BaseReference<TableReference>().getFromValue(values(), value);
     }
 }

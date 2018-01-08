@@ -16,33 +16,39 @@ public abstract class BaseService<E extends BaseEntity, R extends BaseEntityRequ
 
     public <T extends BaseServiceRequest> int create(T request) {
         parseRequest(request);
+
         return entity.create(entityRequest);
     }
 
     public <T extends BaseServiceRequest> int update(T request) {
         parseRequest(request);
+
         return entity.update(entityRequest);
     }
 
     @SuppressWarnings("unchecked")
     public <T extends BaseServiceFilter> D get(T filter) {
         parseFilter(filter);
+
         return (D) entity.get(entityFilter);
     }
 
     @SuppressWarnings("unchecked")
     public <T extends BaseServiceFilter> List<D> getAll(T filter) {
         parseFilter(filter);
+
         return entity.getAll(entityFilter);
     }
 
     public <T extends BaseServiceFilter> int count(T filter) {
         parseFilter(filter);
+
         return entity.count(entityFilter);
     }
 
     public <T extends BaseServiceFilter> int delete(T filter) {
         parseFilter(filter);
+
         return entity.delete(entityFilter);
     }
 

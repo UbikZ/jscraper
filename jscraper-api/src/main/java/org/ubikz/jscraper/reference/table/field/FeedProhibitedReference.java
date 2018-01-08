@@ -1,9 +1,8 @@
 package org.ubikz.jscraper.reference.table.field;
 
-import org.ubikz.jscraper.reference.BaseReference;
-import org.ubikz.jscraper.reference.IReference;
+import org.ubikz.jscraper.database.reference.IFieldReference;
 
-public enum FeedProhibitedReference implements IReference<FeedProhibitedReference> {
+public enum FeedProhibitedReference implements IFieldReference {
     LABEL("label");
 
     private String name;
@@ -14,10 +13,5 @@ public enum FeedProhibitedReference implements IReference<FeedProhibitedReferenc
 
     public String get() {
         return name;
-    }
-
-    @Override
-    public FeedProhibitedReference getFromValue(String value) {
-        return new BaseReference<FeedProhibitedReference>().getFromValue(values(), value);
     }
 }

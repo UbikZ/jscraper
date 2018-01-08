@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.ubikz.jscraper.api.controller.BaseController;
 import org.ubikz.jscraper.api.service.model.message.BaseMessage;
+import org.ubikz.jscraper.api.service.model.message.impl.SingleResultMessage;
 import org.ubikz.jscraper.security.jwt.model.JWTProperties;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +30,7 @@ public class TokenAuthentication {
     private static final String CLAIM_CREDENTIALS_KEY = "credentials";
 
     public static void addAuthentication(HttpServletResponse res, Authentication auth, JWTProperties props) throws IOException {
-        BaseMessage message = new BaseMessage();
+        BaseMessage message = new SingleResultMessage();
 
         String jwt = Jwts.builder()
                 .setClaims(new HashMap<String, Object>() {{
@@ -76,7 +77,8 @@ public class TokenAuthentication {
 
     static Date getExpirationTime(long expireHours) {
         Date now = new Date();
-        Long expireInMilis = TimeUnit.HOURS.toMillis(expireHours);
-        return new Date(expireInMilis + now.getTime());
+        Long expireInMillis = TimeUnit.HOURS.toMillis(expireHours);
+
+        return new Date(expireInMillis + now.getTime());
     }
 }

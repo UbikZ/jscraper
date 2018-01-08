@@ -1,83 +1,31 @@
 package org.ubikz.jscraper.database.querybuilder.impl;
 
-import org.ubikz.jscraper.database.querybuilder.AbstractQuery;
+import org.ubikz.jscraper.database.querybuilder.Query;
+import org.ubikz.jscraper.database.querybuilder.parts.impl.TablePart;
+import org.ubikz.jscraper.database.querybuilder.parts.impl.WhereChainPart;
+import org.ubikz.jscraper.database.reference.ITableReference;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.function.Consumer;
 
-@SuppressWarnings("unchecked")
-public class Delete extends AbstractQuery {
-    // SQL elements
-    private static final String SQL_DELETE = "DELETE";
-
+public class Delete extends Query<Delete> {
     public Delete() {
         super();
+        this.allowedParts.addAll(Arrays.asList(
+                TablePart.class,
+                WhereChainPart.class
+        ));
     }
 
-    public Delete from(String table) {
-        this.parts.put(KEY_FROM, table);
-        return this;
+    public Delete from(Consumer<TablePart> consumer) {
+        return consumePart(consumer, TablePart.class);
     }
 
-    @Override
-    public Delete where(String where) {
-        return (Delete) super.where(where);
+    public Delete from(ITableReference table) {
+        return from(t -> t.set(table));
     }
 
-    @Override
-    public Delete where(String column, Object value) {
-        return (Delete) super.where(column, value);
-    }
-
-    @Override
-    public Delete where(String column, String op, Object value) {
-        return (Delete) super.where(column, op, value, null);
-    }
-
-    @Override
-    public Delete where(String column, String op, Object value, String cast) {
-        return (Delete) super.where(column, op, value, cast);
-    }
-
-    @Override
-    public Delete orWhere(String where) {
-        return (Delete) super.orWhere(where);
-    }
-
-    @Override
-    public Delete orWhere(String column, Object value) {
-        return (Delete) super.orWhere(column, value);
-    }
-
-    @Override
-    public Delete orWhere(String column, String op, Object value) {
-        return (Delete) super.orWhere(column, op, value, null);
-    }
-
-    @Override
-    public Delete orWhere(String column, String op, Object value, String cast) {
-        return (Delete) super.orWhere(column, op, value, cast);
-    }
-
-    @Override
-    public void build() {
-        super.build();
-
-        this.sql.add(SQL_DELETE);
-        this.sql.add(SQL_FROM);
-        this.sql.add((String) this.parts.get(KEY_FROM));
-
-        this.handleWhereClauses();
-    }
-
-    @Override
-    protected void initParts() {
-        this.parts.put(KEY_FROM, null);
-        this.parts.put(KEY_WHERE, new ArrayList<>());
-        this.parts.put(KEY_ORWHERE, new ArrayList<>());
-    }
-
-    @Override
-    public String toString() {
-        return this.getSQL();
+    public Delete where(Consumer<WhereChainPart> consumer) {
+        return consumePart(consumer, WhereChainPart.class);
     }
 }

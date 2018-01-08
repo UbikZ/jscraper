@@ -13,7 +13,11 @@ import org.ubikz.jscraper.api.service.model.message.impl.ErrorMessage;
 import java.util.function.Supplier;
 
 public abstract class AbstractController {
-    protected static final Logger logger = LoggerFactory.getLogger(UserDal.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserDal.class);
+
+    public static String buildMessage(Object result) throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsString(result);
+    }
 
     public String send(Supplier<BaseMessage> function) throws JsonProcessingException {
         Object result;
@@ -40,6 +44,6 @@ public abstract class AbstractController {
             }
         }
 
-        return new ObjectMapper().writeValueAsString(result);
+        return buildMessage(result);
     }
 }

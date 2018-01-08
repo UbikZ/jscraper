@@ -3,14 +3,15 @@ package org.ubikz.jscraper.api.dal.impl;
 import com.rometools.rome.feed.synd.SyndEntry;
 import org.springframework.stereotype.Repository;
 import org.ubikz.jscraper.api.dal.BaseDal;
-import org.ubikz.jscraper.api.dal.model.filter.BaseDalFilter;
 import org.ubikz.jscraper.api.dal.model.filter.impl.FeedDalFilter;
-import org.ubikz.jscraper.api.dal.model.request.BaseDalRequest;
 import org.ubikz.jscraper.api.dal.model.request.impl.FeedDalRequest;
 import org.ubikz.jscraper.database.DatabaseService;
-import org.ubikz.jscraper.database.querybuilder.AbstractQuery;
+import org.ubikz.jscraper.database.querybuilder.impl.Select;
+import org.ubikz.jscraper.database.reference.IFieldReference;
 import org.ubikz.jscraper.parser.rss.RssEntry;
 import org.ubikz.jscraper.parser.rss.RssParser;
+import org.ubikz.jscraper.reference.table.TableReference;
+import org.ubikz.jscraper.reference.table.field.FeedReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,20 +19,12 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class FeedDal extends BaseDal {
-    /**
-     * @param databaseService
-     */
+public class FeedDal extends BaseDal<FeedDalRequest, FeedDalFilter> {
     public FeedDal(DatabaseService databaseService) {
         super(databaseService);
-        this.tableName = "feed";
+        this.table = TableReference.FEED;
     }
 
-    /**
-     * @param filter
-     * @return
-     * @throws Exception
-     */
     public List<Map<String, Object>> getRssFeedList(FeedDalFilter filter) throws Exception {
         List<Map<String, Object>> resultList = new ArrayList<>();
 
@@ -53,38 +46,27 @@ public class FeedDal extends BaseDal {
         return resultList;
     }
 
-    /**
-     * @param request
-     * @param created
-     * @return
-     */
     @Override
-    protected Map<String, Object> parseRequest(BaseDalRequest request, boolean created) {
-        FeedDalRequest feedDalRequest = (FeedDalRequest) request;
-        Map<String, Object> values = super.parseRequest(feedDalRequest, created);
+    protected Map<IFieldReference, Object> parseRequest(FeedDalRequest request) {
+        Map<IFieldReference, Object> values = super.parseRequest(request);
 
-        if (feedDalRequest.getUrl() != null) {
-            values.put("url", feedDalRequest.getUrl());
+        if (request.getUrl() != null) {
+            values.put(FeedReference.URL, request.getUrl());
         }
 
-        if (feedDalRequest.getFeedTypeId() != null) {
-            values.put("feed_type_id", feedDalRequest.getFeedTypeId());
+        if (request.getFeedTypeId() != null) {
+            values.put(FeedReference.FEED_TYPE_ID, request.getFeedTypeId());
         }
 
         return values;
     }
 
-    /**
-     * @param filter
-     * @return
-     */
     @Override
-    protected void parseFilter(BaseDalFilter filter, AbstractQuery select, boolean isCount) {
-        FeedDalFilter feedDalFilter = (FeedDalFilter) filter;
-        super.parseFilter(feedDalFilter, select, isCount);
+    protected void parseFilter(FeedDalFilter filter, Select select, boolean isCount) {
+        super.parseFilter(filter, select, isCount);
 
-        if (feedDalFilter.getUrl() != null) {
-            select.where("url", feedDalFilter.getUrl());
+        if (filter.getUrl() != null) {
+            select.where(w -> w.and(p -> p.set(FeedReference.URL, filter.getUrl())));
         }
     }
 }

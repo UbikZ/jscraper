@@ -39,7 +39,7 @@ public class FeedItemContext extends BaseContext<FeedItemService, FeedItemServic
         feedServiceFilter.setEnabled(true);
         request.setFeedList(feedService.getAll(feedServiceFilter).stream().map(FeedDto.class::cast).collect(Collectors.toList()));
 
-        return toFilterResult(service::generate, HttpStatus.CREATED);
+        return singleResult(service.generate(request), HttpStatus.CREATED);
     }
 
     @Override

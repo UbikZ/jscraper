@@ -44,7 +44,7 @@ public class FeedItemService extends BaseService<FeedItemEntity, FeedItemEntityR
     }
 
     @Transactional
-    public Map<String, List<FeedArticleDto>> generate(FeedListServiceRequest request) {
+    public int generate(FeedListServiceRequest request) throws RuntimeException {
         Map<String, List<FeedArticleDto>> articleMap = new HashMap<>();
         List<FeedItemEntityRequest> entityRequestList = new ArrayList<>();
         List<TagEntityRequest> tagRequestList = new ArrayList<>();
@@ -59,7 +59,14 @@ public class FeedItemService extends BaseService<FeedItemEntity, FeedItemEntityR
             filter.setProhibitedFeedList(feedProhibitedList);
             filter.setProhibitedTagList(tagProhibitedList);
 
-            List<FeedArticleDto> subList = feedEntity.getRssFeedArticleList(filter);
+            List<FeedArticleDto> subList;
+
+            try {
+                subList = feedEntity.getRssFeedArticleList(filter);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
             articleMap.put(feed.getUrl(), subList);
             entityRequestList.addAll(parseServiceToEntityArticleListRequest(feed, subList));
             subList.forEach(articleDto -> tagRequestList.addAll(articleDto.getTagList().stream().map(TagEntityRequest::new).collect(Collectors.toList())));
@@ -75,7 +82,7 @@ public class FeedItemService extends BaseService<FeedItemEntity, FeedItemEntityR
             entity.createAll(entityRequestList);
         }
 
-        return articleMap;
+        return articleMap.size();
     }
 
     private void populateEntityArticleListRequestWithTags(List<FeedItemEntityRequest> requestList, Map<Object, TagDto> tagList) {

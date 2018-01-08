@@ -1,9 +1,8 @@
 package org.ubikz.jscraper.reference.table.field;
 
-import org.ubikz.jscraper.reference.BaseReference;
-import org.ubikz.jscraper.reference.IReference;
+import org.ubikz.jscraper.database.reference.IFieldReference;
 
-public enum TagProhibitedReference implements IReference<TagProhibitedReference> {
+public enum TagProhibitedReference implements IFieldReference {
     LABEL("label");
 
     private String name;
@@ -14,10 +13,5 @@ public enum TagProhibitedReference implements IReference<TagProhibitedReference>
 
     public String get() {
         return name;
-    }
-
-    @Override
-    public TagProhibitedReference getFromValue(String value) {
-        return new BaseReference<TagProhibitedReference>().getFromValue(values(), value);
     }
 }

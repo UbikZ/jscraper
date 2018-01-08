@@ -2,57 +2,46 @@ package org.ubikz.jscraper.api.dal.impl;
 
 import org.springframework.stereotype.Repository;
 import org.ubikz.jscraper.api.dal.BaseDal;
-import org.ubikz.jscraper.api.dal.model.filter.BaseDalFilter;
 import org.ubikz.jscraper.api.dal.model.filter.impl.FeedTypeDalFilter;
-import org.ubikz.jscraper.api.dal.model.request.BaseDalRequest;
 import org.ubikz.jscraper.api.dal.model.request.impl.FeedTypeDalRequest;
 import org.ubikz.jscraper.database.DatabaseService;
-import org.ubikz.jscraper.database.querybuilder.AbstractQuery;
+import org.ubikz.jscraper.database.querybuilder.impl.Select;
+import org.ubikz.jscraper.database.reference.IFieldReference;
+import org.ubikz.jscraper.database.reference.impl.OperatorReference;
+import org.ubikz.jscraper.reference.table.TableReference;
+import org.ubikz.jscraper.reference.table.field.CommonReference;
+import org.ubikz.jscraper.reference.table.field.FeedTypeReference;
 
 import java.util.Map;
 
 @Repository
-public class FeedTypeDal extends BaseDal {
-    /**
-     * @param databaseService
-     */
+public class FeedTypeDal extends BaseDal<FeedTypeDalRequest, FeedTypeDalFilter> {
     public FeedTypeDal(DatabaseService databaseService) {
         super(databaseService);
-        this.tableName = "feed_type";
+        this.table = TableReference.FEED_TYPE;
     }
 
-    /**
-     * @param request
-     * @param created
-     * @return
-     */
     @Override
-    protected Map<String, Object> parseRequest(BaseDalRequest request, boolean created) {
-        FeedTypeDalRequest feedTypeDalRequest = (FeedTypeDalRequest) request;
-        Map<String, Object> values = super.parseRequest(feedTypeDalRequest, created);
+    protected Map<IFieldReference, Object> parseRequest(FeedTypeDalRequest request) {
+        Map<IFieldReference, Object> values = super.parseRequest(request);
 
-        if (feedTypeDalRequest.getUrlRegex() != null) {
-            values.put("url_regex", feedTypeDalRequest.getUrlRegex());
+        if (request.getUrlRegex() != null) {
+            values.put(FeedTypeReference.URL_REGEX, request.getUrlRegex());
         }
 
-        if (feedTypeDalRequest.getContentRegex() != null) {
-            values.put("content_regex", feedTypeDalRequest.getContentRegex());
+        if (request.getContentRegex() != null) {
+            values.put(FeedTypeReference.CONTENT_REGEX, request.getContentRegex());
         }
 
         return values;
     }
 
-    /**
-     * @param filter
-     * @return
-     */
     @Override
-    protected void parseFilter(BaseDalFilter filter, AbstractQuery select, boolean isCount) {
-        FeedTypeDalFilter feedTypeDalFilter = (FeedTypeDalFilter) filter;
-        super.parseFilter(feedTypeDalFilter, select, isCount);
+    protected void parseFilter(FeedTypeDalFilter filter, Select select, boolean isCount) {
+        super.parseFilter(filter, select, isCount);
 
-        if (feedTypeDalFilter.getIdList() != null && feedTypeDalFilter.getIdList().size() > 0) {
-            select.where("id", "in", feedTypeDalFilter.getIdList());
+        if (filter.getIdList() != null && filter.getIdList().size() > 0) {
+            select.where(w -> w.and(p -> p.set(CommonReference.ID, OperatorReference.IN, filter.getIdList())));
         }
     }
 }
