@@ -5,7 +5,7 @@ import org.ubikz.jscraper.database.querybuilder.parts.Part;
 import org.ubikz.jscraper.database.reference.IFieldReference;
 import org.ubikz.jscraper.exception.ApplicativeException;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,7 +14,7 @@ public class SetValuePart extends Part {
     private Map<IFieldReference, Parameter> values;
 
     public SetValuePart() {
-        values = new HashMap<>();
+        values = new LinkedHashMap<>();
     }
 
     public void setValues(Map<IFieldReference, Object> values) {
@@ -32,7 +32,7 @@ public class SetValuePart extends Part {
         return values
                 .entrySet()
                 .stream()
-                .map(e -> String.format("%s=:%s", e.getKey(), e.getValue().getName()))
+                .map(e -> String.format("%s=:%s", e.getKey().get(), e.getValue().getName()))
                 .collect(Collectors.joining(", "));
     }
 

@@ -11,14 +11,18 @@ import java.util.stream.Collectors;
 
 public class IdentifierPart extends Part {
     private IdentifierReference identifier;
-    private Boolean distinct;
+    private boolean distinct = false;
 
     public void set(IdentifierReference identifier) {
         this.identifier = identifier;
     }
 
-    public void distinct(Boolean distinct) {
+    public void distinct(boolean distinct) {
         this.distinct = distinct;
+    }
+
+    public void distinct() {
+        distinct(true);
     }
 
     @Override

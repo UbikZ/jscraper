@@ -2,6 +2,9 @@ package org.ubikz.jscraper.database.querybuilder.parts;
 
 import org.ubikz.jscraper.database.reference.IFieldReference;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 public class Parameter {
     private String column;
     private String name;
@@ -14,7 +17,11 @@ public class Parameter {
     public Parameter(String column, Object value) {
         this.column = column;
         this.value = value;
-        this.name = String.format("%s_%s", column, value.toString());
+        this.name = String.format("%s_%s", column, encode(value));
+    }
+
+    public static String encode(Object value) {
+        return Base64.getEncoder().encodeToString(value.toString().getBytes(StandardCharsets.UTF_8));
     }
 
     public String getName() {
